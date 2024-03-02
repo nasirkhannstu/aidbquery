@@ -1,0 +1,147 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+enum UserRole {
+  ADMIN
+  USER
+}
+
+enum UserStatus {
+  ACTIVE
+  SUSPEND
+  RESTRICTED
+  INACTIVE
+}
+
+enum SubscriptionStatus {
+  CANCELED
+  ACTIVE
+  NULL
+}
+
+model Users {
+  id            String       @id @default(cuid())
+  email         String       @unique
+  name          String
+  password      String
+  avatar        String       @default("avatar.png")
+  isEmailVerify Boolean      @default(false)
+  emailVerifyAt DateTime?
+  role          UserRole     @default(USER)
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  status        UserStatus   @default(ACTIVE)
+  userSetting   UserSettings @relation(fields: [userSettingId], references: [id])
+
+  File           Files[]
+  Message        Messages[]
+  ForgotPassword ForgotPasswords[]
+
+  stripeCustomerId       String?             @unique @map(name: "stripe_customer_id")
+  stripeSubscriptionId   String?             @unique @map(name: "stripe_subscription_id")
+  stripePriceId          String?             @map(name: "stripe_price_id")
+  stripeCurrentPeriodEnd DateTime?           @map(name: "stripe_current_period_end")
+  subscriptionStatus     SubscriptionStatus? @default(NULL) @map(name: "subscription_status")
+  userSettingId          String
+
+  @@index([userSettingId])
+}
+
+enum PasswordChangeReason {
+  FORGOT
+  CHANGE
+}
+
+enum PasswordChangeStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}
+
+model ForgotPasswords {
+  id        String               @id @default(cuid())
+  user      Users                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  email     String
+  reason    PasswordChangeReason @default(FORGOT)
+  status    PasswordChangeStatus @default(PENDING)
+  token     String?
+  messageId String?
+  createdAt DateTime             @default(now())
+  updatedAt DateTime             @updatedAt
+  userId    String
+
+  @@index([userId])
+}
+
+enum UploadStatus {
+  PENDING
+  PROCESSING
+  FAILED
+  SUCCESS
+}
+
+enum FileType {
+  PDF
+  TEXT
+  IMAGE
+  DOC
+  URL
+}
+
+model Files {
+  id           String       @id @default(cuid())
+  name         String
+  uploadStatus UploadStatus @default(PENDING)
+  url          String
+  key          String
+  path         String
+  fileType     FileType     @default(PDF)
+  referenceId  String?      @map("reference_id")
+  texts        String?      @db.Text()
+  messages     Messages[]
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  User         Users?       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String?
+
+  @@index([userId])
+}
+
+model Messages {
+  id            String   @id @default(cuid())
+  text          String   @db.Text()
+  isUserMessage Boolean
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  User   Users?  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String?
+  File   Files?  @relation(fields: [fileId], references: [id], onDelete: Cascade)
+  fileId String?
+
+  @@index([userId])
+  @@index([fileId])
+}
+
+model UserSettings {
+  id                      String   @id @default(cuid())
+  documentUploadQuoteUsed Int      @default(0)
+  pdfQuoteUsed            Int      @default(0)
+  textQuoteUsed           Int      @default(0)
+  imageQuoteUsed          Int      @default(0)
+  urlQuoteUsed            Int      @default(0)
+  docxQuoteUsed           Int      @default(0)
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+  User                    Users[]
+}

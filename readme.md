@@ -1,0 +1,1 @@
+**Read the full setup guide and documentation on: [Docs](https://aipdfquery.com/docs/aipdfquery/)**
