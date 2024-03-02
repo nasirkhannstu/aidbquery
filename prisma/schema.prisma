@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -35,11 +32,11 @@ model Users {
   name          String
   password      String
   avatar        String       @default("avatar.png")
-  isEmailVerify Boolean      @default(false)
-  emailVerifyAt DateTime?
+  isEmailVerify Boolean      @default(false) @map(name: "is_email_verify")
+  emailVerifyAt DateTime?    @map("email_verify_at")
   role          UserRole     @default(USER)
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
+  createdAt     DateTime     @default(now()) @map(name: "created_at")
+  updatedAt     DateTime     @updatedAt @map(name: "updated_at")
   status        UserStatus   @default(ACTIVE)
   userSetting   UserSettings @relation(fields: [userSettingId], references: [id])
 
@@ -52,7 +49,7 @@ model Users {
   stripePriceId          String?             @map(name: "stripe_price_id")
   stripeCurrentPeriodEnd DateTime?           @map(name: "stripe_current_period_end")
   subscriptionStatus     SubscriptionStatus? @default(NULL) @map(name: "subscription_status")
-  userSettingId          String
+  userSettingId          String              @map("user_setting_id")
 
   @@index([userSettingId])
 }
@@ -75,10 +72,10 @@ model ForgotPasswords {
   reason    PasswordChangeReason @default(FORGOT)
   status    PasswordChangeStatus @default(PENDING)
   token     String?
-  messageId String?
-  createdAt DateTime             @default(now())
-  updatedAt DateTime             @updatedAt
-  userId    String
+  messageId String?              @map("message_id")
+  createdAt DateTime             @default(now()) @map("created_at")
+  updatedAt DateTime             @updatedAt @map("updated_at")
+  userId    String               @map("user_id")
 
   @@index([userId])
 }
@@ -91,28 +88,24 @@ enum UploadStatus {
 }
 
 enum FileType {
-  PDF
-  TEXT
-  IMAGE
-  DOC
-  URL
+  CSV
+  JSON
 }
 
 model Files {
   id           String       @id @default(cuid())
   name         String
-  uploadStatus UploadStatus @default(PENDING)
+  uploadStatus UploadStatus @default(PENDING) @map("upload_status")
   url          String
   key          String
   path         String
-  fileType     FileType     @default(PDF)
-  referenceId  String?      @map("reference_id")
+  fileType     FileType     @map("file_type")
   texts        String?      @db.Text()
   messages     Messages[]
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
+  createdAt    DateTime     @default(now()) @map("created_at")
+  updatedAt    DateTime     @updatedAt @map("updated_at")
   User         Users?       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId       String?
+  userId       String?      @map("user_id")
 
   @@index([userId])
 }
@@ -120,14 +113,14 @@ model Files {
 model Messages {
   id            String   @id @default(cuid())
   text          String   @db.Text()
-  isUserMessage Boolean
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  isUserMessage Boolean  @map("is_user_message")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
 
   User   Users?  @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String?
+  userId String? @map("user_id")
   File   Files?  @relation(fields: [fileId], references: [id], onDelete: Cascade)
-  fileId String?
+  fileId String? @map("file_id")
 
   @@index([userId])
   @@index([fileId])
@@ -135,13 +128,10 @@ model Messages {
 
 model UserSettings {
   id                      String   @id @default(cuid())
-  documentUploadQuoteUsed Int      @default(0)
-  pdfQuoteUsed            Int      @default(0)
-  textQuoteUsed           Int      @default(0)
-  imageQuoteUsed          Int      @default(0)
-  urlQuoteUsed            Int      @default(0)
-  docxQuoteUsed           Int      @default(0)
-  createdAt               DateTime @default(now())
-  updatedAt               DateTime @updatedAt
+  documentUploadQuoteUsed Int      @default(0) @map("document_upload_quote_used")
+  csvQuoteUsed            Int      @default(0) @map("csv_quote_used")
+  jsonQuoteUsed           Int      @default(0) @map("json_quote_used")
+  createdAt               DateTime @default(now()) @map("created_at")
+  updatedAt               DateTime @updatedAt @map("updated_at")
   User                    Users[]
 }
