@@ -15,91 +15,42 @@ export interface PlanTypes {
    */
   quota: number;
   /**
-   * DOCX support.
+   * CSV file upload feature.
    */
-  pdf: {
+  csv: {
     /**
-     * The amount of pages per DOCX file.
-     */
-    pagesPerPdf: number;
-    /**
-     * The amount of DOC/DOCX files that can be uploaded per month.
-     */
-    quota: number;
-    /**
-     * Indicates whether the feature is allowed in this plan.
+     * Indicates whether the CSV file upload feature is allowed in this plan.
      */
     isAllowed: boolean;
     /**
-     * The file size limit in KB. ** example: `1024` ** 
-     */
-    fileSize: number;
-  };
-  docx: {
-    /**
-     * The amount of pages per DOCX file.
-     */
-    pagesPerDocx: number;
-    /**
-     * The amount of DOC/DOCX files that can be uploaded per month.
+     * The quota for the CSV file upload feature.
      */
     quota: number;
     /**
-     * Indicates whether the feature is allowed in this plan.
-     */
-    isAllowed: boolean;
-    /**
-     * The file size limit in KB ** example: `1024` **
+     * The maximum file size for the CSV file upload feature in KB.
      */
     fileSize: number;
-  };
-
-  /**
-   * Image support.
-   */
-  image: {
     /**
-     * Indicates whether the feature is allowed in this plan.
+     * The maximum number of rows/records for the CSV file upload feature.
      */
-    isAllowed: boolean;
-    /**
-     * The amount of images that can be uploaded per month.
-     */
-    quota: number;
-    /**
-     * The file size limit in KB ** example: `1024` **
-     */
-    fileSize: number;
+    rows: number;
   };
   /**
-   * TXT support.
+   * JSON file upload feature.
    */
-  txt: {
+  json: {
     /**
-     * Indicates whether the feature is allowed in this plan.
+     * Indicates whether the JSON file upload feature is allowed in this plan.
      */
     isAllowed: boolean;
     /**
-     * The amount of TXT files that can be uploaded per month.
+     * The quota for the JSON file upload feature.
      */
     quota: number;
     /**
-     * The file size limit in KB ** example: `1024` **
+     * The maximum file size for the JSON file upload feature in KB.
      */
     fileSize: number;
-  };
-  /**
-   * Link support.
-   */
-  link: {
-    /**
-     * Indicates whether the feature is allowed in this plan.
-     */
-    isAllowed: boolean;
-    /**
-     * The amount of links that can be uploaded per month.
-     */
-    quota: number;
   };
   /**
    * The price of the plan.
@@ -175,25 +126,13 @@ export interface PricingItemTypes {
 
   features: {
     /**
-     * PDF feature.
+     * CSV feature.
      */
-    pdf: FeatureType;
+    csv: FeatureType;
     /**
-     * DOCX feature.
+     * JSON feature.
      */
-    docx: FeatureType;
-    /**
-     * TXT feature.
-     */
-    txt: FeatureType;
-    /**
-     * Image feature.
-     */
-    image: FeatureType;
-    /**
-     * Link feature.
-     */
-    link: FeatureType;
+    json: FeatureType;
   };
   featureAll: { text: string; negative: boolean; footnote?: string }[];
 }

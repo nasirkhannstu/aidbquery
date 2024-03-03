@@ -10,8 +10,6 @@ import { CiCalendarDate } from "react-icons/ci";
 
 import { trpc } from "@/app/_trpc/client";
 import { getUserSubscriptionPlan } from "@/config/using_mode";
-import UploadUrlButton from "@/components/upload/URLUploadButton";
-import ImageUploadButton from "@/components/upload/ImageUploadButton";
 import { INFINITE_QUERY_LIMIT_FILES } from "@/config/infinite-query";
 import LoadMore from "@/components/LoadMore";
 import FileIcon from "@/components/FileIcon";
@@ -23,7 +21,7 @@ export interface PageProps {
   subscriptionPlan: Awaited<ReturnType<typeof getUserSubscriptionPlan>>;
 }
 
-const MyFiles = ({ subscriptionPlan }: PageProps) => {
+const MyFiles = () => {
   const lastFileRef = useRef<HTMLUListElement>(null);
   const [currentlyDeletingFile, setCurrentlyDeletingFile] = useState<
     string | null
@@ -72,10 +70,6 @@ const MyFiles = ({ subscriptionPlan }: PageProps) => {
         <h1 className="mb-3 text-5xl font-bold text-gray-900">My Files</h1>
 
         <div className="flex items-center gap-2">
-          <UploadUrlButton />
-          <ImageUploadButton
-            isAllowed={subscriptionPlan.image?.isAllowed as boolean}
-          />
           <UploadDocumentButton />
         </div>
       </div>
@@ -164,7 +158,6 @@ const MyFiles = ({ subscriptionPlan }: PageProps) => {
           <p>Let&apos;s upload your first file.</p>
           <div className="my-1.5 flex items-center gap-1.5">
             <UploadDocumentButton />
-            <UploadUrlButton />
           </div>
         </div>
       )}

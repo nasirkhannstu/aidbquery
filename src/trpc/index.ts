@@ -4,9 +4,6 @@ import { z } from "zod";
 import { privateProcedure, router } from "./trpc";
 import { db } from "@/db/prisma";
 import { INFINITE_QUERY_LIMIT } from "@/config/infinite-query";
-import { getUrlData, setUrlData } from "./_partials/url";
-import { getDOCTexts } from "./_partials/doc";
-import { getTextTexts } from "./_partials/text";
 import { clientSubscription } from "./_partials/plan";
 import {
   changeName,
@@ -143,13 +140,6 @@ export const appRouter = router({
   changeName: changeName(),
   emailVerify: emailVerify(),
   emailVerifyAccept: emailVerifyAccept(),
-  // TODO: url related stuff should be in a separate file
-  setUrlData: setUrlData(),
-  getUrlData: getUrlData(),
-  // TODO: user file related stuff should be in a separate file
-  getDOCTexts: getDOCTexts(),
-  // TODO:  fileType==='TEXT' related stuff should be in a separate file
-  textOfTEXTS: getTextTexts(),
   subscriptionPlan: clientSubscription(),
   // TODO: admin related stuff should be in a separate file
   adminFils: files(),

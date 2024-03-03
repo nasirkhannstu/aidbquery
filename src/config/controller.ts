@@ -11,36 +11,23 @@ import {
 import { PlanTypes } from "@/types/plan";
 
 export const PLANS: PlanTypes[] = [
-  // Free mode plan
+  /**
+   * Free plan for SaaS
+   */
   {
     name: free_name as string,
     slug: free_slug as string,
     quota: 10,
-    docx: {
+    csv: {
       isAllowed: true,
-      pagesPerDocx: 5,
-      quota: 5,
-      fileSize: 100, // almost 5 pages
+      quota: 10,
+      fileSize: 200,
+      rows: 6_000,
     },
-    pdf: {
+    json: {
       isAllowed: true,
-      pagesPerPdf: 5,
-      quota: 5,
-      fileSize: 2024, // 2MB
-    },
-    link: {
-      isAllowed: true,
-      quota: 20,
-    },
-    txt: {
-      isAllowed: true,
-      quota: 20,
-      fileSize: 200, // 200KB
-    },
-    image: {
-      isAllowed: false,
-      quota: 0,
-      fileSize: 0,
+      quota: 10,
+      fileSize: 100,
     },
     price: {
       amount: free_pricing,
@@ -50,36 +37,23 @@ export const PLANS: PlanTypes[] = [
       },
     },
   },
-  // Pro mode plan
+  /**
+   * Pro plan for SaaS
+   */
   {
     name: pro_name as string,
     slug: pro_slug as string,
     quota: 60,
-    pdf: {
+    csv: {
       isAllowed: true,
-      pagesPerPdf: 200,
       quota: 60,
-      fileSize: 100 * 1024, // 100MB
+      fileSize: 500,
+      rows: 10_000,
     },
-    docx: {
+    json: {
       isAllowed: true,
-      pagesPerDocx: 100,
       quota: 60,
-      fileSize: 100 * 1024, // 100MB
-    },
-    image: {
-      isAllowed: true,
-      quota: 20,
-      fileSize: 2 * 1024, // 2MB
-    },
-    link: {
-      isAllowed: true,
-      quota: 100,
-    },
-    txt: {
-      isAllowed: true,
-      quota: 50,
-      fileSize: 2 * 1024, // 2MB
+      fileSize: 200,
     },
     price: {
       amount: pro_pricing,
@@ -89,36 +63,23 @@ export const PLANS: PlanTypes[] = [
       },
     },
   },
-  // Personal mode plan
+  /**
+   * Plan for PERSONAL mode
+   */
   {
     name: personal_name as string,
     slug: personal_slug as string,
     quota: Infinity,
-    pdf: {
+    csv: {
       isAllowed: true,
-      pagesPerPdf: Infinity,
       quota: Infinity,
-      fileSize: Infinity,
+      fileSize: 5 * 1024,
+      rows: 1_00_000,
     },
-    docx: {
-      isAllowed: true,
-      pagesPerDocx: Infinity,
-      quota: Infinity,
-      fileSize: Infinity,
-    },
-    image: {
+    json: {
       isAllowed: true,
       quota: Infinity,
-      fileSize: Infinity,
-    },
-    link: {
-      isAllowed: true,
-      quota: Infinity,
-    },
-    txt: {
-      isAllowed: true,
-      quota: Infinity,
-      fileSize: Infinity,
+      fileSize: 5 * 1024,
     },
     price: {
       amount: 0,

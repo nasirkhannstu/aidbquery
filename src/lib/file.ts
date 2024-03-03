@@ -1,6 +1,6 @@
 import fs from "fs";
 
-type Folder = "pdfs" | "texts" | "images" | "docs" | "avatars";
+type Folder = "csvs" | "jsons" | "avatars";
 
 export const deleteUnExistingFile = async (filePath: string) => {
   return fs.existsSync(filePath);

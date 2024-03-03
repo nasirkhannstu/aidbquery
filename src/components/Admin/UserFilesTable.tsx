@@ -15,6 +15,7 @@ import {
 } from "@tanstack/react-table";
 import { LuChevronDown } from "react-icons/lu";
 import moment from "moment";
+import Image from "next/image";
 import { FileType, UploadStatus } from "@prisma/client";
 
 import { Button } from "@/components/ui/button";
@@ -37,7 +38,6 @@ import {
 import { trpc } from "@/app/_trpc/client";
 import LoadMore from "../LoadMore";
 import { cn } from "@/lib/utils";
-import Image from "next/image";
 import FileIcon from "../FileIcon";
 
 type FilterType =
@@ -46,11 +46,8 @@ type FilterType =
   | "PROCESSING"
   | "SUCCESS"
   | "FAILED"
-  | "PDF"
-  | "IMAGE"
-  | "TEXT"
-  | "URL"
-  | "DOC";
+  | "CSV"
+  | "JSON";
 
 interface UserType {
   id: string;
@@ -222,11 +219,8 @@ export function UserFilesTable() {
     .length;
   const fileSuccess = data?.filter((file) => file.uploadStatus === "SUCCESS")
     .length;
-  const pdfFiles = data?.filter((file) => file.fileType === "PDF").length;
-  const imageFiles = data?.filter((file) => file.fileType === "IMAGE").length;
-  const textFiles = data?.filter((file) => file.fileType === "TEXT").length;
-  const urlFiles = data?.filter((file) => file.fileType === "URL").length;
-  const docFiles = data?.filter((file) => file.fileType === "DOC").length;
+  const csvFiles = data?.filter((file) => file.fileType === "CSV").length;
+  const jsonFiles = data?.filter((file) => file.fileType === "JSON").length;
 
   return (
     <div className="w-full rounded-md bg-white shadow-sm">
@@ -366,139 +360,60 @@ export function UserFilesTable() {
             {fileFailed || 0}
           </span>
         </Button>
+
         <Button
           onClick={() => {
             table.resetColumnFilters();
-            table.getColumn("fileType")?.setFilterValue("PDF");
-            setFilter("PDF");
+            table.getColumn("fileType")?.setFilterValue("CSV");
+            setFilter("CSV");
           }}
           variant="ghost"
           size="sm"
           className={cn(
             "rounded-none pb-4 transition delay-150 ease-in-out hover:bg-white",
-            filter === "PDF"
+            filter === "CSV"
               ? "border-b-2 border-black text-black"
               : " text-muted-foreground",
           )}
         >
-          PDF
+          CSV
           <span
             className={cn(
               "ml-2 flex h-6 w-6 items-center justify-center rounded text-xs font-bold",
-              filter === "PDF"
+              filter === "CSV"
                 ? "bg-slate-600 text-white"
                 : "bg-slate-600/25 text-slate-600",
             )}
           >
-            {pdfFiles || 0}
+            {csvFiles || 0}
           </span>
         </Button>
+
         <Button
           onClick={() => {
             table.resetColumnFilters();
-            table.getColumn("fileType")?.setFilterValue("IMAGE");
-            setFilter("IMAGE");
+            table.getColumn("fileType")?.setFilterValue("JSON");
+            setFilter("JSON");
           }}
           variant="ghost"
           size="sm"
           className={cn(
             "rounded-none pb-4 transition delay-150 ease-in-out hover:bg-white",
-            filter === "IMAGE"
+            filter === "JSON"
               ? "border-b-2 border-black text-black"
               : " text-muted-foreground",
           )}
         >
-          IMAGE
+          JSON
           <span
             className={cn(
               "ml-2 flex h-6 w-6 items-center justify-center rounded text-xs font-bold",
-              filter === "IMAGE"
+              filter === "JSON"
                 ? "bg-slate-600 text-white"
                 : "bg-slate-600/25 text-slate-600",
             )}
           >
-            {imageFiles || 0}
-          </span>
-        </Button>
-        <Button
-          onClick={() => {
-            table.resetColumnFilters();
-            table.getColumn("fileType")?.setFilterValue("DOC");
-            setFilter("DOC");
-          }}
-          variant="ghost"
-          size="sm"
-          className={cn(
-            "rounded-none pb-4 transition delay-150 ease-in-out hover:bg-white",
-            filter === "DOC"
-              ? "border-b-2 border-black text-black"
-              : " text-muted-foreground",
-          )}
-        >
-          DOC
-          <span
-            className={cn(
-              "ml-2 flex h-6 w-6 items-center justify-center rounded text-xs font-bold",
-              filter === "DOC"
-                ? "bg-slate-600 text-white"
-                : "bg-slate-600/25 text-slate-600",
-            )}
-          >
-            {docFiles || 0}
-          </span>
-        </Button>
-        <Button
-          onClick={() => {
-            table.resetColumnFilters();
-            table.getColumn("fileType")?.setFilterValue("TEXT");
-            setFilter("TEXT");
-          }}
-          variant="ghost"
-          size="sm"
-          className={cn(
-            "rounded-none pb-4 transition delay-150 ease-in-out hover:bg-white",
-            filter === "TEXT"
-              ? "border-b-2 border-black text-black"
-              : " text-muted-foreground",
-          )}
-        >
-          TEXT
-          <span
-            className={cn(
-              "ml-2 flex h-6 w-6 items-center justify-center rounded text-xs font-bold",
-              filter === "TEXT"
-                ? "bg-slate-600 text-white"
-                : "bg-slate-600/25 text-slate-600",
-            )}
-          >
-            {textFiles || 0}
-          </span>
-        </Button>
-        <Button
-          onClick={() => {
-            table.resetColumnFilters();
-            table.getColumn("fileType")?.setFilterValue("URL");
-            setFilter("URL");
-          }}
-          variant="ghost"
-          size="sm"
-          className={cn(
-            "rounded-none pb-4 transition delay-150 ease-in-out hover:bg-white",
-            filter === "URL"
-              ? "border-b-2 border-black text-black"
-              : " text-muted-foreground",
-          )}
-        >
-          URL
-          <span
-            className={cn(
-              "ml-2 flex h-6 w-6 items-center justify-center rounded text-xs font-bold",
-              filter === "URL"
-                ? "bg-slate-600 text-white"
-                : "bg-slate-600/25 text-slate-600",
-            )}
-          >
-            {urlFiles || 0}
+            {jsonFiles || 0}
           </span>
         </Button>
       </div>

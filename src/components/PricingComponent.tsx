@@ -9,7 +9,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "./ui/tooltip";
-import { pricingItems } from "@/lib/pricingItems";
+import { pricingItems } from "@/lib/messages/pricingItems";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "./ui/button";
 import UpgradeButton from "./UpgradeButton";
@@ -125,11 +125,11 @@ const PricingComponent = async ({ user }: PricingComponentProps) => {
                     </li>
                   ))}
 
-                  {/* TODO: spacific features ->  PDF */}
-                  {features.pdf && (
+                  {/* TODO: spacific features ->  CSV */}
+                  {features.csv && (
                     <li className="flex space-x-5">
                       <div className="flex-shrink-0">
-                        {features.pdf.isAllowed ? (
+                        {features.csv.isAllowed ? (
                           <LuCheck className="h-6 w-6 text-blue-500" />
                         ) : (
                           <LuMinus className="h-6 w-6 text-gray-300" />
@@ -139,28 +139,28 @@ const PricingComponent = async ({ user }: PricingComponentProps) => {
                       <div className="flex items-center space-x-1">
                         <p
                           className={cn("text-gray-600", {
-                            "text-gray-400": !features.pdf.isAllowed,
+                            "text-gray-400": !features.csv.isAllowed,
                           })}
                         >
-                          {features.pdf.text}
+                          {features.csv.text}
                         </p>
                         <Tooltip delayDuration={300}>
                           <TooltipTrigger className="ml-1.5 cursor-default">
                             <LuHelpCircle className="h-4 w-4 text-zinc-500" />
                           </TooltipTrigger>
                           <TooltipContent className="w-80 p-2">
-                            {features.pdf.footnote}
+                            {features.csv.footnote}
                           </TooltipContent>
                         </Tooltip>
                       </div>
                     </li>
                   )}
 
-                  {/* TODO: spacific features ->  LINK */}
-                  {features.link && (
+                  {/* TODO: spacific features ->  JSON */}
+                  {features.json && (
                     <li className="flex space-x-5">
                       <div className="flex-shrink-0">
-                        {features.link.isAllowed ? (
+                        {features.json.isAllowed ? (
                           <LuCheck className="h-6 w-6 text-blue-500" />
                         ) : (
                           <LuMinus className="h-6 w-6 text-gray-300" />
@@ -170,110 +170,17 @@ const PricingComponent = async ({ user }: PricingComponentProps) => {
                       <div className="flex items-center space-x-1">
                         <p
                           className={cn("text-gray-600", {
-                            "text-gray-400": !features.link.isAllowed,
+                            "text-gray-400": !features.json.isAllowed,
                           })}
                         >
-                          {features.link.text}
+                          {features.json.text}
                         </p>
                         <Tooltip delayDuration={300}>
                           <TooltipTrigger className="ml-1.5 cursor-default">
                             <LuHelpCircle className="h-4 w-4 text-zinc-500" />
                           </TooltipTrigger>
                           <TooltipContent className="w-80 p-2">
-                            {features.link.footnote}
-                          </TooltipContent>
-                        </Tooltip>
-                      </div>
-                    </li>
-                  )}
-
-                  {/* TODO: spacific features ->  TXT/TEXT */}
-                  {features.txt && (
-                    <li className="flex space-x-5">
-                      <div className="flex-shrink-0">
-                        {features.txt.isAllowed ? (
-                          <LuCheck className="h-6 w-6 text-blue-500" />
-                        ) : (
-                          <LuMinus className="h-6 w-6 text-gray-300" />
-                        )}
-                      </div>
-
-                      <div className="flex items-center space-x-1">
-                        <p
-                          className={cn("text-gray-600", {
-                            "text-gray-400": !features.txt.isAllowed,
-                          })}
-                        >
-                          {features.txt.text}
-                        </p>
-                        <Tooltip delayDuration={300}>
-                          <TooltipTrigger className="ml-1.5 cursor-default">
-                            <LuHelpCircle className="h-4 w-4 text-zinc-500" />
-                          </TooltipTrigger>
-                          <TooltipContent className="w-80 p-2">
-                            {features.txt.footnote}
-                          </TooltipContent>
-                        </Tooltip>
-                      </div>
-                    </li>
-                  )}
-
-                  {/* TODO: spacific features -> DOCX/DOC */}
-                  {features.docx && (
-                    <li className="flex space-x-5">
-                      <div className="flex-shrink-0">
-                        {features.docx.isAllowed ? (
-                          <LuCheck className="h-6 w-6 text-blue-500" />
-                        ) : (
-                          <LuMinus className="h-6 w-6 text-gray-300" />
-                        )}
-                      </div>
-
-                      <div className="flex items-center space-x-1">
-                        <p
-                          className={cn("text-gray-600", {
-                            "text-gray-400": !features.docx.isAllowed,
-                          })}
-                        >
-                          {features.docx.text}
-                        </p>
-                        <Tooltip delayDuration={300}>
-                          <TooltipTrigger className="ml-1.5 cursor-default">
-                            <LuHelpCircle className="h-4 w-4 text-zinc-500" />
-                          </TooltipTrigger>
-                          <TooltipContent className="w-80 p-2">
-                            {features.docx.footnote}
-                          </TooltipContent>
-                        </Tooltip>
-                      </div>
-                    </li>
-                  )}
-
-                  {/* TODO: spacific features -> IMAGE */}
-                  {features.image && (
-                    <li className="flex space-x-5">
-                      <div className="flex-shrink-0">
-                        {features.image.isAllowed ? (
-                          <LuCheck className="h-6 w-6 text-blue-500" />
-                        ) : (
-                          <LuMinus className="h-6 w-6 text-gray-300" />
-                        )}
-                      </div>
-
-                      <div className="flex items-center space-x-1">
-                        <p
-                          className={cn("text-gray-600", {
-                            "text-gray-400": !features.image.isAllowed,
-                          })}
-                        >
-                          {features.image.text}
-                        </p>
-                        <Tooltip delayDuration={300}>
-                          <TooltipTrigger className="ml-1.5 cursor-default">
-                            <LuHelpCircle className="h-4 w-4 text-zinc-500" />
-                          </TooltipTrigger>
-                          <TooltipContent className="w-80 p-2">
-                            {features.image.footnote}
+                            {features.json.footnote}
                           </TooltipContent>
                         </Tooltip>
                       </div>

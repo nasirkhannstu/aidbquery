@@ -2,10 +2,10 @@ import path from "path";
 import fs from "fs/promises";
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { CSVLoader } from "langchain/document_loaders/fs/csv";
+import { JSONLoader } from "langchain/document_loaders/fs/json";
 import { v4 } from "uuid";
 
-import { onUploadCompleteCSV } from "@/lib/on-upload/csv";
+import { onUploadCompleteJSON } from "@/lib/on-upload/json";
 import { authOptions } from "@/lib/auth/authOption";
 import { db } from "@/db/prisma";
 import { getUserSubscriptionPlan } from "@/config/using_mode";
@@ -25,7 +25,7 @@ export const POST = async (request: NextRequest) => {
       where: { id: user?.userSettingId },
     });
     const formData = await request.formData();
-    const file: File | null = formData.get("csv") as unknown as File;
+    const file: File | null = formData.get("json") as unknown as File;
     if (!file) {
       return NextResponse.json({ message: "File not found!" }, { status: 404 });
     }
@@ -41,24 +41,24 @@ export const POST = async (request: NextRequest) => {
     }
 
     // Check if image is allowed
-    if (!plan.csv?.isAllowed) {
+    if (!plan.json?.isAllowed) {
       return NextResponse.json(
         {
-          message: file_actions.csv.fileNotAllowed.message,
-          title: file_actions.csv.fileNotAllowed.title,
+          message: file_actions.json.fileNotAllowed.message,
+          title: file_actions.json.fileNotAllowed.title,
         },
-        { status: file_actions.csv.fileNotAllowed.code },
+        { status: file_actions.json.fileNotAllowed.code },
       );
     }
 
     // Check file size
-    if (file.size > plan.csv!.fileSize * 1000) {
+    if (file.size > plan.json!.fileSize * 1000) {
       return NextResponse.json(
         {
-          message: file_actions.csv.fileSizeExceeded.message,
-          title: file_actions.csv.fileSizeExceeded.title,
+          message: file_actions.json.fileSizeExceeded.message,
+          title: file_actions.json.fileSizeExceeded.title,
         },
-        { status: file_actions.csv.fileSizeExceeded.code },
+        { status: file_actions.json.fileSizeExceeded.code },
       );
     }
 
@@ -74,18 +74,18 @@ export const POST = async (request: NextRequest) => {
     }
 
     // Check quota
-    if ((userLimit?.csvQuoteUsed ?? 0) >= plan.csv!.quota) {
+    if ((userLimit?.jsonQuoteUsed ?? 0) >= plan.json!.quota) {
       return NextResponse.json(
         {
-          message: file_actions.csv.quotaExceeded.message,
-          title: file_actions.csv.quotaExceeded.title,
+          message: file_actions.json.quotaExceeded.message,
+          title: file_actions.json.quotaExceeded.title,
         },
-        { status: file_actions.csv.quotaExceeded.code },
+        { status: file_actions.json.quotaExceeded.code },
       );
     }
 
     // page size checked
-    const loader = new CSVLoader(file);
+    const loader = new JSONLoader(file);
 
     if ((loader.filePathOrBlob as File).size === 0) {
       return NextResponse.json(
@@ -99,36 +99,40 @@ export const POST = async (request: NextRequest) => {
 
     const rowsLevelDocs = await loader.load();
     const rowsAmt = rowsLevelDocs.length;
-    if (rowsAmt > plan.csv!.rows) {
-      return NextResponse.json(
-        {
-          message: file_actions.csv.rowsExceeded.message,
-          title: file_actions.csv.rowsExceeded.title,
-        },
-        { status: file_actions.csv.rowsExceeded.code },
-      );
-    }
 
-    if (file.type === "text/csv") {
+    console.log("rowsAmt", rowsAmt);
+    console.log("rows level docs", rowsLevelDocs);
+
+    // if (rowsAmt > plan.csv!.rows) {
+    //   return NextResponse.json(
+    //     {
+    //       message: file_actions.csv.rowsExceeded.message,
+    //       title: file_actions.csv.rowsExceeded.title,
+    //     },
+    //     { status: file_actions.csv.rowsExceeded.code },
+    //   );
+    // }
+
+    if (file.type === "application/json") {
       const bites = await file.arrayBuffer();
       const buffer = Buffer.from(bites);
       const fileExt = path.extname(file.name);
       const fileName = `${session?.user?.id}-${Date.now()}` + fileExt;
       const filePath = path.join(
         process.cwd(),
-        "public/uploads/csvs",
+        "public/uploads/jsons",
         fileName,
       );
 
       await fs.writeFile(filePath, buffer);
       const key = v4();
 
-      await onUploadCompleteCSV({
+      await onUploadCompleteJSON({
         metadata: await middleware(),
         file: {
           key: key,
           name: file.name,
-          url: `${process.env.ORIGIN}/uploads/csvs/${fileName}`,
+          url: `${process.env.ORIGIN}/uploads/jsons/${fileName}`,
           path: fileName,
         },
       });
@@ -137,21 +141,21 @@ export const POST = async (request: NextRequest) => {
         where: { id: userLimit?.id },
         data: {
           documentUploadQuoteUsed: { increment: 1 },
-          csvQuoteUsed: { increment: 1 },
+          jsonQuoteUsed: { increment: 1 },
         },
       });
 
       return NextResponse.json(
-        { success: true, csv: filePath, key },
+        { success: true, json: filePath, key },
         { status: 201 },
       );
     } else {
       return NextResponse.json(
         {
-          message: file_actions.csv.wrongFileType.message,
-          title: file_actions.csv.wrongFileType.title,
+          message: file_actions.json.wrongFileType.message,
+          title: file_actions.json.wrongFileType.title,
         },
-        { status: file_actions.csv.wrongFileType.code },
+        { status: file_actions.json.wrongFileType.code },
       );
     }
   } catch (error) {

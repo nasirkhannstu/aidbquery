@@ -1,6 +1,6 @@
 {
-  "name": "aipdfquery",
-  "version": "0.1.2",
+  "name": "aicsvquery",
+  "version": "0.5.0",
   "description": "Transform your document experience with our aicsvquery. Users upload files, pose questions, and receiveAI-generated answers tailored to their content. Seamlessly enhance document understanding, streamlining information retrieval. Unlock the power of intelligent insights and elevate your interaction with documents like never before. Try it now",
   "private": true,
   "scripts": {

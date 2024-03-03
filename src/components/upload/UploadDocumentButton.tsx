@@ -50,97 +50,19 @@ const DocumentUploadDropzone = () => {
   return (
     <Dropzone
       accept={{
-        "text/plain": [".txt"],
-        "application/*": [".doc", ".docx", ".pdf"],
+        "text/*": [".csv"],
+        "application/*": [".json"],
       }}
       multiple={false}
       onDrop={async (acceptedFile) => {
         // TODO: upload pdf
-        if (acceptedFile[0].type === "application/pdf") {
+        if (acceptedFile[0].type === "text/csv") {
           setIsUploading(true);
 
           const formData = new FormData();
-          formData.append("pdf", acceptedFile[0]);
+          formData.append("csv", acceptedFile[0]);
 
-          const res = await fetch("/api/uploading/pdfs", {
-            method: "POST",
-            body: formData,
-          });
-          const result = await res.json();
-
-          const progressInterval = startSimulatedProgress();
-
-          if (!res.ok) {
-            return setError({
-              isError: true,
-              message: result.message || "Please try again later",
-            });
-          }
-
-          const key = result.key;
-
-          if (!key) {
-            return toast({
-              title: "Something went wrong",
-              description: "Please try again later",
-              variant: "destructive",
-            });
-          }
-
-          clearInterval(progressInterval);
-          setUploadProgress(100);
-
-          startPolling({ key });
-        } else if (
-          acceptedFile[0].type ===
-            "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
-          acceptedFile[0].type === "application/msword" ||
-          acceptedFile[0].type === "application/doc" ||
-          acceptedFile[0].type === "application/ms-doc"
-        ) {
-          // TODO: upload doc
-          setIsUploading(true);
-
-          const formData = new FormData();
-          formData.append("doc", acceptedFile[0]);
-
-          const res = await fetch("/api/uploading/docs", {
-            method: "POST",
-            body: formData,
-          });
-          const result = await res.json();
-
-          const progressInterval = startSimulatedProgress();
-
-          if (!res.ok) {
-            return setError({
-              isError: true,
-              message: result.message || "Please try again later",
-            });
-          }
-
-          const key = result.key;
-
-          if (!key) {
-            return toast({
-              title: "Something went wrong",
-              description: "Please try again later",
-              variant: "destructive",
-            });
-          }
-
-          clearInterval(progressInterval);
-          setUploadProgress(100);
-
-          startPolling({ key });
-        } else if (acceptedFile[0].type === "text/plain") {
-          // TODO: upload txt
-          setIsUploading(true);
-
-          const formData = new FormData();
-          formData.append("text", acceptedFile[0]);
-
-          const res = await fetch("/api/uploading/texts", {
+          const res = await fetch("/api/uploading/csvs", {
             method: "POST",
             body: formData,
           });
@@ -173,7 +95,7 @@ const DocumentUploadDropzone = () => {
           return setError({
             isError: true,
             message:
-              "The file you are trying to upload is not in a supported format. Only PDF, DOC, DOCX, and .txt (text) files are accepted.",
+              "The file you are trying to upload is not in a supported format. Only CSV and Json files are accepted.",
           });
         }
       }}
@@ -193,22 +115,16 @@ const DocumentUploadDropzone = () => {
                   and drop
                 </p>
                 <p className="text-sm text-zinc-500">
-                  PDF{" "}
-                  {plan?.pdf?.fileSize && (
+                  CSV{" "}
+                  {plan?.csv?.fileSize && (
                     <code className="relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold">
-                      {convertMBtoKB(plan?.pdf?.fileSize)}
+                      {convertMBtoKB(plan?.csv?.fileSize)}
                     </code>
-                  )}
-                  , DOC, DOCX{" "}
-                  {plan?.docx?.fileSize && (
+                  )}{" "}
+                  JSON{" "}
+                  {plan?.json?.fileSize && (
                     <code className="relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold">
-                      {convertMBtoKB(plan?.docx?.fileSize)}
-                    </code>
-                  )}
-                  , TEXT{" "}
-                  {plan?.txt?.fileSize && (
-                    <code className="relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold">
-                      {convertMBtoKB(plan?.txt?.fileSize)}
+                      {convertMBtoKB(plan?.json?.fileSize)}
                     </code>
                   )}{" "}
                   file only.

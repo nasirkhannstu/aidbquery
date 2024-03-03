@@ -1,17 +1,21 @@
-import { PineconeStore } from "langchain/vectorstores/pinecone";
 import { OpenAIEmbeddings } from "langchain/embeddings/openai";
-import { DocxLoader } from "langchain/document_loaders/fs/docx";
+import { PineconeStore } from "langchain/vectorstores/pinecone";
 import path from "path";
+import { FileType } from "@prisma/client";
 import { readFile } from "fs/promises";
+import { JSONLoader } from "langchain/document_loaders/fs/json";
 
-import { middleware } from "./middleware";
+import { getPineconeClient } from "@/lib/pinecone";
 import { db } from "@/db/prisma";
-import { getPineconeClient } from "../pinecone";
-import { textExtractorFromDoc } from "../doc";
 import { pinecone_index } from "../utils";
+import { middleware } from "./middleware";
 
-// NOTE: This stuff is working on MS Word (.doc, .docx)
-export const onUploadCompleteDOC = async ({
+/**
+ * @param param0 metadata
+ * @param param1 file
+ * @returns void
+ */
+export const onUploadCompleteJSON = async ({
   metadata,
   file,
 }: {
@@ -21,12 +25,6 @@ export const onUploadCompleteDOC = async ({
     name: string;
     url: string;
     path: string;
-    fileType: "DOC";
-    mimeType:
-      | "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-      | "application/msword"
-      | "application/ms-doc"
-      | "application/doc";
   };
 }) => {
   const isFileExist = await db.files.findFirst({
@@ -45,34 +43,38 @@ export const onUploadCompleteDOC = async ({
       url: file.url,
       uploadStatus: "PROCESSING",
       path: file.path,
-      fileType: file.fileType,
+      fileType: FileType.JSON,
     },
   });
 
   try {
-    const filePath = path.join(process.cwd(), "public/uploads/docs", file.path);
+    const filePath = path.join(
+      process.cwd(),
+      "public/uploads/jsons",
+      file.path,
+    );
     const fileData = await readFile(filePath);
-    const blob = new Blob([fileData], { type: file.mimeType });
-    const loader = new DocxLoader(blob);
-    const pageLevelDocs = await loader.load();
+    const blob = new Blob([fileData], { type: "application/json" });
+
+    const loader = new JSONLoader(blob);
+    const jsonLevelDocs = await loader.load();
 
     // vectorize and index entire document
     const pinecone = await getPineconeClient();
     const pineconeIndex = pinecone.Index(pinecone_index);
+
     const embeddings = new OpenAIEmbeddings({
       openAIApiKey: process.env.OPENAI_API_KEY,
     });
-    await PineconeStore.fromDocuments(pageLevelDocs, embeddings, {
+
+    await PineconeStore.fromDocuments(jsonLevelDocs, embeddings, {
       pineconeIndex,
       namespace: String(createdFile.id),
     });
 
-    const texts = await textExtractorFromDoc(file.path);
-
     await db.files.update({
       data: {
         uploadStatus: "SUCCESS",
-        texts,
       },
       where: {
         id: createdFile.id,

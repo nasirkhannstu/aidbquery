@@ -39,17 +39,11 @@ next-env.d.ts
 
 
 # my custom ignores
-public/uploads/images/*
-!public/uploads/images/required.md
-
 public/uploads/avatars/*
 !public/uploads/avatars/required.md
 
-public/uploads/docs/*
-!public/uploads/docs/required.md
+public/uploads/csvs/*
+!public/uploads/csvs/required.md
 
-public/uploads/pdfs/*
-!public/uploads/pdfs/required.md
-
-public/uploads/texts/*
-!public/uploads/texts/required.md
+public/uploads/jsons/*
+!public/uploads/jsons/required.md

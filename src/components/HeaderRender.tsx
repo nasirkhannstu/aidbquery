@@ -5,15 +5,12 @@ import { LuArrowBigLeft, LuMenu } from "react-icons/lu";
 import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
-import { PageProps } from "@/components/MyFiles/MyFiles";
 import { useDrawerHandle } from "@/hooks/useDrawerHandler";
-import URLUploadButton from "@/components/upload/URLUploadButton";
 import UploadDocumentButton from "@/components/upload/UploadDocumentButton";
-import ImageUploadButton from "@/components/upload/ImageUploadButton";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import NavigationDrawerSM from "@/components/NavigationDrawerSM";
 
-const HeaderRender = ({ subscriptionPlan }: PageProps) => {
+const HeaderRender = () => {
   const { setIsOpen } = useDrawerHandle();
   const router = useRouter();
 
@@ -52,10 +49,6 @@ const HeaderRender = ({ subscriptionPlan }: PageProps) => {
         </Button>
       </div>
       <div className="flex items-center gap-1">
-        <URLUploadButton />
-        <ImageUploadButton
-          isAllowed={subscriptionPlan?.image?.isAllowed as boolean}
-        />
         <UploadDocumentButton />
       </div>
     </div>
