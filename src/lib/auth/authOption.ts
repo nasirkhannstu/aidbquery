@@ -14,7 +14,7 @@ export const authOptions: AuthOptions = {
         email: {
           label: "Email Address",
           type: "text",
-          placeholder: "demo@aipdfquery.com",
+          placeholder: "demo@aicsvquery.com",
         },
         password: {
           label: "Password",

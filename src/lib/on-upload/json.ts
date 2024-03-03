@@ -1,9 +1,9 @@
-import { OpenAIEmbeddings } from "langchain/embeddings/openai";
-import { PineconeStore } from "langchain/vectorstores/pinecone";
+import { OpenAIEmbeddings } from "@langchain/openai";
+import { PineconeStore } from "@langchain/pinecone";
+import { JSONLoader } from "langchain/document_loaders/fs/json";
 import path from "path";
 import { FileType } from "@prisma/client";
 import { readFile } from "fs/promises";
-import { JSONLoader } from "langchain/document_loaders/fs/json";
 
 import { getPineconeClient } from "@/lib/pinecone";
 import { db } from "@/db/prisma";

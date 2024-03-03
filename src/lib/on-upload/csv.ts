@@ -1,6 +1,6 @@
 import { CSVLoader } from "langchain/document_loaders/fs/csv";
-import { OpenAIEmbeddings } from "langchain/embeddings/openai";
-import { PineconeStore } from "langchain/vectorstores/pinecone";
+import { OpenAIEmbeddings } from "@langchain/openai";
+import { PineconeStore } from "@langchain/pinecone";
 import path from "path";
 import { readFile } from "fs/promises";
 import { FileType } from "@prisma/client";

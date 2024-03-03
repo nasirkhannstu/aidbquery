@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth";
 
-import { getUserSubscriptionPlan } from "../../config/using_mode";
-import { authOptions } from "../auth/authOption";
+import { getUserSubscriptionPlan } from "@/config/using_mode";
+import { authOptions } from "@/lib/auth/authOption";
 
 export const middleware = async () => {
   const session = await getServerSession(authOptions);

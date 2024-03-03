@@ -99,7 +99,7 @@ const MobileNavbarResponsive = ({ isAuth, user }: UserAccountNavProps) => {
                 <div className="flex w-3/4 items-center gap-x-4 rounded-sm px-2 py-1 hover:bg-zinc-100">
                   <Image
                     src={`/uploads/avatars/${user?.avatar}`}
-                    alt="AIPDFQuery"
+                    alt="AICSVQuery"
                     width={50}
                     height={50}
                     className="rounded-full border border-zinc-200 bg-white p-0.5"
@@ -165,7 +165,10 @@ const MobileNavbarResponsive = ({ isAuth, user }: UserAccountNavProps) => {
               <li>
                 <Button
                   onClick={() =>
-                    signOut({ callbackUrl: "/authentication/login", redirect: true })
+                    signOut({
+                      callbackUrl: "/authentication/login",
+                      redirect: true,
+                    })
                   }
                   className={buttonVariants({
                     variant: "destructive",

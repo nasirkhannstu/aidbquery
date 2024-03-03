@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 
 const seedingObject = {
   name: "John Doe",
-  email: "admin@aipdfquery.com",
+  email: "admin@aicsvquery.com",
   password: "admin123",
   role: "ADMIN",
   isEmailVerify: true,
