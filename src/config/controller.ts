@@ -38,7 +38,7 @@ export const PLANS: PlanTypes[] = [
     },
   },
   /**
-   * Pro plan for SaaS
+   * Premium plan for SaaS
    */
   {
     name: pro_name as string,

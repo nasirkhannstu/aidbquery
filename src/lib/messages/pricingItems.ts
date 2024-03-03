@@ -44,7 +44,7 @@ export const pricingItems: PricingItemTypes[] = [
       },
     ],
   },
-  // TODO: for pro plan
+  // TODO: for premium plan
   {
     plan: PLANS[1].name,
     tagline: "For larger projects with higher requirements.",

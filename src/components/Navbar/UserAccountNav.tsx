@@ -144,7 +144,7 @@ const UserAccountNav = ({
         </DropdownMenuItem>
 
         <DropdownMenuItem asChild>
-          {subscriptionPlan?.slug === "pro" &&
+          {subscriptionPlan?.slug === "premium" &&
           subscriptionPlan?.isSubscribed ? (
             <Link href="/billing" className="cursor-pointer">
               Manage Subscription

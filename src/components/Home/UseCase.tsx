@@ -8,6 +8,7 @@ import { CiMedicalCross } from "react-icons/ci";
 
 import FixMaxWidth from "../FixMaxWidth";
 import UseCaseCard from "./UseCaseCard";
+import { app_name } from "@/lib/utils";
 
 const UseCaseSection = () => {
   return (
@@ -37,9 +38,8 @@ const UseCaseSection = () => {
               Icon={BiSolidAnalyse}
               iconColor="text-indigo-600"
               iconBgColor="bg-indigo-500/10"
-              title="Document Analysis"
-              description="Analyze the content of the uploaded documents to identify key
-              themes, topics, and entities."
+              title="Data Analysis"
+              description="Leverage the power of AI to analyze and extract valuable"
             />
           </div>
           <div className="flex w-full flex-col items-center gap-0 border-b-0 md:flex-row md:border-b">
@@ -49,17 +49,16 @@ const UseCaseSection = () => {
               iconColor="text-sky-600"
               iconBgColor="bg-sky-500/10"
               title="Contextual Understanding"
-              description="Develop a system to understand the context within the uploaded
-              documents."
+              description="Understand the context of the data and extract the most"
             />
             <UseCaseCard
               rightBorder={false}
               Icon={TbTextResize}
               iconColor="text-amber-600"
               iconBgColor="bg-amber-500/10"
-              title="Document Summarization"
+              title="Data Summarization"
               description="Implement a summarization feature to condense the key
-              information from the uploaded documents."
+              information from the uploaded data."
             />
           </div>
           <div className="flex w-full flex-col items-center gap-0 border-b-0 md:flex-row md:border-b">
@@ -80,9 +79,9 @@ const UseCaseSection = () => {
               iconColor="text-purple-600"
               iconBgColor="bg-purple-500/10"
               title="Personal Productivity"
-              description="Individuals can streamline their personal research, organize
-              information, and quickly grasp the key points of any document
-              using OfficeAI, thereby enhancing overall productivity."
+              description={`Individuals can streamline their personal research, organize
+              information, and quickly grasp the key points of any data
+              using ${app_name}, thereby enhancing overall productivity.`}
             />
           </div>
           <div className="flex w-full flex-col items-center gap-0 md:flex-row">
@@ -91,8 +90,8 @@ const UseCaseSection = () => {
               Icon={LuBadgeDollarSign}
               iconColor="text-blue-600"
               iconBgColor="bg-blue-500/10"
-              title="Financial Document Insights"
-              description="Provide insights into financial documents by analyzing trends,
+              title="Financial Data Insights"
+              description="Provide insights into financial data by analyzing trends,
               risks, and opportunities mentioned in reports."
             />
             <UseCaseCard
@@ -100,8 +99,8 @@ const UseCaseSection = () => {
               Icon={CiMedicalCross}
               iconColor="text-cyan-600"
               iconBgColor="bg-cyan-500/10"
-              title="Medical Document Analysis"
-              description="Analyze medical documents to extract important information, such
+              title="Medical Data Analysis"
+              description="Analyze medical data to extract important information, such
               as symptoms, diagnoses, and treatment options."
             />
           </div>

@@ -10,7 +10,7 @@ import fs from "fs";
 import "./globals.css";
 import CommonNavbar from "@/components/Navbar/CommonNavbar";
 import Providers from "@/components/Providers";
-import { absURL, app_name, cn } from "@/lib/utils";
+import { TAG_LINE, absURL, app_name, cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/toaster";
 import Footer from "@/components/Footer";
 import { authOptions } from "@/lib/auth/authOption";
@@ -18,7 +18,7 @@ import { authOptions } from "@/lib/auth/authOption";
 export const metadata: Metadata = {
   metadataBase: absURL("/") as unknown as URL,
   title: {
-    default: `${app_name} - The best way to understand your documents with AI`,
+    default: `${app_name} - ${TAG_LINE}`,
     template: `%s - ${app_name}`,
   },
   description: `Transform your document experience with our ${app_name}. Users upload files, pose questions, and receiveAI-generated answers tailored to their content. Seamlessly enhance document understanding, streamlining information retrieval. Unlock the power of intelligent insights and elevate your interaction with documents like never before. Try it now`,
@@ -32,21 +32,8 @@ export const metadata: Metadata = {
     "understanding",
     "ai",
     "nlp",
-    "pdf",
     "openai",
     "namespaceit",
-    "document understanding",
-    "document understanding ai",
-    "document understanding nlp",
-    "document understanding pdf",
-    "document understanding openai",
-    "document understanding namespaceit",
-    "website url",
-    "docx",
-    "image chat",
-    "pdf chatbot",
-    "website chatbot",
-    "image",
     "chatbot",
     "chatgpt",
   ],

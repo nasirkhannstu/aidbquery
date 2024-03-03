@@ -2,7 +2,7 @@
 import React, { useEffect } from "react";
 import { motion, AnimatePresence, useCycle } from "framer-motion";
 
-const values = ["DOCUMENTs", "PDFs", "MS WORDs", "IMAGEs", "TEXTs", "LINKs"];
+const values = ["Database", "Database"];
 
 export const MainDialog = () => {
   const [currentValue, cycleValue] = useCycle(...values);

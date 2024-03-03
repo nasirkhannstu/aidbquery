@@ -1,4 +1,3 @@
-import React from "react";
 import { FaFileCsv } from "react-icons/fa6";
 import { LuFileJson } from "react-icons/lu";
 import { FileType } from "@prisma/client";

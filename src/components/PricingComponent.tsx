@@ -47,11 +47,11 @@ const PricingComponent = async ({ user }: PricingComponentProps) => {
               <div
                 key={plan}
                 className={cn("relative rounded-2xl bg-white shadow-lg", {
-                  "border-2 border-blue-600 shadow-blue-200": plan === "Pro",
-                  "border border-gray-200": plan !== "Pro",
+                  "border-2 border-blue-600 shadow-blue-200": plan === "Premium",
+                  "border border-gray-200": plan !== "Premium",
                 })}
               >
-                {plan === "Pro" && (
+                {plan === "Premium" && (
                   <div className="absolute -top-5 left-0 right-0 mx-auto w-32 rounded-full bg-gradient-to-r from-blue-600 to-cyan-600 px-3 py-2 text-sm font-medium text-white">
                     Upgrade now
                   </div>
@@ -200,7 +200,7 @@ const PricingComponent = async ({ user }: PricingComponentProps) => {
                       {user ? "Upload File" : "Sign up"}
                       <LuArrowRight className="ml-1.5 h-5 w-5" />
                     </Link>
-                  ) : plan === "Pro" ? (
+                  ) : plan === "Premium" ? (
                     user ? (
                       isSubscribed ? (
                         <Link

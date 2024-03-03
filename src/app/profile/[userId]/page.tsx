@@ -231,7 +231,7 @@ const ProfilePage = async ({
                       )}
                     >
                       {result.subscriptionStatus === "ACTIVE"
-                        ? "Pro Plan"
+                        ? "Premium Plan"
                         : "Free Plan"}
                     </p>
                   </div>
@@ -299,7 +299,7 @@ const ProfilePage = async ({
                 >
                   {result.subscriptionStatus === "ACTIVE"
                     ? "Manage My Subscription"
-                    : "Upgrade Pro"}
+                    : "Upgrade Premium"}
                 </Link>
               </div>
             ) : null}

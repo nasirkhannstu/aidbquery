@@ -3,11 +3,11 @@
  */
 export interface PlanTypes {
   /**
-   * The name of the plan (`Free` or `Pro`).
+   * The name of the plan (`Free` or `premium`).
    */
   name: string;
   /**
-   * The slug of the plan (`free` or `pro`).
+   * The slug of the plan (`free` or `premium`).
    */
   slug: string;
   /**
@@ -99,7 +99,7 @@ export type FeatureType = {
  */
 export interface PricingItemTypes {
   /**
-   * The name of the plan. ** example: `Free` or `Pro` **
+   * The name of the plan. ** example: `Free` or `Premium` **
    */
   plan: string;
   /**

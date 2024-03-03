@@ -59,7 +59,7 @@ export const createStripeSession = () =>
       billing_address_collection: "auto",
       line_items: [
         {
-          price: PLANS.find((plan) => plan.name === "Pro")?.price.priceIds
+          price: PLANS.find((plan) => plan.name === "Premium")?.price.priceIds
             .production,
           quantity: 1,
         },

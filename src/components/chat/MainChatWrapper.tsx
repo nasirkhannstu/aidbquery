@@ -74,7 +74,7 @@ const MainChatWrapper = ({
             <p className="text-sm text-zinc-500">
               Your{" "}
               <span className="font-medium">
-                {isSubscribed ? "Pro" : "Free"}
+                {isSubscribed ? "Premium" : "Free"}
               </span>{" "}
               plan maybe not support {fileType} files.
             </p>

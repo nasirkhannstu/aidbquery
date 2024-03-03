@@ -14,12 +14,12 @@ const Features = () => {
           </p>
         </div>
         <h3 className="mb-2 mt-4 text-center text-3xl font-extrabold">
-          <span className="text-primary">{app_name}</span> is a fully featured
+          Experience the Power of AI in Your Database:{" "}
+          <span className="text-primary">{app_name}</span>, Your Comprehensive{" "}
           <span className="bg-gradient-to-r from-pink-500 to-violet-500 bg-clip-text text-transparent drop-shadow-2xl">
-            {" "}
-            Artificial intelligence
+            AI-Powered
           </span>{" "}
-          based chat application for your documents
+          Chat Application!
         </h3>
 
         <div className="mx-auto my-3 h-[2px] w-16 bg-primary" />
