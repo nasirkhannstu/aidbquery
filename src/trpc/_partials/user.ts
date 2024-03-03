@@ -296,40 +296,20 @@ export const deleteUserFiles = () => {
 
       if (!file) throw new TRPCError({ code: "NOT_FOUND" });
 
-      if (file.fileType === "PDF") {
+      if (file.fileType === "CSV") {
         const filePath = path.join(
           process.cwd(),
-          "public/uploads/pdfs",
+          "public/uploads/csvs",
           file.path,
         );
         const isExist = await deleteUnExistingFile(filePath);
         if (isExist) {
           await unlink(filePath);
         }
-      } else if (file.fileType === "TEXT" || file.fileType === "URL") {
+      } else if (file.fileType === "JSON") {
         const filePath = path.join(
           process.cwd(),
-          "public/uploads/texts",
-          file.path,
-        );
-        const isExist = await deleteUnExistingFile(filePath);
-        if (isExist) {
-          await unlink(filePath);
-        }
-      } else if (file.fileType === "IMAGE") {
-        const filePath = path.join(
-          process.cwd(),
-          "public/uploads/images",
-          file.path,
-        );
-        const isExist = await deleteUnExistingFile(filePath);
-        if (isExist) {
-          await unlink(filePath);
-        }
-      } else if (file.fileType === "DOC") {
-        const filePath = path.join(
-          process.cwd(),
-          "public/uploads/docs",
+          "public/uploads/jsons",
           file.path,
         );
         const isExist = await deleteUnExistingFile(filePath);
@@ -349,13 +329,11 @@ export const deleteUserFiles = () => {
         },
       });
 
-      if (file.fileType !== "IMAGE") {
-        // TODO: delete pinecone namespace
-        const pineconeClient = await getPineconeClient();
-        const index = pineconeClient.Index(pinecone_index);
-        const ns = index.namespace(input.id);
-        await ns.deleteAll();
-      }
+      // TODO: delete pinecone namespace
+      const pineconeClient = await getPineconeClient();
+      const index = pineconeClient.Index(pinecone_index);
+      const ns = index.namespace(input.id);
+      await ns.deleteAll();
 
       return { success: true, fileId: input.id };
     });

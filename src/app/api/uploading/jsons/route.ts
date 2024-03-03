@@ -97,22 +97,6 @@ export const POST = async (request: NextRequest) => {
       );
     }
 
-    const rowsLevelDocs = await loader.load();
-    const rowsAmt = rowsLevelDocs.length;
-
-    console.log("rowsAmt", rowsAmt);
-    console.log("rows level docs", rowsLevelDocs);
-
-    // if (rowsAmt > plan.csv!.rows) {
-    //   return NextResponse.json(
-    //     {
-    //       message: file_actions.csv.rowsExceeded.message,
-    //       title: file_actions.csv.rowsExceeded.title,
-    //     },
-    //     { status: file_actions.csv.rowsExceeded.code },
-    //   );
-    // }
-
     if (file.type === "application/json") {
       const bites = await file.arrayBuffer();
       const buffer = Buffer.from(bites);

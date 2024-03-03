@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Dropzone from "react-dropzone";
-import { LuFile, LuFileText } from "react-icons/lu";
+import { LuFileText } from "react-icons/lu";
 import { RxReload } from "react-icons/rx";
 import { MdErrorOutline } from "react-icons/md";
 
@@ -12,6 +12,7 @@ import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/components/ui/use-toast";
 import { trpc } from "@/app/_trpc/client";
 import { cn, convertMBtoKB } from "@/lib/utils";
+import FileIconMimeType, { type MimeType } from "../FileIconMimeType";
 
 const DocumentUploadDropzone = () => {
   const [error, setError] = useState({ isError: false, message: "" });
@@ -55,7 +56,7 @@ const DocumentUploadDropzone = () => {
       }}
       multiple={false}
       onDrop={async (acceptedFile) => {
-        // TODO: upload pdf
+        // TODO: upload csv
         if (acceptedFile[0].type === "text/csv") {
           setIsUploading(true);
 
@@ -63,6 +64,42 @@ const DocumentUploadDropzone = () => {
           formData.append("csv", acceptedFile[0]);
 
           const res = await fetch("/api/uploading/csvs", {
+            method: "POST",
+            body: formData,
+          });
+          const result = await res.json();
+
+          const progressInterval = startSimulatedProgress();
+
+          if (!res.ok) {
+            return setError({
+              isError: true,
+              message: result.message || "Please try again later",
+            });
+          }
+
+          const key = result.key;
+
+          if (!key) {
+            return toast({
+              title: "Something went wrong",
+              description: "Please try again later",
+              variant: "destructive",
+            });
+          }
+
+          clearInterval(progressInterval);
+          setUploadProgress(100);
+
+          startPolling({ key });
+        } else if (acceptedFile[0].type === "application/json") {
+          // TODO: upload json
+          setIsUploading(true);
+
+          const formData = new FormData();
+          formData.append("json", acceptedFile[0]);
+
+          const res = await fetch("/api/uploading/jsons", {
             method: "POST",
             body: formData,
           });
@@ -141,7 +178,9 @@ const DocumentUploadDropzone = () => {
                   )}
                 >
                   <div className="grid h-full place-items-center px-3 py-2">
-                    <LuFile className="h-4 w-4 text-slate-500" />
+                    <FileIconMimeType
+                      mimeType={acceptedFiles[0].type as MimeType}
+                    />
                   </div>
                   <div className="h-full truncate px-3 py-2 text-sm">
                     {acceptedFiles[0].name}
@@ -168,7 +207,7 @@ const DocumentUploadDropzone = () => {
               ) : null}
 
               {error.isError ? (
-                <div className="flex items-center gap-x-2 rounded-md bg-red-50 px-3 py-2 tracking-tight">
+                <div className="my-1.5 flex items-center gap-x-2 rounded-md bg-red-50 px-3 py-2 tracking-tight">
                   <MdErrorOutline className="h-6 w-6 text-red-600 md:h-7 md:w-7" />{" "}
                   <p className="text-sm text-red-800 md:text-base">
                     {error.message}

@@ -21,7 +21,7 @@ export const PLANS: PlanTypes[] = [
     csv: {
       isAllowed: true,
       quota: 10,
-      fileSize: 200,
+      fileSize: 500,
       rows: 6_000,
     },
     json: {
