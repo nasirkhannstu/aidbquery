@@ -1,10 +1,10 @@
-import { BiSolidAnalyse } from "react-icons/bi";
-import { TbTextResize } from "react-icons/tb";
-import { FaConnectdevelop } from "react-icons/fa";
-import { GiMaterialsScience, GiArtificialIntelligence } from "react-icons/gi";
-import { GrGrow } from "react-icons/gr";
+import { GrRisk } from "react-icons/gr";
 import { LuBadgeDollarSign } from "react-icons/lu";
-import { CiMedicalCross } from "react-icons/ci";
+import { PiStudentDuotone } from "react-icons/pi";
+import { IoMdAnalytics } from "react-icons/io";
+import { IoBusiness } from "react-icons/io5";
+import { FaChartBar, FaChartPie } from "react-icons/fa6";
+import { MdOutlineHealthAndSafety } from "react-icons/md";
 
 import FixMaxWidth from "../FixMaxWidth";
 import UseCaseCard from "./UseCaseCard";
@@ -15,7 +15,7 @@ const UseCaseSection = () => {
     <section id="use-case" className="mb-5 pt-20 md:min-h-screen">
       <FixMaxWidth>
         <h3 className="text-center text-2xl text-primary">
-          All-in-one Platform
+          All-in-one Database Platform
         </h3>
         <h2 className="my-3 text-center text-5xl font-extrabold tracking-tighter text-black drop-shadow-md">
           Use Cases
@@ -24,84 +24,74 @@ const UseCaseSection = () => {
           <div className="flex w-full flex-col items-center gap-0 border-b-0 md:flex-row md:border-b">
             <UseCaseCard
               rightBorder
-              Icon={GiArtificialIntelligence}
+              Icon={IoMdAnalytics}
               iconColor="text-slate-600"
               iconBgColor="bg-slate-500/10"
-              title="Business Intelligence"
-              description="In the corporate world, application aids in extracting
-                actionable insights from business reports, market analyses, and
-                competitor information, empowering decision-makers with
-                data-driven strategies."
+              title="Data Analysis and Visualization"
+              description={`Use ${app_name} to quickly extract insights from large CSV and JSON datasets, allowing users to visualize trends, patterns, and correlations effortlessly.`}
             />
             <UseCaseCard
               rightBorder={false}
-              Icon={BiSolidAnalyse}
+              Icon={IoBusiness}
               iconColor="text-indigo-600"
               iconBgColor="bg-indigo-500/10"
-              title="Data Analysis"
-              description="Leverage the power of AI to analyze and extract valuable"
+              title="Business Intelligence"
+              description={`${app_name} can aid in business intelligence tasks by enabling users to ask natural language questions about their data, helping to identify opportunities, detect anomalies, and make informed decisions.`}
             />
           </div>
           <div className="flex w-full flex-col items-center gap-0 border-b-0 md:flex-row md:border-b">
             <UseCaseCard
-              rightBorder
-              Icon={FaConnectdevelop}
-              iconColor="text-sky-600"
-              iconBgColor="bg-sky-500/10"
-              title="Contextual Understanding"
-              description="Understand the context of the data and extract the most"
-            />
-            <UseCaseCard
               rightBorder={false}
-              Icon={TbTextResize}
+              Icon={PiStudentDuotone}
               iconColor="text-amber-600"
               iconBgColor="bg-amber-500/10"
-              title="Data Summarization"
-              description="Implement a summarization feature to condense the key
-              information from the uploaded data."
+              title="Educational Assistance"
+              description={`${app_name} can serve as a valuable educational tool, allowing students and educators to interact with data in a conversational manner, aiding in learning and understanding complex concepts in fields such as statistics, economics, and data science.`}
+            />
+            <UseCaseCard
+              rightBorder={false}
+              Icon={MdOutlineHealthAndSafety}
+              iconColor="text-cyan-600"
+              iconBgColor="bg-cyan-500/10"
+              title="Healthcare Analytics"
+              description={`Healthcare providers can utilize ${app_name} to analyze patient data, track health outcomes, and identify trends in diagnoses and treatments, supporting clinical decision-making and improving patient care.`}
             />
           </div>
           <div className="flex w-full flex-col items-center gap-0 border-b-0 md:flex-row md:border-b">
             <UseCaseCard
               rightBorder
-              Icon={GiMaterialsScience}
+              Icon={FaChartPie}
               iconColor="text-rose-600"
               iconBgColor="bg-rose-500/10"
-              title="Research and Education"
-              description="Application serves as an invaluable tool for researchers and
-              educators, helping them efficiently analyze and extract
-              information from academic papers, articles, and various
-              educational resources."
+              title="Research and Analysis"
+              description={`Researchers can leverage ${app_name} to explore datasets, formulate hypotheses, and conduct exploratory data analysis, speeding up the research process and facilitating knowledge discovery.`}
             />
             <UseCaseCard
               rightBorder={false}
-              Icon={GrGrow}
+              Icon={LuBadgeDollarSign}
               iconColor="text-purple-600"
               iconBgColor="bg-purple-500/10"
-              title="Personal Productivity"
-              description={`Individuals can streamline their personal research, organize
-              information, and quickly grasp the key points of any data
-              using ${app_name}, thereby enhancing overall productivity.`}
+              title="Financial Analysis"
+              description={`Financial professionals can use ${app_name} to analyze financial data, track performance metrics, and generate reports on key indicators such as revenue, expenses, and profitability, aiding in financial planning and decision-making.`}
             />
           </div>
+
           <div className="flex w-full flex-col items-center gap-0 md:flex-row">
             <UseCaseCard
               rightBorder
-              Icon={LuBadgeDollarSign}
+              Icon={FaChartBar}
               iconColor="text-blue-600"
               iconBgColor="bg-blue-500/10"
-              title="Financial Data Insights"
-              description="Provide insights into financial data by analyzing trends,
-              risks, and opportunities mentioned in reports."
+              title="Marketing Insights"
+              description={`Marketers can employ ${app_name} to analyze customer data, segment audiences, and identify effective marketing strategies based on customer behavior and preferences, enhancing targeting and campaign performance.`}
             />
             <UseCaseCard
               rightBorder={false}
-              Icon={CiMedicalCross}
+              Icon={GrRisk}
               iconColor="text-cyan-600"
               iconBgColor="bg-cyan-500/10"
-              title="Medical Data Analysis"
-              description="Analyze medical data to extract important information, such
-              as symptoms, diagnoses, and treatment options."
+              title="Compliance and Risk Management"
+              description={`${app_name} can help organizations ensure compliance with regulations and manage risks by analyzing data for potential issues such as fraud, security breaches, and regulatory violations, enabling proactive mitigation strategies.`}
             />
           </div>
         </div>
