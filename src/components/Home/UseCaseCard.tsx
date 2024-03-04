@@ -1,7 +1,7 @@
-import { cn } from "@/lib/utils";
-import React from "react";
 import { IconType } from "react-icons";
 import { GoArrowUpRight } from "react-icons/go";
+
+import { cn } from "@/lib/utils";
 
 interface UseCaseCardProps {
   title: string;

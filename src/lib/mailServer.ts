@@ -7,7 +7,7 @@ import { PRIMARY_COLOR, app_name } from "./utils";
  * @param mailTo where you want to send the email
  * @param mailSubject Subject of your email
  * @param emailBody Your email html template body
- * @returns Promise<SMTPTransport.SentMessageInfo>
+ * @returns Promise<messageId>
  */
 export const mailServer = async (
   mailTo: string,
@@ -20,7 +20,7 @@ export const mailServer = async (
 
       const message: sendGridMail.MailDataRequired = {
         to: mailTo,
-        from: `${app_name}<${process.env.SMTP_EMAIL}>`,
+        from: `${app_name}<${process.env.SENDGRID_EMAIL}>`,
         subject: mailSubject,
         html: emailBody,
       };

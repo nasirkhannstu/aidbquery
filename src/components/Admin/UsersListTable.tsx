@@ -49,6 +49,7 @@ import {
 } from "@/components/ui/hover-card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useToast } from "@/components/ui/use-toast";
+import Chip from "@/components/Chip";
 
 const using_mode = process.env.NEXT_PUBLIC_USING_MODE as "PERSONAL" | "SaaS";
 
@@ -129,18 +130,32 @@ export const columns: ColumnDef<UsersType>[] = [
     header: "Role",
     cell: ({ row }) => (
       <div>
-        <span
-          className={cn(
-            "rounded-md px-2 py-1 text-xs font-semibold",
+        <Chip
+          textColor={
             row.getValue("role") === "ADMIN"
-              ? "bg-sky-600/25 text-sky-600"
+              ? "text-sky-600"
               : row.getValue("role") === "USER"
-                ? "bg-lime-600/25 text-lime-600"
-                : "bg-slate-200 text-slate-600",
-          )}
-        >
-          {row.getValue("role")}
-        </span>
+                ? "text-indigo-600"
+                : "text-slate-600"
+          }
+          bgColor={
+            row.getValue("role") === "ADMIN"
+              ? "bg-sky-100"
+              : row.getValue("role") === "USER"
+                ? "bg-indigo-100"
+                : "bg-slate-100"
+          }
+          text={row.getValue("role")}
+          border
+          borderColor={
+            row.getValue("role") === "ADMIN"
+              ? "border-sky-600"
+              : row.getValue("role") === "USER"
+                ? "border-indigo-600"
+                : "border-slate-600"
+          }
+          rounded="rounded-full"
+        />
       </div>
     ),
   },
@@ -149,20 +164,38 @@ export const columns: ColumnDef<UsersType>[] = [
     header: "Status",
     cell: ({ row }) => (
       <div>
-        <span
-          className={cn(
-            "rounded-md px-2 py-1 text-xs font-semibold",
+        <Chip
+          textColor={
             row.getValue("status") === "ACTIVE"
-              ? "bg-green-200 text-green-600"
+              ? "text-green-600"
               : row.getValue("status") === "RESTRICTED"
-                ? "bg-amber-200 text-amber-600"
+                ? "text-amber-600"
                 : row.getValue("status") === "SUSPEND"
-                  ? "bg-red-200 text-red-600"
-                  : "bg-slate-200 text-slate-600",
-          )}
-        >
-          {row.getValue("status")}
-        </span>
+                  ? "text-rose-600"
+                  : "text-slate-600"
+          }
+          bgColor={
+            row.getValue("status") === "ACTIVE"
+              ? "bg-green-100"
+              : row.getValue("status") === "RESTRICTED"
+                ? "bg-amber-100"
+                : row.getValue("status") === "SUSPEND"
+                  ? "bg-rose-100"
+                  : "bg-slate-100"
+          }
+          borderColor={
+            row.getValue("status") === "ACTIVE"
+              ? "border-green-600"
+              : row.getValue("status") === "RESTRICTED"
+                ? "border-amber-600"
+                : row.getValue("status") === "SUSPEND"
+                  ? "border-rose-600"
+                  : "border-slate-600"
+          }
+          text={row.getValue("status")}
+          border
+          rounded="rounded-xl"
+        />
       </div>
     ),
   },
@@ -207,7 +240,7 @@ export const columns: ColumnDef<UsersType>[] = [
               <div className="space-y-1">
                 <h4 className="text-sm font-semibold">Only For SaaS</h4>
                 <p className="text-sm text-muted-foreground">
-                  This feature is only available for SaaS mode.
+                  This feature is only available in SaaS mode.
                 </p>
               </div>
             </div>
@@ -217,24 +250,50 @@ export const columns: ColumnDef<UsersType>[] = [
     ),
     cell: ({ row }) => (
       <div className="font-bold capitalize text-muted-foreground">
-        <span
-          className={cn(
-            "rounded-md px-2 py-1 text-xs font-semibold",
+        <Chip
+          textColor={
             row.getValue("subscriptionStatus") === "NULL"
-              ? "bg-slate-200 text-slate-600"
+              ? "text-slate-600"
               : row.getValue("subscriptionStatus") === "ACTIVE" &&
                   using_mode === "SaaS"
-                ? "bg-emerald-200 text-emerald-600"
+                ? "text-emerald-600"
                 : row.getValue("subscriptionStatus") === "CANCELED" &&
                     using_mode === "SaaS"
-                  ? "bg-pink-200 text-pink-600"
-                  : "bg-slate-200 text-slate-600",
-          )}
-        >
-          {row.getValue("subscriptionStatus") && using_mode === "SaaS"
-            ? row.getValue("subscriptionStatus")
-            : "N/A"}
-        </span>
+                  ? "text-pink-600"
+                  : "text-slate-600"
+          }
+          bgColor={
+            row.getValue("subscriptionStatus") === "NULL"
+              ? "bg-slate-100"
+              : row.getValue("subscriptionStatus") === "ACTIVE" &&
+                  using_mode === "SaaS"
+                ? "bg-emerald-100"
+                : row.getValue("subscriptionStatus") === "CANCELED" &&
+                    using_mode === "SaaS"
+                  ? "bg-pink-100"
+                  : "bg-slate-100"
+          }
+          borderColor={
+            row.getValue("subscriptionStatus") === "NULL"
+              ? "border-slate-600"
+              : row.getValue("subscriptionStatus") === "ACTIVE" &&
+                  using_mode === "SaaS"
+                ? "border-emerald-600"
+                : row.getValue("subscriptionStatus") === "CANCELED" &&
+                    using_mode === "SaaS"
+                  ? "border-pink-600"
+                  : "border-slate-600"
+          }
+          text={
+            row.getValue("subscriptionStatus") && using_mode === "SaaS"
+              ? row.getValue("subscriptionStatus") === "NULL"
+                ? "N/A"
+                : row.getValue("subscriptionStatus")
+              : "N/A"
+          }
+          border
+          rounded="rounded-lg"
+        />
       </div>
     ),
   },
@@ -261,7 +320,7 @@ export const columns: ColumnDef<UsersType>[] = [
               <div className="space-y-1">
                 <h4 className="text-sm font-semibold">Only For SaaS</h4>
                 <p className="text-sm text-muted-foreground">
-                  This feature is only available for SaaS mode.
+                  This feature is only available in SaaS mode.
                 </p>
               </div>
             </div>
@@ -541,7 +600,7 @@ export function UsersListTable() {
             "rounded-none pb-4 transition delay-150 ease-in-out hover:bg-white",
             filter === "RESTRICTED"
               ? "border-b-2 border-black text-black"
-              : " text-muted-foreground",
+              : "text-muted-foreground",
           )}
         >
           Restricted
@@ -549,8 +608,8 @@ export function UsersListTable() {
             className={cn(
               "ml-2 flex h-6 w-6 items-center justify-center rounded text-xs font-bold",
               filter === "RESTRICTED"
-                ? "bg-indigo-600 text-white"
-                : "bg-indigo-600/25 text-indigo-600",
+                ? "bg-amber-600 text-white"
+                : "bg-amber-600/25 text-amber-600",
             )}
           >
             {restrictedUser || 0}
@@ -577,8 +636,8 @@ export function UsersListTable() {
             className={cn(
               "ml-2 flex h-6 w-6 items-center justify-center rounded text-xs font-bold",
               filter === "SUSPEND"
-                ? "bg-red-600 text-white"
-                : "bg-red-600/25 text-red-600",
+                ? "bg-rose-600 text-white"
+                : "bg-rose-600/25 text-rose-600",
             )}
           >
             {suspendedUser || 0}
@@ -631,8 +690,8 @@ export function UsersListTable() {
             className={cn(
               "ml-2 flex h-6 w-6 items-center justify-center rounded text-xs font-bold",
               filter === "USER"
-                ? "bg-lime-600 text-white"
-                : "bg-lime-600/25 text-lime-600",
+                ? "bg-indigo-600 text-white"
+                : "bg-indigo-600/25 text-indigo-600",
             )}
           >
             {generalUser || 0}

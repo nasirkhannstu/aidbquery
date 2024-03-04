@@ -7,5 +7,6 @@ export const config = {
     "/change-password",
     "/verifications/:path*",
     "/admin/:path*",
+    "/billing/:path*",
   ],
 };

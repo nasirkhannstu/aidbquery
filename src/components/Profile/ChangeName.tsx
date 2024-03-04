@@ -70,6 +70,7 @@ const ChangeName = ({ name }: EditNameProps) => {
             <Label
               htmlFor="name"
               className="text-xs font-semibold md:text-base"
+              required
             >
               Enter your full name
             </Label>

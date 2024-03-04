@@ -39,6 +39,7 @@ import { trpc } from "@/app/_trpc/client";
 import LoadMore from "../LoadMore";
 import { cn } from "@/lib/utils";
 import FileIcon from "../FileIcon";
+import Chip from "@/components/Chip";
 
 type FilterType =
   | "ALL"
@@ -145,22 +146,44 @@ export const columns: ColumnDef<FileTypes>[] = [
     header: "Status",
     cell: ({ row }) => (
       <div>
-        <span
-          className={cn(
-            "rounded-md px-2 py-1 text-xs font-semibold",
+        <Chip
+          bgColor={
             row.getValue("uploadStatus") === "SUCCESS"
-              ? "bg-green-600/25 text-green-600"
+              ? "text-green-600"
               : row.getValue("uploadStatus") === "PENDING"
-                ? "bg-amber-600/25 text-amber-600"
+                ? "text-amber-600"
                 : row.getValue("uploadStatus") === "PROCESSING"
-                  ? "bg-indigo-600/25 text-indigo-600"
+                  ? "text-indigo-600"
                   : row.getValue("uploadStatus") === "FAILED"
-                    ? "bg-red-600/25 text-red-600"
-                    : "bg-slate-600/25 text-slate-600",
-          )}
-        >
-          {row.getValue("uploadStatus")}
-        </span>
+                    ? "text-rose-600"
+                    : "text-slate-600"
+          }
+          textColor={
+            row.getValue("uploadStatus") === "SUCCESS"
+              ? "bg-green-100"
+              : row.getValue("uploadStatus") === "PENDING"
+                ? "bg-amber-100"
+                : row.getValue("uploadStatus") === "PROCESSING"
+                  ? "bg-indigo-100"
+                  : row.getValue("uploadStatus") === "FAILED"
+                    ? "bg-rose-100"
+                    : "bg-slate-100"
+          }
+          border
+          borderColor={
+            row.getValue("uploadStatus") === "SUCCESS"
+              ? "border-green-600"
+              : row.getValue("uploadStatus") === "PENDING"
+                ? "border-amber-600"
+                : row.getValue("uploadStatus") === "PROCESSING"
+                  ? "border-indigo-600"
+                  : row.getValue("uploadStatus") === "FAILED"
+                    ? "border-rose-600"
+                    : "border-slate-600"
+          }
+          rounded="rounded-full"
+          text={row.getValue("uploadStatus")}
+        />
       </div>
     ),
   },

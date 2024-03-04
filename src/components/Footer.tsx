@@ -69,12 +69,11 @@ const Footer = () => {
             &copy;{app_name} {new Date().getFullYear()} . All rights reserved.
           </p>
           <p className="text-center text-sm text-muted-foreground">
-            As you explore or engage with our websites, services, or tools, we,
-            or our authorized service providers, may utilize cookies. These
-            cookies serve to store information, enhancing your experience by
-            ensuring it&apos;s not only better, faster, and safer but also
-            catered to your preferences. Additionally, they play a role in our
-            marketing efforts.
+            We, or our approved service providers, may use cookies while you
+            browse or use our websites, services, or tools. By storing
+            information, these cookies make sure that your experience is better,
+            faster, safer, and tailored to your preferences. They also
+            contribute to our marketing initiatives.
           </p>
         </div>
       </MaxWidthWrapper>

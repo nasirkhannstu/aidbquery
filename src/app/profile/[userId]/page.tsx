@@ -294,7 +294,7 @@ const ProfilePage = async ({
                   className={buttonVariants({
                     variant: "default",
                     size: "lg",
-                    className: "text-base",
+                    className: "text-base font-semibold",
                   })}
                 >
                   {result.subscriptionStatus === "ACTIVE"
@@ -346,7 +346,7 @@ const ProfilePage = async ({
                   className={buttonVariants({
                     variant: "default",
                     size: "lg",
-                    className: "text-base",
+                    className: "text-base font-semibold",
                   })}
                 >
                   Change Password
@@ -371,7 +371,8 @@ const ProfilePage = async ({
                       Unverified
                     </p>
                     <p className="text-sm text-gray-400">
-                      Please verify your email address to access all services.
+                      In order to utilize full features, please verify your
+                      email address.
                     </p>
                   </>
                 )}
@@ -381,6 +382,7 @@ const ProfilePage = async ({
                     href="/verifications/email"
                     className={buttonVariants({
                       variant: "link",
+                      className: "text-base font-semibold text-green-600",
                     })}
                   >
                     Verify

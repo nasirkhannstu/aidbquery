@@ -41,12 +41,12 @@ const UseCaseSection = () => {
           </div>
           <div className="flex w-full flex-col items-center gap-0 border-b-0 md:flex-row md:border-b">
             <UseCaseCard
-              rightBorder={false}
+              rightBorder
               Icon={PiStudentDuotone}
               iconColor="text-amber-600"
               iconBgColor="bg-amber-500/10"
               title="Educational Assistance"
-              description={`${app_name} can serve as a valuable educational tool, allowing students and educators to interact with data in a conversational manner, aiding in learning and understanding complex concepts in fields such as statistics, economics, and data science.`}
+              description={`${app_name} is a valuable teaching tool that facilitates dialogue between educators and students, aiding in understanding complex concepts in data science, statistics, and economics.`}
             />
             <UseCaseCard
               rightBorder={false}
@@ -54,7 +54,7 @@ const UseCaseSection = () => {
               iconColor="text-cyan-600"
               iconBgColor="bg-cyan-500/10"
               title="Healthcare Analytics"
-              description={`Healthcare providers can utilize ${app_name} to analyze patient data, track health outcomes, and identify trends in diagnoses and treatments, supporting clinical decision-making and improving patient care.`}
+              description={`Healthcare professionals may utilize ${app_name} to track health outcomes, evaluate patient data, and spot patterns in diagnoses and treatments—all of which will enhance patient care.`}
             />
           </div>
           <div className="flex w-full flex-col items-center gap-0 border-b-0 md:flex-row md:border-b">
@@ -72,7 +72,7 @@ const UseCaseSection = () => {
               iconColor="text-purple-600"
               iconBgColor="bg-purple-500/10"
               title="Financial Analysis"
-              description={`Financial professionals can use ${app_name} to analyze financial data, track performance metrics, and generate reports on key indicators such as revenue, expenses, and profitability, aiding in financial planning and decision-making.`}
+              description={`${app_name} is a tool utilized by financial professionals for analyzing financial data, tracking performance metrics, and producing reports on key indicators like revenue, expenses, and profitability.`}
             />
           </div>
 

@@ -34,7 +34,13 @@ async function main() {
 main()
   .then(async () => {
     console.log(
-      `Seed data created successfully: \nName: '${seedingObject.name}', \nEmail: '${seedingObject.email}', \nPassword: '${seedingObject.password}', \nRole: '${seedingObject.role}', \nisEmailVerify:${seedingObject.isEmailVerify}, \nstatus:'${seedingObject.status}', \n`,
+      `Data seeding has finished: 
+      \nName: '${seedingObject.name}',
+      \nEmail: '${seedingObject.email}',
+      \nPassword: '${seedingObject.password}',
+      \nRole: '${seedingObject.role}',
+      \nisEmailVerify:${seedingObject.isEmailVerify},
+      \nstatus:'${seedingObject.status}'`,
     );
 
     await prisma.$disconnect();

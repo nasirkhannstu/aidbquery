@@ -20,6 +20,7 @@ declare namespace NodeJS {
     PINECONE_ENVIRONMENT: string;
     IS_SENDGRID: "ON" | "OFF";
     SENDGRID_API_KEY?: string;
+    SENDGRID_EMAIL?: string;
     SMTP_HOST?: string;
     SMTP_PORT?: number;
     SMTP_EMAIL?: string;

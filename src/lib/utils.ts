@@ -27,8 +27,19 @@ export const pro_pricing = Number(process.env.PRO_PRICING) as number;
 export const free_pricing = Number(process.env.FREE_PRICING) as number;
 
 export const PRIMARY_COLOR = "#0ea5e9";
-export const TAG_LINE = `Unleash Intelligent Insights: Empower Your Data Journey with ${app_name}!`;
+export const TAG_LINE = `${app_name} is a powerful tool that allows users to interact with CSV and JSON files, providing AI-generated insights and enhancing the document experience.`;
 export const DESCRIPTION = `🚀Unlock the full potential of your data with ${app_name_client}! Seamlessly interact with your CSV and JSON files like never before. Simply upload your files, ask questions, and receive AI-generated answers tailored to your content. Say goodbye to manual data parsing and hello to intelligent insights at your fingertips. Elevate your document experience and unlock the power of intelligent information retrieval with ${app_name_client}. Try it now and revolutionize the way you interact with your data!📃🤖`;
+export const KEYWORDS = [
+  app_name,
+  "documents",
+  "understanding",
+  "ai",
+  "nlp",
+  "openai",
+  "namespaceit",
+  "chatbot",
+  "chatgpt",
+];
 
 export function convertMBtoKB(kilobytes: number): string {
   if (kilobytes > 1024) {
