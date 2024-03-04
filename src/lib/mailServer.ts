@@ -1,10 +1,9 @@
 import sendGridMail from "@sendgrid/mail";
 import nodemailer from "nodemailer";
 
-import { app_name } from "./utils";
+import { PRIMARY_COLOR, app_name } from "./utils";
 
 /**
- *
  * @param mailTo where you want to send the email
  * @param mailSubject Subject of your email
  * @param emailBody Your email html template body
@@ -146,7 +145,7 @@ export const forgotPasswordTemplate = (token: string) => {
         border-collapse: collapse !important;
       }
       a {
-        color: #6dd9cb;
+        color: ${PRIMARY_COLOR};
       }
       img {
         height: auto;
@@ -315,7 +314,7 @@ export const forgotPasswordTemplate = (token: string) => {
                         <tr>
                           <td
                             align="center"
-                            bgcolor="#6dd9cb"
+                            bgcolor="${PRIMARY_COLOR}"
                             style="border-radius: 6px"
                           >
                             <a
@@ -540,7 +539,7 @@ export const emailVerifyTemplate = (token: string) => {
         border-collapse: collapse !important;
       }
       a {
-        color: #6dd9cb;
+        color: ${PRIMARY_COLOR};
       }
       img {
         height: auto;
@@ -709,7 +708,7 @@ export const emailVerifyTemplate = (token: string) => {
                         <tr>
                           <td
                             align="center"
-                            bgcolor="#6dd9cb"
+                            bgcolor="${PRIMARY_COLOR}"
                             style="border-radius: 6px"
                           >
                             <a

@@ -71,7 +71,7 @@ export const onUploadCompleteCSV = async ({
     await db.files.update({
       data: {
         uploadStatus: "SUCCESS",
-        csvFileSize: blob.size * 1024,
+        csvFileSize: blob.size / 1024,
         csvRowCount: rowsLevelDoc.length,
       },
       where: {

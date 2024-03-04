@@ -11,15 +11,6 @@ export function absURL(path: string) {
   return `http://localhost:${process.env.PORT ?? 3000}${path}`;
 }
 
-export function convertMBtoKB(kilobytes: number): string {
-  if (kilobytes > 1024) {
-    const mb = kilobytes / 1024;
-    return `${Math.ceil(mb)}MB`;
-  } else {
-    return `${kilobytes}KB`;
-  }
-}
-
 export const pro_name = process.env.PRO_ACCOUNT_NAME;
 export const pro_slug = process.env.PRO_ACCOUNT_SLUG;
 export const free_name = process.env.FREE_ACCOUNT_NAME;
@@ -35,6 +26,15 @@ export const app_name_client =
 export const pro_pricing = Number(process.env.PRO_PRICING) as number;
 export const free_pricing = Number(process.env.FREE_PRICING) as number;
 
-export const MIN_DIMENSION = 150;
+export const PRIMARY_COLOR = "#0ea5e9";
 export const TAG_LINE = `Unleash Intelligent Insights: Empower Your Data Journey with ${app_name}!`;
 export const DESCRIPTION = `🚀Unlock the full potential of your data with ${app_name_client}! Seamlessly interact with your CSV and JSON files like never before. Simply upload your files, ask questions, and receive AI-generated answers tailored to your content. Say goodbye to manual data parsing and hello to intelligent insights at your fingertips. Elevate your document experience and unlock the power of intelligent information retrieval with ${app_name_client}. Try it now and revolutionize the way you interact with your data!📃🤖`;
+
+export function convertMBtoKB(kilobytes: number): string {
+  if (kilobytes > 1024) {
+    const mb = kilobytes / 1024;
+    return `${Math.round(mb)}MB`;
+  } else {
+    return `${Math.ceil(kilobytes)}KB`;
+  }
+}
