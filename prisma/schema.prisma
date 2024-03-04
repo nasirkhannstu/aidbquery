@@ -137,3 +137,12 @@ model UserSettings {
   updatedAt               DateTime @updatedAt @map("updated_at")
   User                    Users[]
 }
+
+model Settings {
+  id        String   @id @default(cuid())
+  facebook  String?
+  twitter   String?
+  support   String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+}
