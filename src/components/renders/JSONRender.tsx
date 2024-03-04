@@ -1,25 +1,23 @@
 import moment from "moment";
 import { MdDriveFileRenameOutline, MdOutlineChat } from "react-icons/md";
 import { BsFiletypeCsv } from "react-icons/bs";
-import { CiLineHeight, CiTimer } from "react-icons/ci";
-import { LuFileType } from "react-icons/lu";
+import { CiTimer } from "react-icons/ci";
 import { FileType } from "@prisma/client";
+import { LuFileType } from "react-icons/lu";
 
 import { convertMBtoKB } from "@/lib/utils";
 
 interface CSVRenderProps {
   name: string;
   size: number;
-  rows: number;
   messages: number;
   fileType: FileType;
   createdAt: Date;
 }
 
-const CSVRender = ({
+const JSONRender = ({
   createdAt,
   name,
-  rows,
   size,
   messages,
   fileType,
@@ -50,13 +48,6 @@ const CSVRender = ({
           </div>
         </li>
         <li className="flex items-center gap-x-3">
-          <CiLineHeight className="h-5 w-5 text-slate-600" />
-          <div className="flex gap-x-1.5">
-            <span className="font-bold">Records:</span>
-            <span className="text-slate-600">{rows}</span>
-          </div>
-        </li>
-        <li className="flex items-center gap-x-3">
           <MdOutlineChat className="h-5 w-5 text-slate-600" />
           <div className="flex gap-x-1.5">
             <span className="font-bold">Chats:</span>
@@ -77,4 +68,4 @@ const CSVRender = ({
   );
 };
 
-export default CSVRender;
+export default JSONRender;

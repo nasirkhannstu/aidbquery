@@ -2,8 +2,8 @@ import { OpenAIEmbeddings } from "@langchain/openai";
 import { PineconeStore } from "@langchain/pinecone";
 import { JSONLoader } from "langchain/document_loaders/fs/json";
 import path from "path";
-import { FileType } from "@prisma/client";
 import { readFile } from "fs/promises";
+import { FileType } from "@prisma/client";
 
 import { getPineconeClient } from "@/lib/pinecone";
 import { db } from "@/db/prisma";
@@ -75,6 +75,7 @@ export const onUploadCompleteJSON = async ({
     await db.files.update({
       data: {
         uploadStatus: "SUCCESS",
+        fileSize: blob.size / 1024,
       },
       where: {
         id: createdFile.id,

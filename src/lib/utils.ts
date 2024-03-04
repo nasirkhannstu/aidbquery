@@ -35,6 +35,7 @@ export function convertMBtoKB(kilobytes: number): string {
     const mb = kilobytes / 1024;
     return `${Math.round(mb)}MB`;
   } else {
-    return `${Math.ceil(kilobytes)}KB`;
+    if (kilobytes < 1) return `${Math.ceil(kilobytes * 1024)}Bytes`;
+    else return `${Math.ceil(kilobytes)}KB`;
   }
 }

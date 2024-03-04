@@ -13,8 +13,6 @@ interface FileIconProps {
 const FileIconMimeType = ({ mimeType, size = 4 }: FileIconProps) => {
   const iconSize = `h-${size} w-${size}`;
 
-  console.log(mimeType);
-
   return mimeType === "text/csv" ? (
     <FaFileCsv className={cn("text-green-700", iconSize)} />
   ) : mimeType === "application/json" ? (

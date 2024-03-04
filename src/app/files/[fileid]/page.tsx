@@ -8,6 +8,7 @@ import { db } from "@/db/prisma";
 import { authOptions } from "@/lib/auth/authOption";
 import { getUserSubscriptionPlan } from "@/config/using_mode";
 import CSVRender from "@/components/renders/CSVRender";
+import JSONRender from "@/components/renders/JSONRender";
 
 interface DocumentDisplayPageProps {
   params: { fileid: string };
@@ -32,7 +33,7 @@ const DocumentDisplayPage = async ({
       fileType: true,
       createdAt: true,
       csvRowCount: true,
-      csvFileSize: true,
+      fileSize: true,
       name: true,
       _count: {
         select: { messages: true },
@@ -61,7 +62,16 @@ const DocumentDisplayPage = async ({
                 messages={file._count.messages}
                 name={file.name}
                 rows={file.csvRowCount as number}
-                size={file.csvFileSize as number}
+                size={file.fileSize as number}
+                fileType={file.fileType}
+              />
+            ) : file.fileType === "JSON" ? (
+              <JSONRender
+                createdAt={file.createdAt}
+                messages={file._count.messages}
+                name={file.name}
+                size={file.fileSize as number}
+                fileType={file.fileType}
               />
             ) : null}
           </div>
