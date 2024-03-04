@@ -101,7 +101,7 @@ model Files {
   path         String
   fileType     FileType     @map("file_type")
   texts        String?      @db.Text()
-  csvFileSize  Float?       @map("csv_file_size")
+  fileSize     Float?       @map("csv_file_size")
   csvRowCount  Int?         @map("csv_row_count")
   messages     Messages[]
   createdAt    DateTime     @default(now()) @map("created_at")
