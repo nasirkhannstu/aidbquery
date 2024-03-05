@@ -1,9 +1,10 @@
 "use client";
 import React from "react";
 import Link from "next/link";
-import { ImUsers } from "react-icons/im";
 import { LuFileCheck } from "react-icons/lu";
 import { usePathname } from "next/navigation";
+import { IoSettingsOutline } from "react-icons/io5";
+import { PiUsers } from "react-icons/pi";
 
 import { cn } from "@/lib/utils";
 
@@ -20,7 +21,7 @@ const DashboardItemList = () => {
               pathname === "/admin/users" ? "bg-primary/20 text-primary" : "",
             )}
           >
-            <ImUsers
+            <PiUsers
               className={cn(
                 "h-6 w-6",
                 pathname === "/admin/users" ? "text-primary" : "",
@@ -49,6 +50,28 @@ const DashboardItemList = () => {
               className={cn(pathname === "/admin/files" ? "text-primary" : "")}
             >
               Uploaded Files
+            </Link>
+          </li>
+          <li
+            className={cn(
+              pathname === "/admin/settings"
+                ? "bg-primary/20 text-primary"
+                : "",
+            )}
+          >
+            <IoSettingsOutline
+              className={cn(
+                "h-6 w-6",
+                pathname === "/admin/settings" ? "text-primary" : "",
+              )}
+            />
+            <Link
+              href="/admin/settings"
+              className={cn(
+                pathname === "/admin/settings" ? "text-primary" : "",
+              )}
+            >
+              Settings
             </Link>
           </li>
         </ul>

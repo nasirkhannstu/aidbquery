@@ -24,6 +24,7 @@ import {
   users,
 } from "./_partials/admin";
 import { createStripeSession } from "./_partials/stripe";
+import { getSocialMedia, setupSocialMedia } from "./_partials/settings";
 
 export const appRouter = router({
   getUserFiles: privateProcedure.query(async ({ ctx }) => {
@@ -148,6 +149,8 @@ export const appRouter = router({
   adminUserSuspend: suspendUser(),
   adminUserRestrict: restrictUser(),
   adminMakeActiveUser: activeUser(),
+  getSocialMedia: getSocialMedia(),
+  setupSocialMedia: setupSocialMedia(),
 });
 
 export type AppRouter = typeof appRouter;

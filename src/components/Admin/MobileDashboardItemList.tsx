@@ -3,8 +3,9 @@ import React from "react";
 import { MdDashboard } from "react-icons/md";
 import { usePathname } from "next/navigation";
 import { LuFileCheck } from "react-icons/lu";
-import { ImUsers } from "react-icons/im";
 import Link from "next/link";
+import { IoSettingsOutline } from "react-icons/io5";
+import { PiUsers } from "react-icons/pi";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -45,7 +46,7 @@ const MobileDashboardItemList = () => {
                     : "",
                 )}
               >
-                <ImUsers
+                <PiUsers
                   className={cn(
                     "h-6 w-6",
                     pathname === "/admin/users" ? "text-primary" : "",
@@ -80,6 +81,28 @@ const MobileDashboardItemList = () => {
                   )}
                 >
                   Uploaded Files
+                </Link>
+              </li>
+              <li
+                className={cn(
+                  pathname === "/admin/settings"
+                    ? "bg-primary/20 text-primary"
+                    : "",
+                )}
+              >
+                <IoSettingsOutline
+                  className={cn(
+                    "h-6 w-6",
+                    pathname === "/admin/settings" ? "text-primary" : "",
+                  )}
+                />
+                <Link
+                  href="/admin/settings"
+                  className={cn(
+                    pathname === "/admin/settings" ? "text-primary" : "",
+                  )}
+                >
+                  Settings
                 </Link>
               </li>
             </ul>
