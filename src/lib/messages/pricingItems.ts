@@ -9,7 +9,8 @@ export const pricingItems: PricingItemTypes[] = [
   // TODO: for free plan
   {
     plan: PLANS[0].name,
-    tagline: "Exclusively for personal use.",
+    secondTagline: "Limited",
+    tagline: "Only to be used for personal purposes.",
     quota: PLANS[0].quota,
     finance: {
       price: free_pricing,
@@ -47,7 +48,8 @@ export const pricingItems: PricingItemTypes[] = [
   // TODO: for premium plan
   {
     plan: PLANS[1].name,
-    tagline: "For larger projects with higher requirements.",
+    secondTagline: "Most popular",
+    tagline: "For more ambitious and larger undertakings.",
     quota: PLANS[1].quota,
     finance: {
       price: pro_pricing,

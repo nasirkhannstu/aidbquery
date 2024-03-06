@@ -1,14 +1,12 @@
 /* eslint-disable indent */
 "use client";
 import React from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { LuBadgeDollarSign, LuBot, LuSuperscript } from "react-icons/lu";
 
 import { buttonVariants } from "@/components/ui/button";
 import { BannerSvg } from "@/components/Home/BannerSvg";
 import { MainDialog } from "@/components/animations/MainDialog";
-import { app_name_client } from "@/lib/utils";
 import { trpc } from "@/app/_trpc/client";
 import Description from "./Description";
 
@@ -27,51 +25,10 @@ const Landing = () => {
           to-sky-700 to-90% opacity-[0.15] shadow md:h-[130vh] md:w-[130vh]"
         />
         {/* TODO:  left side small circle*/}
-        <Image
-          priority
-          placeholder="blur"
-          blurDataURL="/images/ellipse2.png"
-          src="/images/ellipse2.png"
-          alt={app_name_client}
-          width={500}
-          height={503}
-          className="absolute -inset-x-52 inset-y-16 z-0 select-none object-cover opacity-70"
-        />
+
         {/* TODO: bottom middle circle */}
         <div className="absolute inset-x-[40%] top-[45rem] h-[370px] w-[370px] select-none rounded-full bg-primary/40 shadow-xl blur-2xl" />
-        <Image
-          priority
-          placeholder="blur"
-          blurDataURL="/images/ellipse2.png"
-          src="/images/ellipse2.png"
-          width={800}
-          height={800}
-          alt={app_name_client}
-          quality={100}
-          className="absolute left-40 top-40 z-0 select-none opacity-50 blur-xl"
-        />
-        <Image
-          priority
-          placeholder="blur"
-          blurDataURL="/images/ellipse2.png"
-          src="/images/ellipse2.png"
-          width={400}
-          height={403}
-          alt={app_name_client}
-          quality={100}
-          className="absolute -top-[140px] left-[20rem] z-0 select-none"
-        />
-        <Image
-          priority
-          placeholder="blur"
-          blurDataURL="/images/ellipse3.png"
-          src="/images/ellipse3.png"
-          alt={app_name_client}
-          width={400}
-          height={400}
-          quality={100}
-          className="absolute -bottom-64 z-0 select-none opacity-40 shadow-lg"
-        />
+
         {/* NOTE: left side */}
         <div className="z-10 flex w-full justify-center lg:h-[calc(100vh-56px)] lg:w-[40%] lg:items-center">
           <div className="p-3 md:px-5">

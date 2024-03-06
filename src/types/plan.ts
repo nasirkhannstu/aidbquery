@@ -102,6 +102,7 @@ export interface PricingItemTypes {
    * The name of the plan. ** example: `Free` or `Premium` **
    */
   plan: string;
+  secondTagline?: string;
   /**
    * The tagline for the plan.
    */

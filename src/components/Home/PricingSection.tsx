@@ -14,11 +14,10 @@ const PricingSection = ({ user }: PricingSectionProps) => {
           Pricing
         </p>
         <h2 className="py-3 text-center text-4xl font-extrabold drop-shadow-xl">
-          Simple, Transparent Pricing
+          Simple, transparent pricing
         </h2>
         <p className="mx-auto max-w-prose text-center text-lg font-light text-muted-foreground">
-          Choose an affordable plan that’s packed with the best features for
-          engaging your audience, creating customer loyalty, and driving sales.
+          Choose a plan that suits your specific requirements.
         </p>
 
         <div className="container max-w-5xl text-center">

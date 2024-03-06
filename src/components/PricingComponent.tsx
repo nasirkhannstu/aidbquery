@@ -1,6 +1,11 @@
 import React from "react";
 import Link from "next/link";
-import { LuHelpCircle, LuCheck, LuMinus, LuArrowRight } from "react-icons/lu";
+import {
+  LuHelpCircle,
+  LuArrowRight,
+  LuBadgeCheck,
+  LuBadgeMinus,
+} from "react-icons/lu";
 
 import { LoginUser } from "@/types/nextauth";
 import {
@@ -42,39 +47,59 @@ const PricingComponent = async ({ user }: PricingComponentProps) => {
             features,
             featureAll,
             finance: { price },
+            secondTagline,
           }) => {
             return (
               <div
                 key={plan}
                 className={cn("relative rounded-2xl bg-white shadow-lg", {
-                  "border-2 border-blue-600 shadow-blue-200": plan === "Premium",
+                  "border-2 border-purple-600 shadow-blue-200":
+                    plan === "Premium",
                   "border border-gray-200": plan !== "Premium",
                 })}
               >
                 {plan === "Premium" && (
-                  <div className="absolute -top-5 left-0 right-0 mx-auto w-32 rounded-full bg-gradient-to-r from-blue-600 to-cyan-600 px-3 py-2 text-sm font-medium text-white">
+                  <div className="absolute -top-5 left-0 right-0 mx-auto w-32 rounded-full bg-gradient-to-r from-sky-600 to-purple-600 px-3 py-2 text-sm font-semibold text-white">
                     Upgrade now
                   </div>
                 )}
 
                 <div className="p-5">
-                  <h3 className="font-display my-3 text-center text-3xl font-bold">
-                    {plan}
-                  </h3>
-                  <p className="text-gray-500">{tagline} </p>
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-display my-3 text-3xl font-bold">
+                      {plan}
+                    </h3>
+                    <h4
+                      className={cn(
+                        "font-display my-3 rounded-full px-3 py-1 font-bold",
+                        plan === "Free"
+                          ? "bg-slate-100 text-slate-600"
+                          : "bg-primary/10 text-primary",
+                      )}
+                    >
+                      {secondTagline}
+                    </h4>
+                  </div>
+
                   <p className="font-display my-5 text-6xl font-semibold drop-shadow-2xl">
                     ${price}
+                    <span className="text-lg font-light text-primary">
+                      /month
+                    </span>
                   </p>
-                  <p className="text-gray-500">per month</p>
+                  {/* <p className="text-gray-500">per month</p> */}
+                  <p className="text-gray-500">{tagline}</p>
                 </div>
 
                 <div className="flex h-20 items-center justify-center border-b border-t border-gray-200 bg-gray-50">
                   <div className="flex items-center space-x-1">
-                    <p>{quota.toLocaleString()} Documents included</p>
+                    <p className="text-lg font-light">
+                      {quota} Documents included
+                    </p>
 
                     <Tooltip delayDuration={300}>
                       <TooltipTrigger className="ml-1.5 cursor-default">
-                        <LuHelpCircle className="h-4 w-4 text-zinc-500" />
+                        <LuHelpCircle className="h-5 w-5 font-light text-black" />
                       </TooltipTrigger>
                       <TooltipContent className="w-80 p-2">
                         How many documents you can upload every month (including
@@ -90,9 +115,9 @@ const PricingComponent = async ({ user }: PricingComponentProps) => {
                     <li key={text} className="flex space-x-5">
                       <div className="flex-shrink-0">
                         {!negative ? (
-                          <LuMinus className="h-6 w-6 text-gray-300" />
+                          <LuBadgeMinus className="h-6 w-6 text-gray-300" />
                         ) : (
-                          <LuCheck className="h-6 w-6 text-blue-500" />
+                          <LuBadgeCheck className="h-6 w-6 text-blue-500" />
                         )}
                       </div>
                       {footnote ? (
@@ -130,9 +155,9 @@ const PricingComponent = async ({ user }: PricingComponentProps) => {
                     <li className="flex space-x-5">
                       <div className="flex-shrink-0">
                         {features.csv.isAllowed ? (
-                          <LuCheck className="h-6 w-6 text-blue-500" />
+                          <LuBadgeCheck className="h-6 w-6 text-blue-500" />
                         ) : (
-                          <LuMinus className="h-6 w-6 text-gray-300" />
+                          <LuBadgeMinus className="h-6 w-6 text-gray-300" />
                         )}
                       </div>
 
@@ -161,9 +186,9 @@ const PricingComponent = async ({ user }: PricingComponentProps) => {
                     <li className="flex space-x-5">
                       <div className="flex-shrink-0">
                         {features.json.isAllowed ? (
-                          <LuCheck className="h-6 w-6 text-blue-500" />
+                          <LuBadgeCheck className="h-6 w-6 text-blue-500" />
                         ) : (
-                          <LuMinus className="h-6 w-6 text-gray-300" />
+                          <LuBadgeMinus className="h-6 w-6 text-gray-300" />
                         )}
                       </div>
 
