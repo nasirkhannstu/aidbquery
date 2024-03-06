@@ -59,7 +59,7 @@
 }
 
 .grainy {
-  background-color: #f8f9fa;
+  @apply bg-slate-100;
 }
 
 .scrollbar-w-2::-webkit-scrollbar {
@@ -94,17 +94,6 @@
 }
 .grid-child li a {
   @apply h-full w-full;
-}
-
-.swiper-button-next::after {
-  @apply text-xl font-bold text-primary/80 !important;
-}
-.swiper-button-prev::after {
-  @apply text-xl font-bold text-primary/80 !important;
-}
-
-.use-case__wrapper > div > div {
-  @apply w-full border-b p-6 text-base text-gray-500 md:w-1/2 md:border-b-0;
 }
 
 .use-case__content {

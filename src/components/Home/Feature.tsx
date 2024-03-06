@@ -6,11 +6,11 @@ import { app_name } from "@/lib/utils";
 
 const Features = () => {
   return (
-    <section id="features" className="pt-20">
+    <section id="features" className="py-20">
       <FixMaxWidth className="flex flex-col justify-center">
         <div className="flex justify-center">
-          <p className="rounded-3xl bg-primary px-3 py-1.5 text-sm font-bold text-white">
-            BEST EVER FEATURES
+          <p className="rounded-3xl px-3 py-1.5 text-sm font-bold text-primary">
+            FEATURES
           </p>
         </div>
         <h3 className="mb-2 mt-4 text-center text-3xl font-extrabold">

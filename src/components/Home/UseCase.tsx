@@ -12,7 +12,7 @@ import { app_name } from "@/lib/utils";
 
 const UseCaseSection = () => {
   return (
-    <section id="use-case" className="mb-5 pt-20 md:min-h-screen">
+    <section id="use-case" className="mb-5 py-20 md:min-h-screen">
       <FixMaxWidth>
         <h3 className="text-center text-2xl text-primary">
           All-in-one Database Platform

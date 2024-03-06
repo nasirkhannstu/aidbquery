@@ -1,7 +1,6 @@
 import { getServerSession } from "next-auth";
 
 import { authOptions } from "@/lib/auth/authOption";
-import HomeCarousel from "@/components/Home/Carousel";
 import Features from "@/components/Home/Feature";
 import PricingSection from "@/components/Home/PricingSection";
 import Landing from "@/components/Home/Landing";
@@ -17,6 +16,9 @@ export default async function Home() {
       {/* NOTE: landing section */}
       <Landing />
 
+      {/* Feature section */}
+      <Features />
+
       {/* value proposition section */}
       <section className="bg-white">
         <div className="flex w-full flex-col items-center justify-center bg-white py-2 lg:py-5">
@@ -27,12 +29,6 @@ export default async function Home() {
         {/* NOTE: supported files */}
         <SupportedFiles />
       </section>
-
-      {/* NOTE: carousel */}
-      <HomeCarousel />
-
-      {/* Feature section */}
-      <Features />
 
       {/* NOTE: use case section */}
       <UseCaseSection />

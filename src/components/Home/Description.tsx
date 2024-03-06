@@ -3,7 +3,7 @@ import { app_name_client } from "@/lib/utils";
 
 const Description = () => {
   return (
-    <p className="mt-4 max-w-prose text-center text-base leading-7 text-slate-600 lg:mt-8">
+    <p className="mt-4 text-center text-base leading-7 text-slate-600 lg:mt-8">
       🚀Unlock the full potential of your data with{" "}
       <span className="relative inline-block before:absolute before:-inset-1 before:block before:-skew-y-3 before:bg-cyan-500">
         <span className="relative font-semibold text-white">
