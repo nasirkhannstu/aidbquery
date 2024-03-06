@@ -10,7 +10,8 @@
     "lint": "next lint",
     "introspect": "drizzle-kit introspect:mysql",
     "db:generate": "drizzle-kit generate:mysql",
-    "db:push": "ts-node db/migrate"
+    "db:push": "drizzle-kit push:mysql",
+    "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
     "@ant-design/nextjs-registry": "^1.0.0",
@@ -43,7 +44,6 @@
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.11",
     "tailwindcss": "^3.3.0",
-    "ts-node": "^10.9.2",
     "typescript": "^5"
   }
 }
