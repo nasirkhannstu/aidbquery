@@ -2,17 +2,24 @@
   "name": "aidbquery",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "introspect": "drizzle-kit introspect:mysql",
+    "db:generate": "drizzle-kit generate:mysql",
+    "db:push": "ts-node db/migrate"
   },
   "dependencies": {
     "@ant-design/nextjs-registry": "^1.0.0",
     "antd": "^5.15.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
+    "dotenv": "^16.4.5",
+    "drizzle-orm": "^0.29.4",
+    "mysql2": "^3.9.2",
     "next": "14.1.2",
     "next-auth": "^4.24.6",
     "react": "^18",
@@ -27,6 +34,7 @@
     "@typescript-eslint/eslint-plugin": "^7.1.1",
     "@typescript-eslint/parser": "^7.1.1",
     "autoprefixer": "^10.0.1",
+    "drizzle-kit": "^0.20.14",
     "eslint": "^8.57.0",
     "eslint-config-next": "^14.1.2",
     "eslint-config-prettier": "^9.1.0",
@@ -35,6 +43,7 @@
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.11",
     "tailwindcss": "^3.3.0",
+    "ts-node": "^10.9.2",
     "typescript": "^5"
   }
 }

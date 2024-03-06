@@ -1,0 +1,27 @@
+{
+  "version": "5",
+  "dialect": "mysql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1709727101360,
+      "tag": "0000_jazzy_iron_fist",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1709729799751,
+      "tag": "0001_heavy_rockslide",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1709730210406,
+      "tag": "0002_true_bushwacker",
+      "breakpoints": true
+    }
+  ]
+}
