@@ -9,5 +9,6 @@ declare namespace NodeJS {
     DB_NAME: string;
     APP_MODE: "SaaS" | "PERSONAL";
     NEXT_PUBLIC_APP_MODE: "SaaS" | "PERSONAL";
+    NEXTAUTH_SECRET?: string;
   }
 }

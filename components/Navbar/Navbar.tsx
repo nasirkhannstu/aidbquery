@@ -11,6 +11,7 @@ import {
 import Logo from "@/components/Navbar/Logo";
 import { APP_MODE_CLIENT } from "@/lib/utils";
 import { useSession } from "next-auth/react";
+import ProfileMenu from "./ProfileMenu";
 
 const Navbar = () => {
   const session = useSession();
@@ -27,18 +28,18 @@ const Navbar = () => {
           {/* <MobileNavbarResponsive isAuth={!!user} user={user ?? undefined} /> */}
 
           <div className="hidden items-center space-x-1 md:flex">
-            <Button href="/#home" type="text" icon={<HomeTwoTone />}>
+            <Button href="/#home" type="link" icon={<HomeTwoTone />}>
               Home
             </Button>
 
-            <Button href="/#features" type="text" icon={<ApiTwoTone />}>
+            <Button href="/#features" type="link" icon={<ApiTwoTone />}>
               Features
             </Button>
-            <Button href="/#use-case" type="text" icon={<HighlightTwoTone />}>
+            <Button href="/#use-case" type="link" icon={<HighlightTwoTone />}>
               Use cases
             </Button>
             {APP_MODE_CLIENT === "SaaS" && (
-              <Button href="/#pricing" type="text" icon={<DollarTwoTone />}>
+              <Button href="/#pricing" type="link" icon={<DollarTwoTone />}>
                 Pricing
               </Button>
             )}
@@ -58,19 +59,7 @@ const Navbar = () => {
               </>
             ) : (
               <>
-                <Button href="/files" type="text">
-                  Chats
-                </Button>
-
-                {/* <UserAccountNav
-                  name={user.name}
-                  email={user.email}
-                  imageBase64={avatarBase64}
-                  isEmailVerify={user.isEmailVerify}
-                  userId={user.id}
-                  isAdmin={user.role === "ADMIN"}
-                  createdAt={user.createdAt}
-                /> */}
+                <ProfileMenu />
               </>
             )}
           </div>

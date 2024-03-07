@@ -2,20 +2,24 @@ import { sql } from "drizzle-orm";
 import {
   mysqlTable,
   varchar,
-  datetime,
   timestamp,
-  serial,
+  boolean,
 } from "drizzle-orm/mysql-core";
+import { createId } from "@paralleldrive/cuid2";
 
 export const users = mysqlTable("users", {
-  id: serial("id").primaryKey().autoincrement(),
-  fullName: varchar("full_name", { length: 256 }),
-  email: varchar("email", { length: 256 }).unique(),
-  password: varchar("password", { length: 256 }),
-  createdAt: datetime("created_at")
+  id: varchar("id", { length: 128 })
+    .$defaultFn(() => createId())
+    .primaryKey(),
+  fullName: varchar("full_name", { length: 256 }).notNull(),
+  email: varchar("email", { length: 256 }).unique().notNull(),
+  password: varchar("password", { length: 256 }).notNull(),
+  isEmailVerified: boolean("is_email_verified").notNull().default(false),
+  createdAt: timestamp("created_at")
     .notNull()
     .default(sql`now()`),
   updatedAt: timestamp("updated_at")
     .default(sql`now()`)
-    .onUpdateNow(),
+    .onUpdateNow()
+    .notNull(),
 });

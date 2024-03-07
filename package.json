@@ -18,6 +18,7 @@
     "@ant-design/nextjs-registry": "^1.0.0",
     "@hookform/resolvers": "^3.3.4",
     "@mantine/hooks": "^7.6.1",
+    "@paralleldrive/cuid2": "^2.2.2",
     "@pinecone-database/pinecone": "^2.1.0",
     "@radix-ui/react-slot": "^1.0.2",
     "@tailwindcss/typography": "^0.5.10",
@@ -31,6 +32,7 @@
     "framer-motion": "^11.0.8",
     "jsonwebtoken": "^9.0.2",
     "langchain": "^0.1.25",
+    "lodash": "^4.17.21",
     "mysql2": "^3.9.2",
     "next": "14.1.2",
     "next-auth": "^4.24.6",
@@ -50,6 +52,8 @@
     "zustand": "^4.5.2"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/lodash": "^4.14.202",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

@@ -3,7 +3,9 @@ import { PropsWithChildren } from "react";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { ConfigProvider } from "antd";
 import { SessionProvider } from "next-auth/react";
+
 import Navbar from "./Navbar/Navbar";
+import { primary_color } from "@/lib/theme";
 
 const Providers = ({ children }: PropsWithChildren) => {
   return (
@@ -11,7 +13,7 @@ const Providers = ({ children }: PropsWithChildren) => {
       <ConfigProvider
         theme={{
           token: {
-            colorPrimary: "#13c2c2",
+            colorPrimary: primary_color,
           },
         }}
       >
