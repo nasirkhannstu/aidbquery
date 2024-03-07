@@ -7,5 +7,7 @@ declare namespace NodeJS {
     DB_USER: string;
     DB_PASSWORD: string;
     DB_NAME: string;
+    APP_MODE: "SaaS" | "PERSONAL";
+    NEXT_PUBLIC_APP_MODE: "SaaS" | "PERSONAL";
   }
 }
