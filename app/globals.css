@@ -2,7 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  :root {
+    --primary: #1d39c4;
+  }
+}
 
-body{
-  @apply bg-gray-50
+body {
+  @apply bg-gray-50;
 }

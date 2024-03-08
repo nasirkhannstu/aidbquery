@@ -3,10 +3,11 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { APP_NAME, DESCRIPTION } from "@/lib/utils";
 import Providers from "@/components/Providers";
-import Navbar from "@/components/Navbar/Navbar";
 
-const inter = Inter({ subsets: ["latin"] });
-
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--main-font",
+});
 export const metadata: Metadata = {
   title: {
     default: APP_NAME || "AIDBQuery",

@@ -84,7 +84,7 @@ const tailFormItemLayout = {
 const App: React.FC = () => {
   const [form] = Form.useForm();
 
-  const onFinish = (values: any) => {
+  const onFinish = (values: unknown) => {
     console.log("Received values of form: ", values);
   };
 
@@ -113,7 +113,7 @@ const App: React.FC = () => {
       setAutoCompleteResult([]);
     } else {
       setAutoCompleteResult(
-        [".com", ".org", ".net"].map((domain) => `${value}${domain}`)
+        [".com", ".org", ".net"].map((domain) => `${value}${domain}`),
       );
     }
   };
@@ -183,7 +183,7 @@ const App: React.FC = () => {
                 return Promise.resolve();
               }
               return Promise.reject(
-                new Error("The new password that you entered do not match!")
+                new Error("The new password that you entered do not match!"),
               );
             },
           }),

@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Button, Form, FormProps, Input, message } from "antd";
+import { Button, Form, type FormProps, Input, message } from "antd";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
 
@@ -21,16 +21,14 @@ const App: React.FC = () => {
     });
 
     if (res?.ok) {
-      console.log("res: ", res);
-      signIn("credentials", {
+      void signIn("credentials", {
         email: values.email,
         password: values.password,
       });
     } else {
-      console.log("res: ", res);
-      messageHandler.open({
+      await messageHandler.open({
         type: "error",
-        content: res?.error as string,
+        content: res?.error,
       });
     }
   };
@@ -39,11 +37,11 @@ const App: React.FC = () => {
     <>
       {messageHolder}
       <div className="container flex justify-center">
-        <div className="max-w-xl w-full pt-6 px-10 mt-28 bg-white rounded border">
+        <div className="mt-28 w-full max-w-xl rounded border bg-white px-10 pt-6">
           <div className="my-3">
             <p className="text-slate-600">LOGIN</p>
-            <h4 className="md:text-3xl text-lg font-bold">Welcome back</h4>
-            <p className="text-slate-400 font-light">
+            <h4 className="text-lg font-bold md:text-3xl">Welcome back</h4>
+            <p className="font-light text-slate-400">
               Access your account by logging in.
             </p>
           </div>
@@ -81,7 +79,7 @@ const App: React.FC = () => {
               <Input placeholder="Enter your password" type="password" />
             </Form.Item>
 
-            <div className="flex justify-between items-center flex-col md:flex-row">
+            <div className="flex flex-col items-center justify-between md:flex-row">
               <div className="flex items-start gap-x-px">
                 <p>Don&apos;t you have an account yet? </p>
                 <Link href="/login">Crate one</Link>

@@ -1,5 +1,5 @@
-import React, { PropsWithChildren } from "react";
-import { Metadata } from "next";
+import React, { type PropsWithChildren } from "react";
+import { type Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Register new account",
