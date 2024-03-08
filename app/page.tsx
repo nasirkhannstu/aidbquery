@@ -7,7 +7,7 @@ import { users } from "@/db/schema";
 export default async function Home() {
   const user = await db.query.users.findFirst({
     where(fields, operators) {
-      return eq(fields.id, 1);
+      return eq(fields.id, "1");
     },
   });
 
