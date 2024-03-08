@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Button, Form, FormProps, Input } from "antd";
+import { Button, Form, type FormProps, Input } from "antd";
 import Link from "next/link";
 
 type FieldType = {
@@ -9,26 +9,26 @@ type FieldType = {
   remember?: string;
 };
 
-const App: React.FC = () => {
+const RegisterPage: React.FC = () => {
   const [form] = Form.useForm();
 
-  const onFinish = (values: any) => {
+  const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
     console.log("Received values of form: ", values);
   };
 
   const onFinishFailed: FormProps<FieldType>["onFinishFailed"] = (
-    errorInfo
+    errorInfo,
   ) => {
     console.log("Failed:", errorInfo);
   };
 
   return (
     <div className="container flex justify-center">
-      <div className="max-w-xl w-full pt-6 px-10 mt-28 bg-white rounded border">
+      <div className="mt-28 w-full max-w-xl rounded border bg-white px-10 pt-6">
         <div className="my-3">
           <p className="text-slate-600">REGISTER</p>
-          <h4 className="md:text-3xl text-lg font-bold">Create new account</h4>
-          <p className="text-slate-400 font-light">
+          <h4 className="text-lg font-bold md:text-3xl">Create new account</h4>
+          <p className="font-light text-slate-400">
             To begin, complete the form.
           </p>
         </div>
@@ -39,7 +39,7 @@ const App: React.FC = () => {
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
         >
-          <div className="w-full flex-col md:flex-row flex gap-x-2 items-center">
+          <div className="flex w-full flex-col items-center gap-x-2 md:flex-row">
             <div className="w-full md:w-1/2">
               <Form.Item
                 label="First Name"
@@ -120,7 +120,9 @@ const App: React.FC = () => {
                     return Promise.resolve();
                   }
                   return Promise.reject(
-                    new Error("The new password that you entered do not match!")
+                    new Error(
+                      "The new password that you entered do not match!",
+                    ),
                   );
                 },
               }),
@@ -128,7 +130,7 @@ const App: React.FC = () => {
           >
             <Input placeholder="Confirm your password" />
           </Form.Item>
-          <div className="flex justify-between items-center flex-col md:flex-row">
+          <div className="flex flex-col items-center justify-between md:flex-row">
             <div className="flex items-start gap-x-px">
               <p>Already have an account? </p>
               <Link href="/login">Login</Link>
@@ -145,4 +147,4 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+export default RegisterPage;

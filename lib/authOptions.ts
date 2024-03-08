@@ -1,12 +1,12 @@
-import { AuthOptions } from "next-auth";
+import { type AuthOptions, getServerSession } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
+import { eq } from "drizzle-orm";
 import lodash from "lodash";
 
-import { User } from "@/types/nextauth";
-import { db } from "@/db/db";
-import { eq } from "drizzle-orm";
+import { db } from "@/db";
 import { users } from "@/db/schema";
+import { type User } from "@/app/types/next-auth";
 
 export const authOptions: AuthOptions = {
   providers: [
@@ -27,24 +27,32 @@ export const authOptions: AuthOptions = {
         const user = await db
           .select()
           .from(users)
-          .where(eq(users.email, credentials?.email as string));
+          .where(eq(users.email, credentials?.email ?? ""));
 
         if (user.length === 0) throw new Error("Invalid credentials");
         else {
-          const isValid = await bcrypt.compare(
-            credentials?.password as string,
-            user[0].password
-          );
-          if (!isValid) throw new Error("Invalid credentials");
+          if (user[0] && credentials?.password) {
+            const isValid = await bcrypt.compare(
+              credentials?.password,
+              user[0]?.password,
+            );
+            if (!isValid) throw new Error("Invalid credentials");
 
-          return lodash.omit(user[0], ["password"]);
+            return lodash.omit(user[0], ["password"]);
+          } else {
+            return null;
+          }
         }
       },
     }),
   ],
   callbacks: {
     async jwt({ user, token, session, trigger }) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      console.log("jwt", { user }, { token }, { session }, { trigger });
+
       if (trigger === "update") {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return { ...token, ...session };
       }
 
@@ -54,7 +62,7 @@ export const authOptions: AuthOptions = {
       return params.baseUrl + "/chats";
     },
     async session({ session, token }) {
-      session.user = token as User;
+      session.user = token as unknown as User;
 
       return session;
     },
@@ -65,3 +73,5 @@ export const authOptions: AuthOptions = {
   session: { strategy: "jwt" },
   secret: process.env.NEXTAUTH_SECRET,
 };
+
+export const getServerAuthSession = () => getServerSession(authOptions);

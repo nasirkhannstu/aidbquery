@@ -1,5 +1,4 @@
 import type { Config } from "tailwindcss";
-import { primary_color } from "./lib/theme";
 
 const config = {
   darkMode: ["class"],
@@ -34,7 +33,7 @@ const config = {
         "accordion-up": "accordion-up 0.2s ease-out",
       },
       colors: {
-        primary: primary_color,
+        primary: "var(--primary)",
       },
     },
   },
