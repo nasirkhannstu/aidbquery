@@ -5,7 +5,7 @@ import { ConfigProvider } from "antd";
 import { SessionProvider } from "next-auth/react";
 
 import Navbar from "./Navbar/Navbar";
-import { primary_color } from "@/lib/theme";
+import { theme } from "@/lib/theme";
 import { TRPCReactProvider } from "@/trpc/provider";
 
 const Providers = ({ children }: PropsWithChildren) => {
@@ -15,9 +15,7 @@ const Providers = ({ children }: PropsWithChildren) => {
         <AntdRegistry>
           <ConfigProvider
             theme={{
-              token: {
-                colorPrimary: primary_color,
-              },
+              token: theme,
             }}
           >
             <Navbar />

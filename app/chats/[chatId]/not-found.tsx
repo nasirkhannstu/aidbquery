@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 
 import { errorAlerts } from "@/lib/alerts/alerts";
 
-const NotFound: React.FC = () => {
+const FileNotFound: React.FC = () => {
   const router = useRouter();
 
   return (
@@ -13,7 +13,7 @@ const NotFound: React.FC = () => {
       status="404"
       title="404"
       style={{ marginTop: "10%" }}
-      subTitle={errorAlerts.pageNotFound.message}
+      subTitle={errorAlerts.fileNotFound.message}
       extra={
         <Button type="primary" onClick={() => router.push("/")}>
           Back Home
@@ -22,4 +22,4 @@ const NotFound: React.FC = () => {
     />
   );
 };
-export default NotFound;
+export default FileNotFound;

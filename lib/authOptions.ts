@@ -49,7 +49,7 @@ export const authOptions: AuthOptions = {
   callbacks: {
     async jwt({ user, token, session, trigger }) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      console.log("jwt", { user }, { token }, { session }, { trigger });
+      // console.log("jwt", { user }, { token }, { session }, { trigger });
 
       if (trigger === "update") {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return
