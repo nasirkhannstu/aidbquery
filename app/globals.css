@@ -5,6 +5,7 @@
 @layer base {
   :root {
     --primary: #1d39c4;
+    --bg-fade: #f4f6ff;
   }
 }
 

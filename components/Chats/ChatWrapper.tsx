@@ -6,8 +6,10 @@ import { type FileTypes } from "@/types/types";
 import { api } from "@/trpc/provider";
 import ChatInput from "./ChatInput";
 import { alerts } from "@/lib/alerts/alerts";
+import ChatContextProvider from "@/components/Chats/ChatContextProvider";
+import Messages from "./Messages";
 
-const { Text } = Typography;
+const { Text, Title } = Typography;
 
 interface ChatWrapperProps {
   fileId: string;
@@ -15,34 +17,43 @@ interface ChatWrapperProps {
 }
 
 const ChatWrapper = ({ fileId, fileType }: ChatWrapperProps) => {
-  // const { data: fileStatus, isLoading } = api.files.fileStatus.useQuery(
-  //   {
-  //     fileId: fileId,
-  //   },
-  //   {
-  //     refetchInterval: (data) =>
-  //       data?.status === "PENDING" || data?.status === "SUCCESS" ? false : 500,
-  //   },
-  // );
-
-  const isLoading = true;
+  const { data: fileStatus, isLoading } = api.files.fileStatus.useQuery(
+    {
+      fileId: fileId,
+    },
+    {
+      refetchInterval: (data) =>
+        data?.status === "PENDING" || data?.status === "SUCCESS" ? false : 500,
+    },
+  );
 
   if (isLoading)
     return (
-      <div className="flex min-h-full flex-col justify-between gap-2 divide-y divide-zinc-200 bg-zinc-50">
-        <div className="mb-28 flex flex-1 flex-col items-center justify-center">
+      <div className="flex h-full min-h-[calc(100vh-56px)] flex-col justify-between gap-2">
+        <div className="flex h-full flex-1 items-center justify-center">
           <div className="flex flex-col items-center gap-2">
             <RxReload className="h-8 w-8 animate-spin text-primary" />
-            <h3 className="text-xl font-semibold">Loading...</h3>
-            <Text type="secondary" strong>
-              {alerts.chatLoading.message}
-            </Text>
+            <Title className="text-xl font-semibold" level={4}>
+              Loading...
+            </Title>
+            <Text type="secondary">{alerts.chatLoading.message}</Text>
           </div>
+        </div>
+        <ChatInput />
+      </div>
+    );
+
+  return (
+    <ChatContextProvider fileId={fileId} fileType={fileType}>
+      <div className="flex h-full min-h-[calc(100vh-56px)] flex-col justify-between gap-2">
+        <div className="flex h-full flex-1 items-center justify-center">
+          <Messages fileId={fileId} />
         </div>
 
         <ChatInput />
       </div>
-    );
+    </ChatContextProvider>
+  );
 };
 
 export default ChatWrapper;

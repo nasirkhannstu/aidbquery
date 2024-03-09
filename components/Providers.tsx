@@ -13,11 +13,7 @@ const Providers = ({ children }: PropsWithChildren) => {
     <SessionProvider>
       <TRPCReactProvider>
         <AntdRegistry>
-          <ConfigProvider
-            theme={{
-              token: theme,
-            }}
-          >
+          <ConfigProvider theme={theme}>
             <Navbar />
             {children}
           </ConfigProvider>

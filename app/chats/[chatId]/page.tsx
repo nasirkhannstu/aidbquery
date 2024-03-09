@@ -21,7 +21,7 @@ const ChatPage = async ({
   if (!file) return notFound();
 
   return (
-    <div className="container min-h-[calc(100vh-56px)] w-full max-w-screen-lg bg-slate-100">
+    <div className="container min-h-[calc(100vh-56px)] w-full max-w-screen-md bg-slate-100 p-0">
       <ChatWrapper fileId={chatId} fileType={file.type} />
     </div>
   );

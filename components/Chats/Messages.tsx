@@ -1,7 +1,7 @@
 import React from "react";
 
-const Chats = () => {
-  return <div>Chats</div>;
+const Messages = ({ fileId }: { fileId: string }) => {
+  return <div>Messages</div>;
 };
 
-export default Chats;
+export default Messages;
