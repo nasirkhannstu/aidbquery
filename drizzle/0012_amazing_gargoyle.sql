@@ -1,0 +1,2 @@
+ALTER TABLE `messages` ADD `file_id` varchar(128) NOT NULL;--> statement-breakpoint
+ALTER TABLE `messages` ADD CONSTRAINT `messages_file_id_files_id_fk` FOREIGN KEY (`file_id`) REFERENCES `files`(`id`) ON DELETE no action ON UPDATE no action;

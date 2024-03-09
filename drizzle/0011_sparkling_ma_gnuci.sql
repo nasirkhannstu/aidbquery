@@ -1,0 +1,2 @@
+ALTER TABLE `messages` ADD `user_id` varchar(128) NOT NULL;--> statement-breakpoint
+ALTER TABLE `messages` ADD CONSTRAINT `messages_user_id_users_id_fk` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE no action ON UPDATE no action;

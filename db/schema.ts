@@ -44,7 +44,6 @@ export const files = mysqlTable("files", {
     .default(sql`now()`)
     .onUpdateNow()
     .notNull(),
-
   userId: varchar("user_id", { length: 128 })
     .notNull()
     .references(() => users.id),
@@ -63,6 +62,12 @@ export const messages = mysqlTable("messages", {
     .default(sql`now()`)
     .onUpdateNow()
     .notNull(),
+  userId: varchar("user_id", { length: 128 })
+    .notNull()
+    .references(() => users.id),
+  fileId: varchar("file_id", { length: 128 })
+    .notNull()
+    .references(() => files.id),
 });
 
 export const userSettings = mysqlTable("user_settings", {
@@ -84,5 +89,28 @@ export const userSettings = mysqlTable("user_settings", {
 
 export const usersRelations = relations(users, ({ many, one }) => ({
   files: many(files),
-  settings: one(userSettings),
+  messages: many(messages),
+  userSetting: one(userSettings, {
+    fields: [users.id],
+    references: [userSettings.userId],
+  }),
+}));
+
+export const fileRelations = relations(files, ({ one, many }) => ({
+  userFile: one(users, {
+    fields: [files.userId],
+    references: [users.id],
+  }),
+  messages: many(messages),
+}));
+
+export const messageRelations = relations(messages, ({ one }) => ({
+  messageUser: one(users, {
+    fields: [messages.userId],
+    references: [users.id],
+  }),
+  messageFile: one(files, {
+    fields: [messages.fileId],
+    references: [files.id],
+  }),
 }));
