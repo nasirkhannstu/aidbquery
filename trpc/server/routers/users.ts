@@ -8,8 +8,8 @@ import {
   publicProcedure,
 } from "@/trpc/server/api/trpc";
 import { users } from "@/db/schema";
-import { userErrors } from "@/lib/messages/errors.trpc";
-import { messages } from "@/lib/messages/toast.trpc";
+import { userErrors } from "@/lib/alerts/errors.trpc";
+import { messages } from "@/lib/alerts/toast.trpc";
 
 export const userRouters = createTRPCRouter({
   register: publicProcedure
