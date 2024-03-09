@@ -1,29 +1,46 @@
 "use client";
-import React from "react";
-import { Button, Form, type FormProps, Input } from "antd";
+import { Button, Form, type FormProps, Input, message } from "antd";
 import Link from "next/link";
 
+import { api } from "@/trpc/provider";
+
 type FieldType = {
-  username?: string;
-  password?: string;
-  remember?: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
 };
 
 const RegisterPage: React.FC = () => {
+  const [messageHandler, messageHolder] = message.useMessage();
   const [form] = Form.useForm();
+  const createUser = api.users.register.useMutation({
+    onSuccess: async (data) => {
+      await messageHandler.open({
+        type: "success",
+        content: data.message,
+      });
+    },
+    async onError({ message }) {
+      await messageHandler.open({
+        type: "error",
+        content: message,
+      });
+    },
+  });
 
-  const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
-    console.log("Received values of form: ", values);
-  };
-
-  const onFinishFailed: FormProps<FieldType>["onFinishFailed"] = (
-    errorInfo,
-  ) => {
-    console.log("Failed:", errorInfo);
+  const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
+    await createUser.mutateAsync({
+      name: `${values.firstName} ${values.lastName}`,
+      email: values.email,
+      password: values.password,
+    });
   };
 
   return (
     <div className="container flex justify-center">
+      {messageHolder}
       <div className="mt-28 w-full max-w-xl rounded border bg-white px-10 pt-6">
         <div className="my-3">
           <p className="text-slate-600">REGISTER</p>
@@ -32,13 +49,7 @@ const RegisterPage: React.FC = () => {
             To begin, complete the form.
           </p>
         </div>
-        <Form
-          layout="vertical"
-          form={form}
-          size="large"
-          onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
-        >
+        <Form layout="vertical" form={form} size="large" onFinish={onFinish}>
           <div className="flex w-full flex-col items-center gap-x-2 md:flex-row">
             <div className="w-full md:w-1/2">
               <Form.Item
@@ -128,7 +139,7 @@ const RegisterPage: React.FC = () => {
               }),
             ]}
           >
-            <Input placeholder="Confirm your password" />
+            <Input placeholder="Confirm your password" type="password" />
           </Form.Item>
           <div className="flex flex-col items-center justify-between md:flex-row">
             <div className="flex items-start gap-x-px">

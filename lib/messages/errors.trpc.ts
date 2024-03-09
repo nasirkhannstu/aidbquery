@@ -21,6 +21,6 @@ type UserErrorsType = Record<
 export const userErrors: UserErrorsType = {
   userExists: {
     code: "BAD_REQUEST",
-    message: "User already exists",
+    message: "The user already exists.",
   },
 };

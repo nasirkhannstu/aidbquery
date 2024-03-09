@@ -82,7 +82,7 @@ const App: React.FC = () => {
             <div className="flex flex-col items-center justify-between md:flex-row">
               <div className="flex items-start gap-x-px">
                 <p>Don&apos;t you have an account yet? </p>
-                <Link href="/login">Crate one</Link>
+                <Link href="/register">Crate one</Link>
               </div>
               <Form.Item className="mt-5 md:mt-0">
                 <Button type="primary" htmlType="submit">

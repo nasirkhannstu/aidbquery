@@ -10,22 +10,22 @@ import { TRPCReactProvider } from "@/trpc/provider";
 
 const Providers = ({ children }: PropsWithChildren) => {
   return (
-    // <TRPCReactProvider>
-    <AntdRegistry>
-      <ConfigProvider
-        theme={{
-          token: {
-            colorPrimary: primary_color,
-          },
-        }}
-      >
-        <SessionProvider>
-          <Navbar />
-          {children}
-        </SessionProvider>
-      </ConfigProvider>
-    </AntdRegistry>
-    // </TRPCReactProvider>
+    <SessionProvider>
+      <TRPCReactProvider>
+        <AntdRegistry>
+          <ConfigProvider
+            theme={{
+              token: {
+                colorPrimary: primary_color,
+              },
+            }}
+          >
+            <Navbar />
+            {children}
+          </ConfigProvider>
+        </AntdRegistry>
+      </TRPCReactProvider>
+    </SessionProvider>
   );
 };
 
