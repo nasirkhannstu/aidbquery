@@ -1,0 +1,2 @@
+ALTER TABLE `user_settings` ADD `user_id` varchar(128);--> statement-breakpoint
+ALTER TABLE `user_settings` ADD CONSTRAINT `user_settings_user_id_users_id_fk` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE no action ON UPDATE no action;

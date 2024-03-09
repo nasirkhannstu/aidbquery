@@ -27,10 +27,6 @@ export const users = mysqlTable("users", {
     .notNull(),
 });
 
-export const usersRelations = relations(users, ({ many }) => ({
-  files: many(files),
-}));
-
 export const files = mysqlTable("files", {
   id: varchar("id", { length: 128 })
     .$defaultFn(() => createId())
@@ -83,4 +79,10 @@ export const userSettings = mysqlTable("user_settings", {
     .default(sql`now()`)
     .onUpdateNow()
     .notNull(),
+  userId: varchar("user_id", { length: 128 }).references(() => users.id),
 });
+
+export const usersRelations = relations(users, ({ many, one }) => ({
+  files: many(files),
+  settings: one(userSettings),
+}));

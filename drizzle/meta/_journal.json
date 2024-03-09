@@ -71,6 +71,13 @@
       "when": 1709974343884,
       "tag": "0009_misty_boom_boom",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "5",
+      "when": 1709974963962,
+      "tag": "0010_white_squadron_sinister",
+      "breakpoints": true
     }
   ]
 }
