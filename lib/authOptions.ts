@@ -6,7 +6,7 @@ import lodash from "lodash";
 
 import { db } from "@/db";
 import { users } from "@/db/schema";
-import { type User } from "@/app/types/next-auth";
+import { type User } from "@/types/next-auth";
 
 export const authOptions: AuthOptions = {
   providers: [
