@@ -10,7 +10,7 @@ type ErrorCode =
   | "TIMEOUT"
   | "CONFLICT";
 
-type UserErrorsType = Record<
+type ErrorsType = Record<
   string,
   {
     code: ErrorCode;
@@ -18,9 +18,16 @@ type UserErrorsType = Record<
   }
 >;
 
-export const userErrors: UserErrorsType = {
+export const userErrors: ErrorsType = {
   userExists: {
     code: "BAD_REQUEST",
     message: "The user already exists.",
+  },
+};
+
+export const fileErrors: ErrorsType = {
+  fileNotFound: {
+    code: "NOT_FOUND",
+    message: "File not found",
   },
 };

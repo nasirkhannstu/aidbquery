@@ -2,7 +2,6 @@
 import { RxReload } from "react-icons/rx";
 import { Typography } from "antd";
 
-import { type FileTypes } from "@/types/types";
 import { api } from "@/trpc/provider";
 import ChatInput from "./ChatInput";
 import { alerts } from "@/lib/alerts/alerts";
@@ -13,10 +12,9 @@ const { Text, Title } = Typography;
 
 interface ChatWrapperProps {
   fileId: string;
-  fileType: FileTypes;
 }
 
-const ChatWrapper = ({ fileId, fileType }: ChatWrapperProps) => {
+const ChatWrapper = ({ fileId }: ChatWrapperProps) => {
   const { data: fileStatus, isLoading } = api.files.fileStatus.useQuery(
     {
       fileId: fileId,
@@ -39,12 +37,12 @@ const ChatWrapper = ({ fileId, fileType }: ChatWrapperProps) => {
             <Text type="secondary">{alerts.chatLoading.message}</Text>
           </div>
         </div>
-        <ChatInput />
+        <ChatInput isDisabled />
       </div>
     );
 
   return (
-    <ChatContextProvider fileId={fileId} fileType={fileType}>
+    <ChatContextProvider fileId={fileId}>
       <div className="flex h-full min-h-[calc(100vh-56px)] flex-col justify-between gap-2">
         <div className="flex h-full flex-1 items-center justify-center">
           <Messages fileId={fileId} />

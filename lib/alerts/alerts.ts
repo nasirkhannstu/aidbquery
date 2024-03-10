@@ -16,6 +16,10 @@ export const errorAlerts: AlertTypes = {
     code: 404,
     message: "Sorry, the page you visited does not exist.",
   },
+  messageSendFailed: {
+    code: 500,
+    message: "Failed to send message",
+  },
 };
 
 export const alerts: AlertTypes = {

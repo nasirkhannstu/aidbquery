@@ -2,11 +2,7 @@ import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import bcrypt from "bcryptjs";
 
-import {
-  createTRPCRouter,
-  protectedProcedure,
-  publicProcedure,
-} from "@/trpc/server/api/trpc";
+import { createTRPCRouter, publicProcedure } from "@/trpc/server/api/trpc";
 import { users } from "@/db/schema";
 import { userErrors } from "@/lib/alerts/errors.trpc";
 import { messages } from "@/lib/alerts/toast.trpc";

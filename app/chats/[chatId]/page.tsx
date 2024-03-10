@@ -1,6 +1,5 @@
 import ChatWrapper from "@/components/Chats/ChatWrapper";
 import { db } from "@/db";
-import { files } from "@/db/schema";
 import { getServerAuthSession } from "@/lib/authOptions";
 import { notFound } from "next/navigation";
 
@@ -21,8 +20,8 @@ const ChatPage = async ({
   if (!file) return notFound();
 
   return (
-    <div className="container min-h-[calc(100vh-56px)] w-full max-w-screen-md bg-slate-100 p-0">
-      <ChatWrapper fileId={chatId} fileType={file.type} />
+    <div className="container min-h-[calc(100vh-56px)] w-full max-w-screen-md bg-slate-200 p-0">
+      <ChatWrapper fileId={chatId} />
     </div>
   );
 };

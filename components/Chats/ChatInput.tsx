@@ -1,14 +1,19 @@
 import React from "react";
-import { Button, Input } from "antd";
+import { Input } from "antd";
 import { BsFillSendFill } from "react-icons/bs";
 
 const { TextArea } = Input;
 
-const ChatInput = () => {
+interface ChatInputProps {
+  isDisabled?: boolean;
+}
+
+const ChatInput = ({ isDisabled }: ChatInputProps) => {
   return (
-    <div className="bg-slate-50 p-3">
-      <div className="flex items-center gap-x-2">
+    <div className="bg-slate-50 px-5 py-3">
+      <div className="flex items-center gap-x-3">
         <TextArea
+          disabled={isDisabled}
           placeholder="Type a message"
           autoSize={{ maxRows: 4 }}
           size="large"
@@ -21,12 +26,9 @@ const ChatInput = () => {
             },
           }}
         />
-        <Button
-          type="link"
-          icon={<BsFillSendFill className="h-7 w-7" />}
-          size="large"
-          aria-label="Message send"
-        />
+        <button aria-label="Message send" disabled={isDisabled}>
+          <BsFillSendFill className="h-6 w-6 text-primary" />
+        </button>
       </div>
     </div>
   );
