@@ -24,7 +24,9 @@ const config = {
       },
     ],
     "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
-    "@typescript-eslint/require-await": "off",
+    "@typescript-eslint/require-await": "warn",
+    "@typescript-eslint/no-unsafe-member-access":"off",
+    "@typescript-eslint/no-unsafe-assignment":"off",
     "@typescript-eslint/no-misused-promises": [
       "off",
       {

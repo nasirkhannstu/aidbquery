@@ -47,7 +47,7 @@ export const authOptions: AuthOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ user, token, session, trigger }) {
+    jwt({ user, token, session, trigger }) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       // console.log("jwt", { user }, { token }, { session }, { trigger });
 
@@ -61,7 +61,7 @@ export const authOptions: AuthOptions = {
     redirect(params) {
       return params.baseUrl + "/chats";
     },
-    async session({ session, token }) {
+    session({ session, token }) {
       session.user = token as unknown as User;
 
       return session;

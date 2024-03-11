@@ -75,16 +75,17 @@ const FileListMenu: React.FC = () => {
           </Typography.Title>
         </div>
         <div>
-          <Tooltip title="Upload new file">
-            <Button
-              type="primary"
-              size="large"
-              shape="circle"
-              icon={<PlusOutlined />}
-              onClick={setOpenUploadModal}
-              aria-label="Upload file"
-            />
-          </Tooltip>
+          <Button
+            type="dashed"
+            size="large"
+            shape="default"
+            icon={<PlusOutlined />}
+            onClick={setOpenUploadModal}
+            aria-label="Upload file"
+            color="red"
+          >
+            Upload
+          </Button>
           <FileUpload />
         </div>
       </div>

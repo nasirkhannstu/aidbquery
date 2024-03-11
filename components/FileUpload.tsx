@@ -11,11 +11,14 @@ import {
 import { CloseOutlined, CloudUploadOutlined } from "@ant-design/icons";
 
 import { useUtils } from "@/hooks/useUtils";
+import { useRouter } from "next/navigation";
 
 const { Dragger } = Upload;
 
 const FileUpload: React.FC = () => {
   const { isOpenUploadModal, setCloseUploadModal } = useUtils();
+  const [messageHandler, messageHolder] = message.useMessage();
+  const router = useRouter();
 
   const props: UploadProps = {
     name: "file",
@@ -27,25 +30,27 @@ const FileUpload: React.FC = () => {
     },
     action: "/api/uploads",
     async onChange(info) {
-      console.log("info: >> ", info);
-
       const { status } = info.file;
-      if (status !== "uploading") {
-        console.log(info.file, info.fileList);
-      }
+
       if (status === "done") {
-        await message.success(`${info.file.name} file uploaded successfully.`);
+        await messageHandler.open({
+          type: "success",
+          content: info.file.response.msg,
+        });
+        setCloseUploadModal();
+        router.push(`/chats/${info.file.response?.fileId}`);
       } else if (status === "error") {
-        await message.error(`${info.file.name} file upload failed.`);
+        await messageHandler.open({
+          type: "error",
+          content: info.file.response.msg,
+        });
       }
-    },
-    onDrop(e) {
-      console.log("Dropped files: >> ", e.dataTransfer.files);
     },
   };
 
   return (
     <>
+      {messageHolder}
       <Modal
         open={isOpenUploadModal}
         title={

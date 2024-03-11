@@ -46,7 +46,11 @@ export const POST = async (request: NextRequest) => {
 
     if (embeddings.success) {
       return NextResponse.json(
-        { msg: alerts.uploadSucceed.message },
+        {
+          success: true,
+          msg: alerts.uploadSucceed.message,
+          fileId: embeddings.fileId,
+        },
         { status: alerts.uploadSucceed.code },
       );
     } else {
@@ -57,7 +61,7 @@ export const POST = async (request: NextRequest) => {
     }
   } catch (error: unknown) {
     return NextResponse.json(
-      { msg: APIErrors.catchAll.message },
+      { success: false, msg: APIErrors.catchAll.message },
       { status: APIErrors.catchAll.code },
     );
   }
