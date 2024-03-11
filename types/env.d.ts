@@ -6,5 +6,8 @@ declare namespace NodeJS {
     APP_MODE: "SaaS" | "PERSONAL";
     NEXT_PUBLIC_APP_MODE: "SaaS" | "PERSONAL";
     NEXTAUTH_SECRET?: string;
+    PINECONE_API_KEY: string;
+    PINECONE_INDEX: string;
+    OPENAI_API_KEY: string;
   }
 }

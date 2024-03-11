@@ -25,7 +25,7 @@ const FileUpload: React.FC = () => {
       marginTop: 10,
       marginBottom: 10,
     },
-    action: "https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188",
+    action: "/api/uploads",
     async onChange(info) {
       console.log("info: >> ", info);
 

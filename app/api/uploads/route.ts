@@ -1,0 +1,64 @@
+import { NextResponse, type NextRequest } from "next/server";
+
+import { getServerAuthSession } from "@/lib/authOptions";
+import { APIErrors, alerts } from "@/lib/alerts/alerts.api";
+import { embeddingInPineconeCSV, fileUploader } from "@/lib/upload";
+import { mimeTypeToFileType } from "@/lib/utils";
+import { type MimeTypes } from "@/types/types";
+
+export const POST = async (request: NextRequest) => {
+  try {
+    const session = await getServerAuthSession();
+    if (!session)
+      return NextResponse.json(
+        { msg: APIErrors.unauthorized.message },
+        { status: APIErrors.unauthorized.code },
+      );
+
+    const formData = await request.formData();
+    const file = formData.get("file") as unknown as File;
+
+    if (!file) {
+      return NextResponse.json(
+        { msg: APIErrors.fileNotFound.message },
+        { status: APIErrors.fileNotFound.code },
+      );
+    }
+
+    if (!["application/json", "text/csv"].includes(file.type)) {
+      return NextResponse.json(
+        { msg: APIErrors.invalidFile.message },
+        { status: APIErrors.invalidFile.code },
+      );
+    }
+
+    const { fileName, filePath } = await fileUploader(
+      file,
+      mimeTypeToFileType(file.type as MimeTypes),
+      session.user.id,
+    );
+
+    const embeddings = await embeddingInPineconeCSV(
+      session.user.id,
+      fileName,
+      filePath,
+    );
+
+    if (embeddings.success) {
+      return NextResponse.json(
+        { msg: alerts.uploadSucceed.message },
+        { status: alerts.uploadSucceed.code },
+      );
+    } else {
+      return NextResponse.json(
+        { msg: APIErrors.catchAll.message },
+        { status: APIErrors.catchAll.code },
+      );
+    }
+  } catch (error: unknown) {
+    return NextResponse.json(
+      { msg: APIErrors.catchAll.message },
+      { status: APIErrors.catchAll.code },
+    );
+  }
+};
