@@ -1,13 +1,24 @@
 "use client";
 import { PlusOutlined } from "@ant-design/icons";
 import { FaFileCsv } from "react-icons/fa6";
-import { Button, Menu, Typography } from "antd";
-import type { GetProp, MenuProps } from "antd";
+import {
+  Button,
+  Menu,
+  Typography,
+  Tooltip,
+  type MenuProps,
+  type GetProp,
+} from "antd";
 import { BsFiletypeJson } from "react-icons/bs";
+
+import { useUtils } from "@/hooks/useUtils";
+import FileUpload from "./FileUpload";
 
 type MenuItem = GetProp<MenuProps, "items">[number];
 
 const FileListMenu: React.FC = () => {
+  const { setOpenUploadModal } = useUtils();
+
   const items: MenuItem[] = [
     {
       label: (
@@ -64,12 +75,17 @@ const FileListMenu: React.FC = () => {
           </Typography.Title>
         </div>
         <div>
-          <Button
-            type="primary"
-            size="large"
-            shape="circle"
-            icon={<PlusOutlined />}
-          />
+          <Tooltip title="Upload new file">
+            <Button
+              type="primary"
+              size="large"
+              shape="circle"
+              icon={<PlusOutlined />}
+              onClick={setOpenUploadModal}
+              aria-label="Upload file"
+            />
+          </Tooltip>
+          <FileUpload />
         </div>
       </div>
       <Menu
