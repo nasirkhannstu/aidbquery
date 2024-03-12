@@ -2,7 +2,12 @@ import { NextResponse, type NextRequest } from "next/server";
 
 import { getServerAuthSession } from "@/lib/authOptions";
 import { APIErrors, alerts } from "@/lib/alerts/alerts.api";
-import { embeddingInPineconeCSV, fileUploader } from "@/lib/upload";
+import {
+  fileUploader,
+  type EmbeddingResponse,
+  embeddingAICSV,
+  embeddingAIJSON,
+} from "@/lib/embedding";
 import { mimeTypeToFileType } from "@/lib/utils";
 import { type MimeTypes } from "@/types/types";
 
@@ -38,11 +43,13 @@ export const POST = async (request: NextRequest) => {
       session.user.id,
     );
 
-    const embeddings = await embeddingInPineconeCSV(
-      session.user.id,
-      fileName,
-      filePath,
-    );
+    let embeddings: EmbeddingResponse = { fileId: null, success: false };
+
+    if (file.type === "text/csv") {
+      embeddings = await embeddingAICSV(session.user.id, fileName, filePath);
+    } else if (file.type === "application/json") {
+      embeddings = await embeddingAIJSON(session.user.id, fileName, filePath);
+    }
 
     if (embeddings.success) {
       return NextResponse.json(

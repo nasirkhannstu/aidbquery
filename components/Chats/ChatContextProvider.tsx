@@ -129,7 +129,7 @@ const ChatContextProvider = ({ fileId, children }: ChatContextProps) => {
           (old) => {
             if (!old) return { pages: [], pageParams: [] };
 
-            const isAiResponseCreated = old.pages.some((page) =>
+            const aiResponse = old.pages.some((page) =>
               page.messages.some((message) => message.id === "ai-response"),
             );
 
@@ -137,13 +137,13 @@ const ChatContextProvider = ({ fileId, children }: ChatContextProps) => {
               if (page === old.pages[0]) {
                 let updatedMessages;
 
-                if (!isAiResponseCreated) {
+                if (!aiResponse) {
                   updatedMessages = [
                     {
                       createdAt: new Date().toISOString(),
                       id: "ai-response",
                       text: accResponse,
-                      isUserMessage: false,
+                      sender: "BOT",
                     },
                     ...page.messages,
                   ];

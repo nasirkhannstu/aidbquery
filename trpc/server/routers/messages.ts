@@ -3,12 +3,8 @@ import { eq } from "drizzle-orm";
 import { withCursorPagination } from "drizzle-pagination";
 import { TRPCError } from "@trpc/server";
 
-import {
-  createTRPCRouter,
-  protectedProcedure,
-  publicProcedure,
-} from "@/trpc/server/api/trpc";
-import { files, messages, users } from "@/db/schema";
+import { createTRPCRouter, protectedProcedure } from "@/trpc/server/api/trpc";
+import { messages } from "@/db/schema";
 import { INFINITY_QUERY } from "@/lib/utils";
 import { fileErrors } from "@/lib/alerts/errors.trpc";
 
