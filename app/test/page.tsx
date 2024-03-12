@@ -1,12 +1,7 @@
-import FileUpload from "@/components/FileUpload";
 import React from "react";
 
-const TestDrive = () => {
-  return (
-    <div>
-      <FileUpload />
-    </div>
-  );
+const TestPage = () => {
+  return <div>TestPage</div>;
 };
 
-export default TestDrive;
+export default TestPage;

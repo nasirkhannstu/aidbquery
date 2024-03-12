@@ -59,7 +59,7 @@ export const fileRouter = createTRPCRouter({
       );
 
       return {
-        messages: myFiles,
+        files: myFiles,
         nextCursor: myFiles.length
           ? myFiles[myFiles.length - 1]?.createdAt.toISOString()
           : null,
@@ -91,7 +91,7 @@ export const fileRouter = createTRPCRouter({
       );
 
       return {
-        messages: myFiles,
+        files: myFiles,
         nextCursor: myFiles.length
           ? myFiles[myFiles.length - 1]?.createdAt.toISOString()
           : null,

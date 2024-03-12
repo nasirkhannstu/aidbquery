@@ -1,4 +1,4 @@
-import FileListMenu from "@/components/FileListMenu";
+import FilesListMenu from "@/components/FilesListMenu";
 import { type ReactNode } from "react";
 
 const ChatLayout = ({
@@ -9,9 +9,9 @@ const ChatLayout = ({
   params: { chatId: string };
 }) => {
   return (
-    <div className="flex h-full w-full gap-x-3">
+    <div className="flex h-full max-h-full w-full flex-1 gap-x-3">
       <>
-        <FileListMenu />
+        <FilesListMenu />
       </>
       <>{children}</>
     </div>
