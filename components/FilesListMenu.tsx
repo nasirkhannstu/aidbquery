@@ -1,4 +1,6 @@
 "use client";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { PlusOutlined } from "@ant-design/icons";
 import { Button, Typography } from "antd";
 import { IoIosArrowForward } from "react-icons/io";
@@ -11,6 +13,7 @@ import { FileListCard } from "./FileListCard";
 
 const FileListMenu: React.FC = () => {
   const { setOpenUploadModal } = useUtils();
+  const router = useRouter();
 
   const { data: csvData } = api.files.filesListCSV.useInfiniteQuery({
     limit: 10,
@@ -21,6 +24,12 @@ const FileListMenu: React.FC = () => {
 
   const csvFiles = csvData?.pages.flatMap((page) => page.files);
   const jsonFiles = jsonData?.pages.flatMap((page) => page.files);
+
+  useEffect(() => {
+    if (!csvFiles?.length && !jsonFiles?.length) {
+      router.push("/chats");
+    }
+  }, [csvFiles?.length, router, jsonFiles?.length]);
 
   return (
     <div className="flex max-h-[calc(100vh-56px)] w-full max-w-sm flex-col overflow-y-auto border-r bg-slate-50 px-7 py-2">
@@ -53,7 +62,7 @@ const FileListMenu: React.FC = () => {
               <div>
                 <h3 className="text-base font-bold">Csv Files</h3>
                 <Typography.Text type="secondary">
-                  21 files available
+                  {csvFiles?.length} files available
                 </Typography.Text>
               </div>
               <IoIosArrowForward className="h-5 w-5 text-slate-600" />
@@ -72,7 +81,7 @@ const FileListMenu: React.FC = () => {
               <div>
                 <h3 className="text-base font-bold">Json Files</h3>
                 <Typography.Text type="secondary">
-                  23 files available
+                  {jsonFiles?.length} files available
                 </Typography.Text>
               </div>
               <IoIosArrowForward className="h-5 w-5 text-slate-600" />

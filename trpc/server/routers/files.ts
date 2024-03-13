@@ -1,10 +1,15 @@
 import { z } from "zod";
 import { and, eq } from "drizzle-orm";
 import { withCursorPagination } from "drizzle-pagination";
+import { TRPCError } from "@trpc/server";
+import { unlink } from "fs/promises";
 
 import { createTRPCRouter, protectedProcedure } from "@/trpc/server/api/trpc";
 import { files } from "@/db/schema";
 import { PAGE_SIZE } from "@/lib/utils";
+import { fileErrors } from "@/lib/alerts/errors.trpc";
+import { isFileExist } from "@/lib/utils.server";
+import { pineconeClient } from "@/lib/pinecne";
 
 export const fileRouter = createTRPCRouter({
   fileStatus: protectedProcedure
@@ -31,6 +36,27 @@ export const fileRouter = createTRPCRouter({
       }
 
       return { success: true, status: file[0].status };
+    }),
+
+  userFirstFile: protectedProcedure.query(async ({ ctx }) => {
+    const file = await ctx.db.query.files.findFirst({
+      where: (files, { eq }) => eq(files.userId, ctx.session.user.id),
+    });
+    return file;
+  }),
+
+  userFileById: protectedProcedure
+    .input(z.object({ fileId: z.string() }))
+    .query(async ({ input, ctx }) => {
+      const file = await ctx.db.query.files.findFirst({
+        where: (files, { eq, and }) =>
+          and(
+            eq(files.id, input.fileId),
+            eq(files.userId, ctx.session.user.id),
+          ),
+      });
+
+      return file;
     }),
 
   filesListCSV: protectedProcedure
@@ -65,6 +91,7 @@ export const fileRouter = createTRPCRouter({
           : null,
       };
     }),
+
   filesListJSON: protectedProcedure
     .input(
       z.object({
@@ -96,5 +123,59 @@ export const fileRouter = createTRPCRouter({
           ? myFiles[myFiles.length - 1]?.createdAt.toISOString()
           : null,
       };
+    }),
+
+  deleteFile: protectedProcedure
+    .input(z.object({ fileId: z.string() }))
+    .mutation(async ({ input, ctx }) => {
+      const file = await ctx.db.query.files.findFirst({
+        where: (files, { eq, and }) =>
+          and(
+            eq(files.id, input.fileId),
+            eq(files.userId, ctx.session.user.id),
+          ),
+      });
+
+      if (!file) {
+        throw new TRPCError({
+          code: fileErrors.fileNotFound.code,
+          message: fileErrors.fileNotFound.message,
+        });
+      }
+
+      const isExist = isFileExist(file.path);
+      console.log("isExist: >> ", isExist);
+
+      if (isExist) {
+        await unlink(file.path);
+
+        await ctx.db
+          .delete(files)
+          .where(
+            and(
+              eq(files.id, input.fileId),
+              eq(files.userId, ctx.session.user.id),
+            ),
+          );
+
+        const index = pineconeClient.index(process.env.PINECONE_INDEX);
+        const namespace = index.namespace(file.id);
+        await namespace.deleteAll();
+
+        return { success: true };
+      } else {
+        await ctx.db
+          .delete(files)
+          .where(
+            and(
+              eq(files.id, input.fileId),
+              eq(files.userId, ctx.session.user.id),
+            ),
+          );
+        throw new TRPCError({
+          code: fileErrors.deleteFailed.code,
+          message: fileErrors.deleteFailed.message,
+        });
+      }
     }),
 });

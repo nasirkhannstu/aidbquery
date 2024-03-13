@@ -10,24 +10,39 @@ type ErrorCode =
   | "TIMEOUT"
   | "CONFLICT";
 
-type ErrorsType = Record<
-  string,
+type UserAlertTypes = "userExists";
+type FileAlertTypes = "fileNotFound" | "deleteFailed";
+
+type UserErrorsType = Record<
+  UserAlertTypes,
   {
     code: ErrorCode;
     message: string;
   }
 >;
 
-export const userErrors: ErrorsType = {
+type FileErrorsType = Record<
+  FileAlertTypes,
+  {
+    code: ErrorCode;
+    message: string;
+  }
+>;
+
+export const userErrors: UserErrorsType = {
   userExists: {
     code: "BAD_REQUEST",
     message: "The user already exists.",
   },
 };
 
-export const fileErrors: ErrorsType = {
+export const fileErrors: FileErrorsType = {
   fileNotFound: {
     code: "NOT_FOUND",
     message: "File not found",
+  },
+  deleteFailed: {
+    code: "BAD_REQUEST",
+    message: "Failed to delete file",
   },
 };

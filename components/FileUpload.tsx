@@ -12,6 +12,7 @@ import { CloseOutlined, CloudUploadOutlined } from "@ant-design/icons";
 
 import { useUtils } from "@/hooks/useUtils";
 import { useRouter } from "next/navigation";
+import { api } from "@/trpc/provider";
 
 const { Dragger } = Upload;
 
@@ -19,6 +20,7 @@ const FileUpload: React.FC = () => {
   const { isOpenUploadModal, setCloseUploadModal } = useUtils();
   const [messageHandler, messageHolder] = message.useMessage();
   const router = useRouter();
+  const utils = api.useUtils();
 
   const props: UploadProps = {
     name: "file",
@@ -37,6 +39,7 @@ const FileUpload: React.FC = () => {
           type: "success",
           content: info.file.response.msg,
         });
+        await utils.files.invalidate();
         setCloseUploadModal();
         router.push(`/chats/${info.file.response?.fileId}`);
       } else if (status === "error") {

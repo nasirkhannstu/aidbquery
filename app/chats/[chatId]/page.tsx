@@ -1,27 +1,20 @@
+"use client";
+import { useRouter } from "next/navigation";
+
 import ChatWrapper from "@/components/Chats/ChatWrapper";
-import { db } from "@/db";
-import { getServerAuthSession } from "@/lib/authOptions";
-import { notFound } from "next/navigation";
+import { api } from "@/trpc/provider";
 
-const ChatPage = async ({
-  params: { chatId },
-}: {
-  params: { chatId: string };
-}) => {
-  const session = await getServerAuthSession();
+const ChatPage = ({ params: { chatId } }: { params: { chatId: string } }) => {
+  const router = useRouter();
+  const { data: file } = api.files.userFileById.useQuery({ fileId: chatId });
 
-  if (!session || !chatId) return notFound();
-
-  const file = await db.query.files.findFirst({
-    where: (files, { and, eq }) =>
-      and(eq(files.id, chatId), eq(files.userId, session?.user.id)),
-  });
-
-  if (!file) return notFound();
+  if (!file) {
+    return router.push("/chats");
+  }
 
   return (
     <div className="container min-h-[calc(100vh-56px)] w-full max-w-screen-md bg-slate-200 p-0">
-      <ChatWrapper fileId={chatId} />
+      <ChatWrapper fileId={file.id} />
     </div>
   );
 };

@@ -44,7 +44,7 @@ export const fileUploader = async (
 
   await writeFile(filePath, new Uint8Array(await file.arrayBuffer()));
 
-  return { filePath, fileName };
+  return { filePath, fileName: file.name };
 };
 
 /**
