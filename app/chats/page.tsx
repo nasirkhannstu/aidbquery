@@ -5,11 +5,9 @@ import EmptyChatList from "@/components/EmptyChatList";
 import { api } from "@/trpc/provider";
 import FilesListMenu from "@/components/FilesListMenu";
 
-const ChatPage = () => {
+const ChatsPage = () => {
   const router = useRouter();
   const { data: file } = api.files.userFirstFile.useQuery();
-
-  router.refresh();
 
   if (file) {
     return router.push(`/chats/${file.id}`);
@@ -25,4 +23,4 @@ const ChatPage = () => {
   );
 };
 
-export default ChatPage;
+export default ChatsPage;

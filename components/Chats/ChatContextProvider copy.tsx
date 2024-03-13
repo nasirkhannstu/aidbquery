@@ -1,10 +1,9 @@
 import { type ReactNode, createContext, useRef, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { type FileTypes } from "@/types/types";
 import { v4 } from "uuid";
 
-import { INFINITY_QUERY } from "@/lib/utils";
 import { api } from "@/trpc/provider";
+import { INFINITY_QUERY } from "@/lib/utils";
 
 type StreamResponse = {
   addMessage: () => void;
@@ -26,15 +25,10 @@ export const ChatContext = createContext<StreamResponse>({
 
 interface ChatContextProps {
   fileId: string;
-  fileType: FileTypes;
   children: ReactNode;
 }
 
-export const ChatContextProvider = ({
-  fileId,
-  fileType,
-  children,
-}: ChatContextProps) => {
+const ChatContextProvider = ({ fileId, children }: ChatContextProps) => {
   const [message, setMessage] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const utils = api.useUtils();
@@ -42,6 +36,7 @@ export const ChatContextProvider = ({
 
   const { mutate: sendMessage } = useMutation({
     mutationFn: async ({ message }: { message: string }) => {
+      // NOTE: invalidate the messages query according to the file type
       const response = await fetch("/api/chats", {
         method: "POST",
         body: JSON.stringify({
@@ -60,13 +55,10 @@ export const ChatContextProvider = ({
       backupMessage.current = message;
       setMessage("");
 
-      // step 1
       await utils.messages.messagesOfFile.cancel();
 
-      // step 2
       const previousMessages = utils.messages.messagesOfFile.getInfiniteData();
 
-      // step 3
       utils.messages.messagesOfFile.setInfiniteData(
         { fileId, limit: INFINITY_QUERY },
         (old) => {
@@ -107,36 +99,14 @@ export const ChatContextProvider = ({
 
       return {
         previousMessages:
-          previousMessages?.pages.flatMap(
-            (page: {
-              messages:
-                | {
-                    id: string;
-                    createdAt: Date;
-                    updatedAt: Date;
-                    userId: string;
-                    text: string | null;
-                    sender: "USER" | "BOT" | null;
-                    fileId: string;
-                  }
-                | readonly {
-                    id: string;
-                    createdAt: Date;
-                    updatedAt: Date;
-                    userId: string;
-                    text: string | null;
-                    sender: "USER" | "BOT" | null;
-                    fileId: string;
-                  }[];
-            }) => page.messages,
-          ) ?? [],
+          previousMessages?.pages.flatMap((page) => page.messages) ?? [],
       };
     },
     onSuccess: async (stream) => {
       setIsLoading(false);
 
       if (!stream) {
-        return alert("Failed to send message");
+        return;
       }
 
       const reader = stream.getReader();
@@ -156,10 +126,11 @@ export const ChatContextProvider = ({
         // append chunk to the actual message
         utils.messages.messagesOfFile.setInfiniteData(
           { fileId, limit: INFINITY_QUERY },
+          //@ts-expect-error @ts-ignore
           (old) => {
             if (!old) return { pages: [], pageParams: [] };
 
-            const isAiResponseCreated = old.pages.some((page) =>
+            const aiResponse = old.pages.some((page) =>
               page.messages.some((message) => message.id === "ai-response"),
             );
 
@@ -167,13 +138,13 @@ export const ChatContextProvider = ({
               if (page === old.pages[0]) {
                 let updatedMessages;
 
-                if (!isAiResponseCreated) {
+                if (!aiResponse) {
                   updatedMessages = [
                     {
                       createdAt: new Date().toISOString(),
                       id: "ai-response",
                       text: accResponse,
-                      isUserMessage: false,
+                      sender: "BOT",
                     },
                     ...page.messages,
                   ];
@@ -192,6 +163,7 @@ export const ChatContextProvider = ({
                 return {
                   ...page,
                   messages: updatedMessages,
+                  nextCursor: "",
                 };
               }
 
@@ -206,9 +178,9 @@ export const ChatContextProvider = ({
 
     onError: (_, __, context) => {
       setMessage(backupMessage.current);
-      utils.getFileMessages.setData(
+      utils.messages.messagesOfFile.setData(
         { fileId },
-        { messages: context?.previousMessages ?? [] },
+        { messages: context?.previousMessages ?? [], nextCursor: null },
       );
     },
     onSettled: async () => {
@@ -237,3 +209,5 @@ export const ChatContextProvider = ({
     </ChatContext.Provider>
   );
 };
+
+export default ChatContextProvider;
