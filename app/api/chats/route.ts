@@ -1,91 +1,86 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { db } from "@/db";
+import { OpenAIStream, StreamingTextResponse } from "ai";
+import { PineconeStore } from "@langchain/pinecone";
+import { NextResponse, type NextRequest } from "next/server";
+import { z } from "zod";
+
 import { openai, embeddings } from "@/lib/openai";
 import { pineconeClient } from "@/lib/pinecne";
-import { SendMessageValidator } from "@/lib/validators/SendMessageValidator";
-import { PineconeStore } from "@langchain/pinecone";
-import { type NextRequest } from "next/server";
-
-import { OpenAIStream, StreamingTextResponse } from "ai";
+import { getServerAuthSession } from "@/lib/authOptions";
+import { APIErrors } from "@/lib/alerts/alerts.api";
+import { messages } from "@/db/schema";
 
 export const POST = async (req: NextRequest) => {
-  // endpoint for asking a question to a pdf file
-
   const body = await req.json();
+  const session = await getServerAuthSession();
 
-  const { id: userId } = user;
+  if (!session?.user.id) return new Response("Unauthorized", { status: 401 });
 
-  if (!userId) return new Response("Unauthorized", { status: 401 });
+  const { fileId, message } = z
+    .object({
+      fileId: z.string(),
+      message: z.string(),
+    })
+    .parse(body);
 
-  const { fileId, message } = SendMessageValidator.parse(body);
-
-  const file = await db.file.findFirst({
-    where: {
-      id: fileId,
-      userId,
-    },
+  const file = await db.query.files.findFirst({
+    where: (files, { eq, and }) =>
+      and(eq(files.id, fileId), eq(files.userId, session.user.id)),
   });
 
-  if (!file) return new Response("Not found", { status: 404 });
+  if (!file)
+    return NextResponse.json(
+      { msg: APIErrors.fileNotFound.message },
+      { status: APIErrors.fileNotFound.code },
+    );
 
-  await db.message.create({
-    data: {
-      text: message,
-      isUserMessage: true,
-      userId,
-      fileId,
-    },
+  await db.insert(messages).values({
+    fileId,
+    text: message,
+    userId: session.user.id,
+    sender: "USER",
   });
 
-  // 1: vectorize message
-  const embeddings = new OpenAIEmbeddings({
-    openAIApiKey: process.env.OPENAI_API_KEY,
-  });
-
-  const pinecone = await getPineconeClient();
-  const pineconeIndex = pinecone.Index("quill");
-
+  const index = pineconeClient.index(process.env.PINECONE_INDEX);
   const vectorStore = await PineconeStore.fromExistingIndex(embeddings, {
-    pineconeIndex,
+    pineconeIndex: index,
     namespace: file.id,
   });
 
   const results = await vectorStore.similaritySearch(message, 4);
 
-  const prevMessages = await db.message.findMany({
-    where: {
-      fileId,
-    },
-    orderBy: {
-      createdAt: "asc",
-    },
-    take: 6,
+  const prevMessages = await db.query.messages.findMany({
+    where: (messages, { eq }) => eq(messages.fileId, fileId),
+    limit: 6,
+    orderBy: (messages, { asc }) => asc(messages.createdAt),
   });
 
   const formattedPrevMessages = prevMessages.map((msg) => ({
-    role: msg.isUserMessage ? ("user" as const) : ("assistant" as const),
+    role: msg.sender === "USER" ? ("user" as const) : ("assistant" as const),
     content: msg.text,
   }));
 
   const response = await openai.chat.completions.create({
-    model: "gpt-3.5-turbo",
+    model: "gpt-4",
     temperature: 0,
     stream: true,
     messages: [
       {
         role: "system",
         content:
-          "Use the following pieces of context (or previous conversaton if needed) to answer the users question in markdown format.",
+          "Use the following pieces of context (or previous conversation if needed) to answer the users question in markdown format.",
       },
       {
         role: "user",
-        content: `Use the following pieces of context (or previous conversaton if needed) to answer the users question in markdown format. \nIf you don't know the answer, just say that you don't know, don't try to make up an answer.
+        content: `Use the following pieces of context (or previous conversation if needed) to answer the users question in markdown format. \nIf you don't know the answer, just say that you don't know, don't try to make up an answer.
         
   \n----------------\n
   
   PREVIOUS CONVERSATION:
   ${formattedPrevMessages.map((message) => {
-    if (message.role === "user") return `User: ${message.content}\n`;
-    return `Assistant: ${message.content}\n`;
+    if (message.role === "user") return `User: ${message.content!}\n`;
+    return `Assistant: ${message.content!}\n`;
   })}
   
   \n----------------\n
@@ -100,13 +95,11 @@ export const POST = async (req: NextRequest) => {
 
   const stream = OpenAIStream(response, {
     async onCompletion(completion) {
-      await db.message.create({
-        data: {
-          text: completion,
-          isUserMessage: false,
-          fileId,
-          userId,
-        },
+      await db.insert(messages).values({
+        fileId,
+        text: completion,
+        sender: "BOT",
+        userId: session.user.id,
       });
     },
   });
