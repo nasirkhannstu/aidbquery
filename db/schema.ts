@@ -10,6 +10,7 @@ import {
 } from "drizzle-orm/mysql-core";
 import { createId } from "@paralleldrive/cuid2";
 
+// TODO: users table
 export const users = mysqlTable("users", {
   id: varchar("id", { length: 128 })
     .$defaultFn(() => createId())
@@ -27,6 +28,37 @@ export const users = mysqlTable("users", {
     .notNull(),
 });
 
+// TODO: payments table
+export const payments = mysqlTable("payments", {
+  id: varchar("id", { length: 128 })
+    .$defaultFn(() => createId())
+    .primaryKey(),
+  userId: varchar("user_id", { length: 128 })
+    .notNull()
+    .references(() => users.id),
+  amount: int("amount").notNull(),
+  stripePaymentId: varchar("stripe_payment_id", { length: 256 }),
+  stripeCustomerId: varchar("stripe_customer_id", { length: 256 }),
+  stripeSubscriptionId: varchar("stripe_subscription_id", {
+    length: 256,
+  }),
+  stripePaymentMethod: varchar("stripe_payment_method", {
+    length: 256,
+  }),
+  stripeSubscriptionStatus: varchar("stripe_subscription_status", {
+    length: 256,
+  }),
+  stripeSubscriptionEnd: timestamp("stripe_subscription_end"),
+  createdAt: timestamp("created_at")
+    .notNull()
+    .default(sql`now()`),
+  updatedAt: timestamp("updated_at")
+    .default(sql`now()`)
+    .onUpdateNow()
+    .notNull(),
+});
+
+// TODO: files table
 export const files = mysqlTable("files", {
   id: varchar("id", { length: 128 })
     .$defaultFn(() => createId())
@@ -49,6 +81,7 @@ export const files = mysqlTable("files", {
     .references(() => users.id),
 });
 
+// TODO: messages table
 export const messages = mysqlTable("messages", {
   id: varchar("id", { length: 128 })
     .$defaultFn(() => createId())
@@ -70,6 +103,7 @@ export const messages = mysqlTable("messages", {
     .references(() => files.id),
 });
 
+// TODO: settings table
 export const userSettings = mysqlTable("user_settings", {
   id: varchar("id", { length: 128 })
     .$defaultFn(() => createId())
