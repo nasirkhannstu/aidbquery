@@ -1,35 +1,23 @@
 "use client";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { PlusOutlined } from "@ant-design/icons";
 import { Button, Typography } from "antd";
 import { IoIosArrowForward } from "react-icons/io";
 
 import { useUtils } from "@/hooks/useUtils";
 import FileUpload from "./FileUpload";
-import { api } from "@/trpc/provider";
 import { FileIcon } from "./FileIcon";
 import { FileListCard } from "./FileListCard";
+import type { File } from "@/types/types";
 
-const FileListMenu: React.FC = () => {
+interface FileListProps {
+  files: File[] | undefined;
+}
+
+const FilesListMenu = ({ files }: FileListProps) => {
   const { setOpenUploadModal } = useUtils();
-  const router = useRouter();
 
-  const { data: csvData } = api.files.filesListCSV.useInfiniteQuery({
-    limit: 10,
-  });
-  const { data: jsonData } = api.files.filesListJSON.useInfiniteQuery({
-    limit: 10,
-  });
-
-  const csvFiles = csvData?.pages.flatMap((page) => page.files);
-  const jsonFiles = jsonData?.pages.flatMap((page) => page.files);
-
-  useEffect(() => {
-    if (!csvFiles?.length && !jsonFiles?.length) {
-      router.push("/chats");
-    }
-  }, [csvFiles?.length, router, jsonFiles?.length]);
+  const csvFiles = files?.filter((file) => file.type === "CSV");
+  const jsonFiles = files?.filter((file) => file.type === "JSON");
 
   return (
     <div className="flex max-h-[calc(100vh-56px)] w-full max-w-sm flex-col overflow-y-auto border-r bg-slate-50 px-7 py-2">
@@ -62,7 +50,9 @@ const FileListMenu: React.FC = () => {
               <div>
                 <h3 className="text-base font-bold">Csv Files</h3>
                 <Typography.Text type="secondary">
-                  {csvFiles?.length} files available
+                  {csvFiles?.length}{" "}
+                  {csvFiles && csvFiles?.length > 1 ? "files" : "file"}{" "}
+                  available
                 </Typography.Text>
               </div>
               <IoIosArrowForward className="h-5 w-5 text-slate-600" />
@@ -76,12 +66,14 @@ const FileListMenu: React.FC = () => {
             </ul>
           </div>
           <div className="flex items-center gap-x-3 rounded py-1.5 transition hover:cursor-pointer hover:bg-slate-100">
-            <FileIcon type="JSON" size={10} />
+            <FileIcon type="JSON" size={8} />
             <div className="flex flex-1 items-center justify-between">
               <div>
                 <h3 className="text-base font-bold">Json Files</h3>
                 <Typography.Text type="secondary">
-                  {jsonFiles?.length} files available
+                  {jsonFiles?.length}{" "}
+                  {jsonFiles && jsonFiles?.length > 1 ? "files" : "file"}{" "}
+                  available
                 </Typography.Text>
               </div>
               <IoIosArrowForward className="h-5 w-5 text-slate-600" />
@@ -100,4 +92,4 @@ const FileListMenu: React.FC = () => {
   );
 };
 
-export default FileListMenu;
+export default FilesListMenu;

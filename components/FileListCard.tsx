@@ -1,5 +1,5 @@
 "use client";
-import { useParams, usePathname, useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { DeleteOutlined } from "@ant-design/icons";
 import { Button, message } from "antd";
 
@@ -12,11 +12,11 @@ interface FileListCardProps {
 }
 
 export const FileListCard = ({ fileName, id }: FileListCardProps) => {
-  const pathname = usePathname();
   const router = useRouter();
   const utils = api.useUtils();
+  const searchParams = useSearchParams();
+  const _id = searchParams.get("_id");
   const [messageAPI, messageHolder] = message.useMessage();
-  const fileId = useParams().chatId;
   const { mutate: deleteFile, isLoading } = api.files.deleteFile.useMutation({
     onError(err) {
       console.log(err);
@@ -31,9 +31,7 @@ export const FileListCard = ({ fileName, id }: FileListCardProps) => {
     },
   });
 
-  const isActive = pathname === `/chats/${id}`;
-
-  console.log("isActive", isActive);
+  const isActive = _id === id;
 
   return (
     <li
@@ -41,7 +39,7 @@ export const FileListCard = ({ fileName, id }: FileListCardProps) => {
         "flex cursor-pointer items-center justify-between gap-x-3 truncate rounded-md border  px-4 py-3",
         isActive ? "border-primary/50 bg-primary/10" : "border-slate-200",
       )}
-      onClick={() => router.push(`/chats/${id}`)}
+      onClick={() => router.push(`/chats?_id=${id}`)}
     >
       {messageHolder}
       <p
@@ -57,7 +55,7 @@ export const FileListCard = ({ fileName, id }: FileListCardProps) => {
         icon={<DeleteOutlined />}
         size="small"
         loading={isLoading}
-        disabled={fileId === id}
+        disabled={_id === id}
         onClick={(e) => {
           e.stopPropagation();
           const permit = confirm("Are you sure you want to delete this file?");

@@ -38,28 +38,8 @@ export const fileRouter = createTRPCRouter({
       return { success: true, status: file[0].status };
     }),
 
-  userFirstFile: protectedProcedure.query(async ({ ctx }) => {
-    const file = await ctx.db.query.files.findFirst({
-      where: (files, { eq }) => eq(files.userId, ctx.session.user.id),
-    });
-    return file;
-  }),
-
-  userFileById: protectedProcedure
-    .input(z.object({ fileId: z.string() }))
-    .query(async ({ input, ctx }) => {
-      const file = await ctx.db.query.files.findFirst({
-        where: (files, { eq, and }) =>
-          and(
-            eq(files.id, input.fileId),
-            eq(files.userId, ctx.session.user.id),
-          ),
-      });
-
-      return file;
-    }),
-
-  filesListCSV: protectedProcedure
+  // TODO: files list according to login in user
+  filesList: protectedProcedure
     .input(
       z.object({
         limit: z.number().min(1).max(100).default(PAGE_SIZE),
@@ -69,59 +49,15 @@ export const fileRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const myFiles = await ctx.db.query.files.findMany(
         withCursorPagination({
-          where: and(
-            eq(files.userId, ctx.session.user.id),
-            eq(files.type, "CSV"),
-          ),
+          where: eq(files.userId, ctx.session.user.id),
           limit: input.limit,
-          cursors: [
-            [
-              files.createdAt,
-              "desc",
-              input.cursor ? new Date(input.cursor) : undefined,
-            ],
-          ],
+          cursors: [[files.id, "asc", input.cursor ? input.cursor : undefined]],
         }),
       );
 
       return {
         files: myFiles,
-        nextCursor: myFiles.length
-          ? myFiles[myFiles.length - 1]?.createdAt.toISOString()
-          : null,
-      };
-    }),
-
-  filesListJSON: protectedProcedure
-    .input(
-      z.object({
-        limit: z.number().min(1).max(100).default(PAGE_SIZE),
-        cursor: z.string().nullish(),
-      }),
-    )
-    .query(async ({ ctx, input }) => {
-      const myFiles = await ctx.db.query.files.findMany(
-        withCursorPagination({
-          where: and(
-            eq(files.userId, ctx.session.user.id),
-            eq(files.type, "JSON"),
-          ),
-          limit: input.limit,
-          cursors: [
-            [
-              files.createdAt,
-              "desc",
-              input.cursor ? new Date(input.cursor) : undefined,
-            ],
-          ],
-        }),
-      );
-
-      return {
-        files: myFiles,
-        nextCursor: myFiles.length
-          ? myFiles[myFiles.length - 1]?.createdAt.toISOString()
-          : null,
+        nextCursor: myFiles.length ? myFiles[myFiles.length - 1]?.id : null,
       };
     }),
 

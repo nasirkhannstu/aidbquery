@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { db } from "@/db";
 import { OpenAIStream, StreamingTextResponse } from "ai";
 import { PineconeStore } from "@langchain/pinecone";
@@ -78,10 +77,12 @@ export const POST = async (req: NextRequest) => {
   \n----------------\n
   
   PREVIOUS CONVERSATION:
-  ${formattedPrevMessages.map((message) => {
-    if (message.role === "user") return `User: ${message.content!}\n`;
-    return `Assistant: ${message.content!}\n`;
-  })}
+  ${formattedPrevMessages
+    .map((message) => {
+      if (message.role === "user") return `User: ${message.content}\n`;
+      return `Assistant: ${message.content}\n`;
+    })
+    .join("")}
   
   \n----------------\n
   
@@ -92,6 +93,24 @@ export const POST = async (req: NextRequest) => {
       },
     ],
   });
+
+  console.log(
+    "with join: ",
+    formattedPrevMessages
+      .map((message) => {
+        if (message.role === "user") return `User: ${message.content}\n`;
+        return `Assistant: ${message.content}\n`;
+      })
+      .join(""),
+  );
+
+  console.log(
+    "without join: ",
+    formattedPrevMessages.map((message) => {
+      if (message.role === "user") return `User: ${message.content}\n`;
+      return `Assistant: ${message.content}\n`;
+    }),
+  );
 
   const stream = OpenAIStream(response, {
     async onCompletion(completion) {

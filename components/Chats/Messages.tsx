@@ -11,7 +11,7 @@ import { ChatContext } from "./ChatContextProvider";
 const Messages = ({ fileId }: { fileId: string }) => {
   const { isLoading: isThinking } = useContext(ChatContext);
   const { data, isLoading, fetchNextPage } =
-    api.messages.messagesOfFile.useInfiniteQuery(
+    api.messages.fileMessages.useInfiniteQuery(
       {
         fileId,
         limit: INFINITY_QUERY,
@@ -89,7 +89,7 @@ const Messages = ({ fileId }: { fileId: string }) => {
         </div>
       ) : (
         <div className="flex flex-1 flex-col items-center justify-center gap-2">
-          <LuMessageSquare className="text-primary/60 h-8 w-8" />
+          <LuMessageSquare className="h-8 w-8 text-primary/60" />
           <h3 className="text-xl font-semibold">You&apos;re all set!</h3>
           <p className="text-sm text-zinc-500">
             Ask your first question to get started.

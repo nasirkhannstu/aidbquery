@@ -1,24 +1,49 @@
 "use client";
-import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { Button, Empty } from "antd";
 
-import EmptyChatList from "@/components/EmptyChatList";
+import ChatWrapper from "@/components/Chats/ChatWrapper";
+import FileListMenu from "@/components/FilesListMenu";
 import { api } from "@/trpc/provider";
-import FilesListMenu from "@/components/FilesListMenu";
 
 const ChatsPage = () => {
-  const router = useRouter();
-  const { data: file } = api.files.userFirstFile.useQuery();
+  const searchParams = useSearchParams();
+  const _id = searchParams.get("_id");
 
-  if (file) {
-    return router.push(`/chats/${file.id}`);
-  }
+  const { data } = api.files.filesList.useInfiniteQuery({ limit: 10 });
+  const filesList = data?.pages.flatMap((page) => page.files);
 
   return (
-    <div className="flex h-full min-h-[calc(100vh-56px)] w-full flex-1 gap-x-3">
-      <>
-        <FilesListMenu />
-      </>
-      <EmptyChatList />
+    <div className="flex max-h-[calc(100vh-56px)] min-h-full w-full">
+      <FileListMenu files={filesList} />
+
+      {!filesList?.length ? (
+        <div className="container min-h-[calc(100vh-56px)] w-full max-w-screen-md">
+          <Empty
+            className="my-24"
+            description={
+              <span>
+                You don&apos;t have any files yet, upload a file to start chat.
+              </span>
+            }
+          >
+            <Button size="large">Upload Now</Button>
+          </Empty>
+        </div>
+      ) : _id ? (
+        <div className="container min-h-full w-full max-w-screen-md bg-slate-200 p-0">
+          <ChatWrapper fileId={_id} />
+        </div>
+      ) : (
+        <div className="container min-h-[calc(100vh-56px)] w-full max-w-screen-md p-0">
+          <Empty
+            className="my-24 rounded bg-white px-10 py-12"
+            description={
+              <span>Select a file to start chat with your files.</span>
+            }
+          />
+        </div>
+      )}
     </div>
   );
 };
