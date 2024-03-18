@@ -5,7 +5,7 @@ import { FiUser } from "react-icons/fi";
 import { SiOpenai } from "react-icons/si";
 
 import { cn } from "@/lib/utils";
-import type { Message as MessageType } from "@/types/types";
+import { type Message as AIMessage } from "ai";
 
 interface NoMessage {
   createdAt: Date;
@@ -15,7 +15,7 @@ interface NoMessage {
 }
 
 interface MessageProps {
-  message: NoMessage | MessageType;
+  message: NoMessage | AIMessage;
   isSamePerson: boolean;
 }
 

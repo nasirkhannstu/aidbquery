@@ -10,6 +10,8 @@ import { getServerAuthSession } from "@/lib/authOptions";
 import { APIErrors } from "@/lib/alerts/alerts.api";
 import { messages } from "@/db/schema";
 
+export const runtime = "edge";
+
 export const POST = async (req: NextRequest) => {
   const body = await req.json();
   const session = await getServerAuthSession();
@@ -36,9 +38,9 @@ export const POST = async (req: NextRequest) => {
 
   await db.insert(messages).values({
     fileId,
-    text: message,
+    content: message,
     userId: session.user.id,
-    sender: "USER",
+    role: "user",
   });
 
   const index = pineconeClient.index(process.env.PINECONE_INDEX);
@@ -56,13 +58,13 @@ export const POST = async (req: NextRequest) => {
   });
 
   const formattedPrevMessages = prevMessages.map((msg) => ({
-    role: msg.sender === "USER" ? ("user" as const) : ("assistant" as const),
-    content: msg.text,
+    role: msg.role === "user" ? ("user" as const) : ("assistant" as const),
+    content: msg.content,
   }));
 
   const response = await openai.chat.completions.create({
     model: "gpt-3.5-turbo",
-    temperature: 0,
+    temperature: 0.2,
     stream: true,
     messages: [
       {
@@ -116,12 +118,27 @@ export const POST = async (req: NextRequest) => {
     async onCompletion(completion) {
       await db.insert(messages).values({
         fileId,
-        text: completion,
-        sender: "BOT",
+        content: completion,
+        role: "assistant",
         userId: session.user.id,
       });
     },
   });
 
   return new StreamingTextResponse(stream);
+};
+
+export const GET = async (request: NextRequest) => {
+  const session = await getServerAuthSession();
+  if (session) return new Response("Unauthorized", { status: 401 });
+
+  const { fileId } = await request.json();
+  if (!fileId) return;
+
+  const messages = await db.query.messages.findMany({
+    where: (messages, { eq }) => eq(messages.fileId, fileId as string),
+    orderBy: (messages, { asc }) => asc(messages.createdAt),
+  });
+
+  return NextResponse.json(messages, { status: 200 });
 };

@@ -94,8 +94,15 @@ export const messages = mysqlTable("messages", {
   id: varchar("id", { length: 128 })
     .$defaultFn(() => createId())
     .primaryKey(),
-  text: text("text"),
-  sender: mysqlEnum("sender", ["USER", "BOT"]).notNull(),
+  content: text("content").notNull(),
+  role: mysqlEnum("role", [
+    "system",
+    "user",
+    "assistant",
+    "function",
+    "data",
+    "tool",
+  ]).notNull(),
   createdAt: timestamp("created_at")
     .notNull()
     .default(sql`now()`),

@@ -1,25 +1,19 @@
 import { z } from "zod";
-import { eq } from "drizzle-orm";
-import { withCursorPagination } from "drizzle-pagination";
 import { TRPCError } from "@trpc/server";
 
 import { createTRPCRouter, protectedProcedure } from "@/trpc/server/api/trpc";
-import { messages } from "@/db/schema";
-import { INFINITY_QUERY } from "@/lib/utils";
 import { fileErrors } from "@/lib/alerts/errors.trpc";
 
 export const messageRouter = createTRPCRouter({
   fileMessages: protectedProcedure
     .input(
       z.object({
-        limit: z.number().min(1).max(100).default(INFINITY_QUERY),
-        cursor: z.string().nullish(),
         fileId: z.string(),
       }),
     )
     .query(async ({ ctx, input }) => {
       const file = await ctx.db.query.files.findFirst({
-        where: (files, { and, eq }) =>
+        where: (files, { eq, and }) =>
           and(
             eq(files.id, input.fileId),
             eq(files.userId, ctx.session?.user.id),
@@ -32,21 +26,15 @@ export const messageRouter = createTRPCRouter({
           message: fileErrors.fileNotFound.message,
         });
 
-      const prevMessages = await ctx.db.query.messages.findMany(
-        withCursorPagination({
-          where: eq(messages.fileId, input.fileId),
-          limit: input.limit,
-          cursors: [
-            [messages.id, "asc", input.cursor ? input.cursor : undefined],
-          ],
-        }),
-      );
+      const messages = await ctx.db.query.messages.findMany({
+        where: (messages, { eq, and }) =>
+          and(
+            eq(messages.fileId, input.fileId),
+            eq(messages.userId, ctx.session?.user.id),
+          ),
+        orderBy: (messages, { asc }) => asc(messages.createdAt),
+      });
 
-      return {
-        messages: prevMessages,
-        nextCursor: prevMessages.length
-          ? prevMessages[prevMessages.length - 1]?.id
-          : null,
-      };
+      return { messages };
     }),
 });

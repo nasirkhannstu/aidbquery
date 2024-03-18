@@ -1,11 +1,12 @@
 "use client";
+
 import { RxReload } from "react-icons/rx";
+import { useChat } from "ai/react";
 import { Typography } from "antd";
 
 import { api } from "@/trpc/provider";
 import ChatInput from "./ChatInput";
 import { alerts } from "@/lib/alerts/alerts";
-import ChatContextProvider from "@/components/Chats/ChatContextProvider";
 import Messages from "./Messages";
 
 const { Text, Title } = Typography;
@@ -15,15 +16,20 @@ interface ChatWrapperProps {
 }
 
 const ChatWrapper = ({ fileId }: ChatWrapperProps) => {
-  const { data: fileStatus, isLoading } = api.files.fileStatus.useQuery(
-    {
-      fileId: fileId,
-    },
-    {
-      refetchInterval: (data) =>
-        data?.status === "PENDING" || data?.status === "SUCCESS" ? false : 500,
-    },
-  );
+  const { data: _messages, isLoading } = api.messages.fileMessages.useQuery({
+    fileId,
+  });
+
+  const {
+    isLoading: isThinking,
+    messages,
+    handleSubmit,
+    input,
+    handleInputChange,
+  } = useChat({
+    api: "/api/chats",
+    initialMessages: _messages?.messages ?? [],
+  });
 
   if (isLoading)
     return (
@@ -37,20 +43,22 @@ const ChatWrapper = ({ fileId }: ChatWrapperProps) => {
             <Text type="secondary">{alerts.chatLoading.message}</Text>
           </div>
         </div>
-        <ChatInput isDisabled />
+        {/* <ChatInput /> */}
       </div>
     );
 
   return (
-    <ChatContextProvider fileId={fileId}>
-      <div className="flex h-full min-h-[calc(100vh-56px)] flex-col justify-between gap-2">
-        <div className="flex h-full flex-1 items-center justify-center">
-          <Messages fileId={fileId} />
-        </div>
-
-        <ChatInput />
+    <div className="flex h-full min-h-[calc(100vh-56px)] flex-col justify-between gap-2">
+      <div className="flex h-full flex-1 items-center justify-center">
+        <Messages isThinking={isThinking} messages={messages} />
       </div>
-    </ChatContextProvider>
+
+      <ChatInput
+        input={input}
+        handleSubmit={handleSubmit}
+        handleChange={handleInputChange}
+      />
+    </div>
   );
 };
 

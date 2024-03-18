@@ -1,0 +1,1 @@
+ALTER TABLE `messages` MODIFY COLUMN `content` text NOT NULL;
