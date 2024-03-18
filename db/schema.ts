@@ -1,4 +1,4 @@
-import { relations, sql } from "drizzle-orm";
+import { type InferSelectModel, relations, sql } from "drizzle-orm";
 import {
   mysqlTable,
   varchar,
@@ -28,8 +28,8 @@ export const users = mysqlTable("users", {
     .notNull(),
 });
 
-// TODO: payments table
-export const payments = mysqlTable("payments", {
+// TODO: subscriptions table
+export const subscriptions = mysqlTable("subscriptions", {
   id: varchar("id", { length: 128 })
     .$defaultFn(() => createId())
     .primaryKey(),
@@ -87,7 +87,7 @@ export const messages = mysqlTable("messages", {
     .$defaultFn(() => createId())
     .primaryKey(),
   text: text("text"),
-  sender: mysqlEnum("sender", ["USER", "BOT"]),
+  sender: mysqlEnum("sender", ["USER", "BOT"]).notNull(),
   createdAt: timestamp("created_at")
     .notNull()
     .default(sql`now()`),
@@ -121,6 +121,7 @@ export const userSettings = mysqlTable("user_settings", {
   userId: varchar("user_id", { length: 128 }).references(() => users.id),
 });
 
+// FIXME: relation with users table
 export const usersRelations = relations(users, ({ many, one }) => ({
   files: many(files),
   messages: many(messages),
@@ -130,6 +131,7 @@ export const usersRelations = relations(users, ({ many, one }) => ({
   }),
 }));
 
+// FIXME: relation with files table
 export const fileRelations = relations(files, ({ one, many }) => ({
   userFile: one(users, {
     fields: [files.userId],
@@ -138,6 +140,7 @@ export const fileRelations = relations(files, ({ one, many }) => ({
   messages: many(messages),
 }));
 
+// FIXME: relation with messages table
 export const messageRelations = relations(messages, ({ one }) => ({
   messageUser: one(users, {
     fields: [messages.userId],
@@ -148,3 +151,12 @@ export const messageRelations = relations(messages, ({ one }) => ({
     references: [files.id],
   }),
 }));
+
+// TODO: exports all table types
+export type User = InferSelectModel<typeof users>;
+export type Subscription = InferSelectModel<typeof subscriptions>;
+export type File = InferSelectModel<typeof files>;
+export type Message = InferSelectModel<typeof messages>;
+export type UserSetting = InferSelectModel<typeof userSettings>;
+export type FileStatus = typeof files.$inferSelect.status;
+export type FileType = typeof files.$inferSelect.type;
