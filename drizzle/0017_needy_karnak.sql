@@ -1,0 +1,1 @@
+ALTER TABLE `subscriptions` RENAME COLUMN `stripe_payment_id` TO `stripe_price_id`;

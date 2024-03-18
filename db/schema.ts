@@ -7,6 +7,7 @@ import {
   mysqlEnum,
   text,
   int,
+  float,
 } from "drizzle-orm/mysql-core";
 import { createId } from "@paralleldrive/cuid2";
 
@@ -35,20 +36,27 @@ export const subscriptions = mysqlTable("subscriptions", {
     .primaryKey(),
   userId: varchar("user_id", { length: 128 })
     .notNull()
-    .references(() => users.id),
-  amount: int("amount").notNull(),
-  stripePaymentId: varchar("stripe_payment_id", { length: 256 }),
-  stripeCustomerId: varchar("stripe_customer_id", { length: 256 }),
+    .references(() => users.id)
+    .notNull(),
+  amount: float("amount").notNull(),
+  stripePriceId: varchar("stripe_price_id", { length: 256 }).notNull(),
+  stripeCustomerId: varchar("stripe_customer_id", { length: 256 }).notNull(),
   stripeSubscriptionId: varchar("stripe_subscription_id", {
     length: 256,
-  }),
+  }).notNull(),
   stripePaymentMethod: varchar("stripe_payment_method", {
     length: 256,
-  }),
-  stripeSubscriptionStatus: varchar("stripe_subscription_status", {
-    length: 256,
-  }),
-  stripeSubscriptionEnd: timestamp("stripe_subscription_end"),
+  }).notNull(),
+  stripeSubscriptionStatus: mysqlEnum("stripe_subscription_status", [
+    "active",
+    "canceled",
+    "incomplete",
+    "incomplete_expired",
+    "past_due",
+    "trialing",
+    "unpaid",
+  ]).notNull(),
+  stripeSubscriptionEnd: timestamp("stripe_subscription_end").notNull(),
   createdAt: timestamp("created_at")
     .notNull()
     .default(sql`now()`),
@@ -125,15 +133,16 @@ export const userSettings = mysqlTable("user_settings", {
 export const usersRelations = relations(users, ({ many, one }) => ({
   files: many(files),
   messages: many(messages),
-  userSetting: one(userSettings, {
+  setting: one(userSettings, {
     fields: [users.id],
     references: [userSettings.userId],
   }),
+  subscriptions: many(subscriptions),
 }));
 
 // FIXME: relation with files table
 export const fileRelations = relations(files, ({ one, many }) => ({
-  userFile: one(users, {
+  user: one(users, {
     fields: [files.userId],
     references: [users.id],
   }),
@@ -142,11 +151,11 @@ export const fileRelations = relations(files, ({ one, many }) => ({
 
 // FIXME: relation with messages table
 export const messageRelations = relations(messages, ({ one }) => ({
-  messageUser: one(users, {
+  user: one(users, {
     fields: [messages.userId],
     references: [users.id],
   }),
-  messageFile: one(files, {
+  file: one(files, {
     fields: [messages.fileId],
     references: [files.id],
   }),
@@ -160,3 +169,5 @@ export type Message = InferSelectModel<typeof messages>;
 export type UserSetting = InferSelectModel<typeof userSettings>;
 export type FileStatus = typeof files.$inferSelect.status;
 export type FileType = typeof files.$inferSelect.type;
+export type SubscriptionStatus =
+  typeof subscriptions.$inferSelect.stripeSubscriptionStatus;

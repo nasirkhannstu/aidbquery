@@ -7,6 +7,24 @@ export const subscriptionRoute = createTRPCRouter({
     // FIXME: remove checked after deployment
     console.log("absURL", absURL("/billing"));
 
+    const subscription = await ctx.db.query.subscriptions.findFirst({
+      where: (subscriptions, { eq }) =>
+        eq(subscriptions.userId, ctx.session.user.id),
+    });
+
+    if (
+      subscription &&
+      subscription.stripeSubscriptionStatus === "active" &&
+      subscription.stripeCustomerId
+    ) {
+      const billingPortal = await stripe.billingPortal.sessions.create({
+        customer: subscription.stripeCustomerId ?? "",
+        return_url: absURL("/billing"),
+      });
+
+      return { url: billingPortal.url };
+    }
+
     const subscribe = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       mode: "subscription",

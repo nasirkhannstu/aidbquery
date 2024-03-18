@@ -1,26 +1,7 @@
-"use client";
-import { useRouter } from "next/navigation";
+import React from "react";
 
-import EmptyChatList from "@/components/EmptyChatList";
-import { api } from "@/trpc/provider";
-import FilesListMenu from "@/components/FilesListMenu";
-
-const ChatsPage = () => {
-  const router = useRouter();
-  const { data: file } = api.files.userFirstFile.useQuery();
-
-  if (file) {
-    return router.push(`/chats/${file.id}`);
-  }
-
-  return (
-    <div className="flex h-full min-h-[calc(100vh-56px)] w-full flex-1 gap-x-3">
-      <>
-        <FilesListMenu />
-      </>
-      <EmptyChatList />
-    </div>
-  );
+const TestPage = () => {
+  return <div>TestPage</div>;
 };
 
-export default ChatsPage;
+export default TestPage;
