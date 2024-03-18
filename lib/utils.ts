@@ -1,8 +1,8 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import fs from "fs";
 
-import type { FileTypes, MimeTypes } from "@/types/types";
+import type { MimeTypes } from "@/types/types";
+import { type FileType } from "@/db/schema";
 
 export const APP_NAME = process.env.APP_NAME;
 export const APP_NAME_CLIENT = process.env.NEXT_PUBLIC_APP_NAME;
@@ -17,13 +17,13 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function baseURL(href?: string) {
+export function absURL(href?: string) {
   if (typeof window !== "undefined") return "";
   if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}` + href;
   return `http://localhost:${process.env.PORT ?? 3000}` + href;
 }
 
-export const fileTypeToMimeType = (type: FileTypes) => {
+export const fileTypeToMimeType = (type: FileType) => {
   switch (type) {
     case "JSON":
       return "application/json";
@@ -40,4 +40,3 @@ export const mimeTypeToFileType = (type: MimeTypes) => {
       return "CSV";
   }
 };
-

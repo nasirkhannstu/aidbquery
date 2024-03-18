@@ -10,7 +10,7 @@ declare namespace NodeJS {
     PINECONE_INDEX: string;
     OPENAI_API_KEY: string;
     STRIPE_SECRET_KEY: string;
-    STRIPE_PRICE_API_KEY: string;
+    STRIPE_PRICE_ID: string;
     STRIPE_WEBHOOKS_SECRET: string;
   }
 }

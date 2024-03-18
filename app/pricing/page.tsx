@@ -58,7 +58,7 @@ const PricingPage = () => {
               <div className="mt-5">
                 <h1 className="text-5xl font-bold text-rose-600">
                   ${freePlan.price}
-                  <span className="text-base">/month</span>
+                  <span className="text-base">/day</span>
                 </h1>
               </div>
               <Divider className="bg-gray-100" />
@@ -105,7 +105,7 @@ const PricingPage = () => {
               <div className="mt-5">
                 <h1 className="text-5xl font-bold text-rose-600">
                   ${premiumPlan.price}
-                  <span className="text-base">/month</span>
+                  <span className="text-base">/day</span>
                 </h1>
               </div>
               <Divider className="bg-gray-100" />
