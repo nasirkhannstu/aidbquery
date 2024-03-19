@@ -26,7 +26,10 @@ const ChatInput = ({
   return (
     <div className="bg-slate-50 px-5 py-3">
       <div className="flex items-center gap-x-3">
-        <form onSubmit={handleSubmit}>
+        <form
+          onSubmit={handleSubmit}
+          className="flex w-full items-center gap-x-2"
+        >
           <TextArea
             onChange={handleChange}
             value={input}
@@ -43,10 +46,10 @@ const ChatInput = ({
               },
             }}
           />
+          <button type="submit" aria-label="Message send" disabled={isLoading}>
+            <BsFillSendFill className="h-6 w-6 text-primary" />
+          </button>
         </form>
-        <button type="submit" aria-label="Message send" disabled={isLoading}>
-          <BsFillSendFill className="h-6 w-6 text-primary" />
-        </button>
       </div>
     </div>
   );

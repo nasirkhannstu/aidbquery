@@ -5,7 +5,7 @@ import { JSONLoader } from "langchain/document_loaders/fs/json";
 import { PineconeStore } from "@langchain/pinecone";
 import { eq } from "drizzle-orm";
 
-import { type FileTypes } from "@/types/types";
+import { type FileType } from "@/db/schema";
 import { pineconeClient } from "./pinecne";
 import { embeddings } from "./openai";
 import { db } from "@/db";
@@ -23,7 +23,7 @@ export interface EmbeddingResponse {
  */
 export const fileUploader = async (
   file: File,
-  fileType: FileTypes,
+  fileType: FileType,
   userId: string,
 ) => {
   const uploadFolder = join(

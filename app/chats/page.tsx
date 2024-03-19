@@ -1,4 +1,5 @@
 "use client";
+import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { Button, Empty } from "antd";
 
@@ -48,4 +49,12 @@ const ChatsPage = () => {
   );
 };
 
-export default ChatsPage;
+const ChatsPageWrapper = () => {
+  return (
+    <Suspense fallback="Loading...">
+      <ChatsPage />
+    </Suspense>
+  );
+};
+
+export default ChatsPageWrapper;

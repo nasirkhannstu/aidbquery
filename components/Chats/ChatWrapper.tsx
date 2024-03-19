@@ -29,6 +29,9 @@ const ChatWrapper = ({ fileId }: ChatWrapperProps) => {
   } = useChat({
     api: "/api/chats",
     initialMessages: _messages?.messages ?? [],
+    body: {
+      fileId: fileId,
+    },
   });
 
   if (isLoading)

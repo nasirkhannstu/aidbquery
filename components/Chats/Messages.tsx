@@ -12,11 +12,11 @@ interface MessagesProps {
 
 const Messages = ({ messages, isThinking }: MessagesProps) => {
   return (
-    <div className="scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch max-h-[calc(100vh-56px-75px)] flex-1 flex-col-reverse gap-4 overflow-y-auto border-zinc-200 p-3 ">
+    <div className="scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch flex max-h-[calc(100vh-3.5rem-7rem)] flex-1 flex-col-reverse gap-4 overflow-y-auto border-zinc-200 p-3">
       {messages && messages.length > 0 ? (
         messages.map((message, index) => {
           const samePersonAsPrevious =
-            messages[index - 1]?.sender === messages[index]?.sender;
+            messages[index - 1]?.role === messages[index]?.role;
 
           if (index === messages.length - 1)
             return (

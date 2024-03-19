@@ -3,27 +3,31 @@ import { OpenAIStream, StreamingTextResponse } from "ai";
 import { PineconeStore } from "@langchain/pinecone";
 import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
+import _ from "lodash";
 
 import { openai, embeddings } from "@/lib/openai";
 import { pineconeClient } from "@/lib/pinecne";
 import { getServerAuthSession } from "@/lib/authOptions";
 import { APIErrors } from "@/lib/alerts/alerts.api";
-import { messages } from "@/db/schema";
-
-export const runtime = "edge";
+import { messages as DMessages } from "@/db/schema";
 
 export const POST = async (req: NextRequest) => {
   const body = await req.json();
+
   const session = await getServerAuthSession();
 
   if (!session?.user.id) return new Response("Unauthorized", { status: 401 });
 
-  const { fileId, message } = z
+  const { fileId, messages } = z
     .object({
       fileId: z.string(),
-      message: z.string(),
+      messages: z.array(
+        z.object({ content: z.string(), role: z.enum(["user", "assistant"]) }),
+      ),
     })
     .parse(body);
+
+  const lastMessage = _.last(messages);
 
   const file = await db.query.files.findFirst({
     where: (files, { eq, and }) =>
@@ -36,9 +40,9 @@ export const POST = async (req: NextRequest) => {
       { status: APIErrors.fileNotFound.code },
     );
 
-  await db.insert(messages).values({
+  await db.insert(DMessages).values({
     fileId,
-    content: message,
+    content: lastMessage?.content ?? "",
     userId: session.user.id,
     role: "user",
   });
@@ -49,7 +53,9 @@ export const POST = async (req: NextRequest) => {
     namespace: file.id,
   });
 
-  const results = await vectorStore.similaritySearch(message, 4);
+  const results = await vectorStore.similaritySearch(
+    lastMessage?.content ?? "",
+  );
 
   const prevMessages = await db.query.messages.findMany({
     where: (messages, { eq }) => eq(messages.fileId, fileId),
@@ -91,7 +97,7 @@ export const POST = async (req: NextRequest) => {
   CONTEXT:
   ${results.map((r) => r.pageContent).join("\n\n")}
   
-  USER INPUT: ${message}`,
+  USER INPUT: ${lastMessage?.content}`,
       },
     ],
   });
@@ -116,7 +122,7 @@ export const POST = async (req: NextRequest) => {
 
   const stream = OpenAIStream(response, {
     async onCompletion(completion) {
-      await db.insert(messages).values({
+      await db.insert(DMessages).values({
         fileId,
         content: completion,
         role: "assistant",

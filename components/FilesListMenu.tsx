@@ -7,7 +7,7 @@ import { useUtils } from "@/hooks/useUtils";
 import FileUpload from "./FileUpload";
 import { FileIcon } from "./FileIcon";
 import { FileListCard } from "./FileListCard";
-import type { File } from "@/types/types";
+import { type File } from "@/db/schema";
 
 interface FileListProps {
   files: File[] | undefined;
