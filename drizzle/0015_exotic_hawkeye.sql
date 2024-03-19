@@ -1,1 +1,0 @@
-ALTER TABLE `subscriptions` MODIFY COLUMN `stripe_subscription_status` enum('active','canceled','incomplete','incomplete_expired','past_due','trialing','unpaid') NOT NULL;

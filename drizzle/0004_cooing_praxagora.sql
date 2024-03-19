@@ -1,1 +1,0 @@
-ALTER TABLE `users` MODIFY COLUMN `updated_at` timestamp DEFAULT now() ON UPDATE CURRENT_TIMESTAMP;
