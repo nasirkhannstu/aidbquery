@@ -148,6 +148,20 @@
       "when": 1710756487390,
       "tag": "0020_blushing_ironclad",
       "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "5",
+      "when": 1710841437299,
+      "tag": "0021_fresh_xorn",
+      "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "5",
+      "when": 1710841478135,
+      "tag": "0022_lame_black_widow",
+      "breakpoints": true
     }
   ]
 }

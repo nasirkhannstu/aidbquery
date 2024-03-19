@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import { useState } from "react";
 import { Button, Form, type FormProps, Input, message } from "antd";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
@@ -10,10 +10,13 @@ type FieldType = {
 };
 
 const App: React.FC = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [form] = Form.useForm();
   const [messageHandler, messageHolder] = message.useMessage();
 
   const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
+    setIsLoading(true);
+
     const res = await signIn("credentials", {
       email: values.email,
       password: values.password,
@@ -25,11 +28,13 @@ const App: React.FC = () => {
         email: values.email,
         password: values.password,
       });
+      setIsLoading(false);
     } else {
       await messageHandler.open({
         type: "error",
         content: res?.error,
       });
+      setIsLoading(false);
     }
   };
 
@@ -85,7 +90,7 @@ const App: React.FC = () => {
                 <Link href="/register">Crate one</Link>
               </div>
               <Form.Item className="mt-5 md:mt-0">
-                <Button type="primary" htmlType="submit">
+                <Button type="primary" htmlType="submit" loading={isLoading}>
                   Login
                 </Button>
               </Form.Item>

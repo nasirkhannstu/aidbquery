@@ -1,16 +1,11 @@
 import NextAuth from "next-auth";
 
+import type { User } from "@/db/schema";
+
+type ModifyUser = Omit<User, "password">;
+
 declare module "next-auth" {
   interface Session {
-    user: User;
+    user: ModifyUser;
   }
-}
-
-export interface User {
-  id: string;
-  email: string;
-  fullName: string;
-  isEmailVerified: boolean;
-  createdAt: Date;
-  updatedAt: Date;
 }

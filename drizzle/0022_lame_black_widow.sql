@@ -1,0 +1,1 @@
+ALTER TABLE `users` MODIFY COLUMN `avatar` varchar(256) NOT NULL DEFAULT 'avatar.jpg';

@@ -7,10 +7,10 @@ import {
   HighlightTwoTone,
   HomeTwoTone,
 } from "@ant-design/icons";
+import { useSession } from "next-auth/react";
 
 import Logo from "@/components/Navbar/Logo";
 import { APP_MODE_CLIENT } from "@/lib/utils";
-import { useSession } from "next-auth/react";
 import ProfileMenu from "./ProfileMenu";
 
 const Navbar = () => {
@@ -45,7 +45,7 @@ const Navbar = () => {
             )}
           </div>
 
-          <div className="hidden items-center space-x-2 sm:flex">
+          <div className="hidden items-center space-x-1 sm:flex">
             {!user ? (
               <>
                 <Button href="/login">Sign in</Button>
@@ -59,7 +59,11 @@ const Navbar = () => {
               </>
             ) : (
               <>
-                <ProfileMenu />
+                <ProfileMenu
+                  email={session.data?.user.email}
+                  name={session.data?.user.fullName}
+                  avatar={session.data?.user.avatar}
+                />
               </>
             )}
           </div>

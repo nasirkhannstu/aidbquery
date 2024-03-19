@@ -1,4 +1,4 @@
-import { type AuthOptions, getServerSession } from "next-auth";
+import { type AuthOptions, getServerSession, type Session } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { eq } from "drizzle-orm";
@@ -6,7 +6,7 @@ import lodash from "lodash";
 
 import { db } from "@/db";
 import { users } from "@/db/schema";
-import { type User } from "@/types/next-auth";
+import type { ModifyUser } from "@/types/next-auth";
 
 export const authOptions: AuthOptions = {
   providers: [
@@ -23,7 +23,7 @@ export const authOptions: AuthOptions = {
           type: "password",
         },
       },
-      async authorize(credentials): Promise<User | null> {
+      async authorize(credentials): Promise<ModifyUser | null> {
         const user = await db
           .select()
           .from(users)
@@ -48,12 +48,12 @@ export const authOptions: AuthOptions = {
   ],
   callbacks: {
     jwt({ user, token, session, trigger }) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      // console.log("jwt", { user }, { token }, { session }, { trigger });
+      // console.log("session => ", session);
+      // console.log("token => ", token);
+      // console.log("user => ", user);
 
       if (trigger === "update") {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-        return { ...token, ...session };
+        return { ...token, ...(session as Session) };
       }
 
       return { ...token, ...user };
@@ -62,7 +62,7 @@ export const authOptions: AuthOptions = {
       return params.baseUrl + "/chats";
     },
     session({ session, token }) {
-      session.user = token as unknown as User;
+      session.user = token as unknown as ModifyUser;
 
       return session;
     },
