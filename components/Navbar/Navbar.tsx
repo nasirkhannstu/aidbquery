@@ -63,6 +63,7 @@ const Navbar = () => {
                   email={session.data?.user.email}
                   name={session.data?.user.fullName}
                   avatar={session.data?.user.avatar}
+                  id={session.data?.user.id}
                 />
               </>
             )}

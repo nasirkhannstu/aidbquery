@@ -1,11 +1,9 @@
 import { type AuthOptions, getServerSession, type Session } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
-import { eq } from "drizzle-orm";
 import lodash from "lodash";
 
 import { db } from "@/db";
-import { users } from "@/db/schema";
 import type { ModifyUser } from "@/types/next-auth";
 
 export const authOptions: AuthOptions = {
@@ -24,21 +22,21 @@ export const authOptions: AuthOptions = {
         },
       },
       async authorize(credentials): Promise<ModifyUser | null> {
-        const user = await db
-          .select()
-          .from(users)
-          .where(eq(users.email, credentials?.email ?? ""));
+        if (!credentials) return null;
+        const user = await db.query.users.findFirst({
+          where: (user, { eq }) => eq(user.email, credentials?.email),
+        });
 
-        if (user.length === 0) throw new Error("Invalid credentials");
+        if (!user) throw new Error("Invalid credentials");
         else {
-          if (user[0] && credentials?.password) {
+          if (credentials?.password) {
             const isValid = await bcrypt.compare(
               credentials?.password,
-              user[0]?.password,
+              user.password,
             );
             if (!isValid) throw new Error("Invalid credentials");
 
-            return lodash.omit(user[0], ["password"]);
+            return lodash.omit(user, ["password", "bio"]);
           } else {
             return null;
           }

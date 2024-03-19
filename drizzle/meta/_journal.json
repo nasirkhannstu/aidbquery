@@ -162,6 +162,20 @@
       "when": 1710841478135,
       "tag": "0022_lame_black_widow",
       "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "5",
+      "when": 1710845203447,
+      "tag": "0023_lyrical_alice",
+      "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "5",
+      "when": 1710845595831,
+      "tag": "0024_groovy_randall",
+      "breakpoints": true
     }
   ]
 }

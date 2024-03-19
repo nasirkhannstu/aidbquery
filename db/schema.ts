@@ -21,6 +21,7 @@ export const users = mysqlTable("users", {
   password: varchar("password", { length: 256 }).notNull(),
   isEmailVerified: boolean("is_email_verified").notNull().default(false),
   avatar: varchar("avatar", { length: 256 }).notNull().default("avatar.jpg"),
+  bio: varchar("bio", { length: 500 }),
   createdAt: timestamp("created_at")
     .notNull()
     .default(sql`now()`),
