@@ -15,11 +15,11 @@ const ChatsPage = () => {
   const filesList = data?.pages.flatMap((page) => page.files);
 
   return (
-    <div className="flex max-h-[calc(100vh-56px)] min-h-full w-full">
+    <div className="flex max-h-[calc(100vh-var(--navbar-h))] min-h-full w-full">
       <FileListMenu files={filesList} />
 
       {!filesList?.length ? (
-        <div className="container min-h-[calc(100vh-56px)] w-full max-w-screen-md">
+        <div className="container min-h-[calc(100vh-var(--navbar-h))] w-full max-w-screen-md">
           <Empty
             className="my-24"
             description={
@@ -36,7 +36,7 @@ const ChatsPage = () => {
           <ChatWrapper fileId={_id} />
         </div>
       ) : (
-        <div className="container min-h-[calc(100vh-56px)] w-full max-w-screen-md p-0">
+        <div className="container min-h-[calc(100vh-var(--navbar-h))] w-full max-w-screen-md p-0">
           <Empty
             className="my-24 rounded bg-white px-10 py-12"
             description={

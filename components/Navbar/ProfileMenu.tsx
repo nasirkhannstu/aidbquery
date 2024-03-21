@@ -35,7 +35,7 @@ const ProfileMenu = ({ avatar, email, name, id }: ProfileMenuProps) => {
             icon={<UserOutlined />}
             src={
               <Image
-                src={`/assets/${avatar}`}
+                src={`/uploads/avatars/${avatar}`}
                 alt={name!}
                 width={56}
                 height={56}
@@ -108,7 +108,7 @@ const ProfileMenu = ({ avatar, email, name, id }: ProfileMenuProps) => {
                 style={{ cursor: "pointer" }}
                 src={
                   <Image
-                    src={`/assets/${avatar}`}
+                    src={`/uploads/avatars/${avatar}`}
                     alt={name!}
                     width={56}
                     height={56}

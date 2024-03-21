@@ -11,7 +11,8 @@ export const userRouters = createTRPCRouter({
   register: publicProcedure
     .input(
       z.object({
-        name: z.string().trim(),
+        firstName: z.string().trim(),
+        lastName: z.string().trim(),
         email: z.string().email().trim(),
         password: z.string(),
       }),
@@ -31,7 +32,8 @@ export const userRouters = createTRPCRouter({
       const hashedPassword = await bcrypt.hash(input.password, 12);
 
       await ctx.db.insert(users).values({
-        fullName: input.name,
+        firstName: input.firstName,
+        lastName: input.lastName,
         email: input.email,
         password: hashedPassword,
       });

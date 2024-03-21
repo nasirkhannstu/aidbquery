@@ -3,6 +3,7 @@ import { Button, Form, type FormProps, Input, message } from "antd";
 import Link from "next/link";
 
 import { api } from "@/trpc/provider";
+import { useRouter } from "next/navigation";
 
 type FieldType = {
   firstName: string;
@@ -14,6 +15,7 @@ type FieldType = {
 
 const RegisterPage: React.FC = () => {
   const [messageHandler, messageHolder] = message.useMessage();
+  const router = useRouter();
   const [form] = Form.useForm();
   const createUser = api.users.register.useMutation({
     onSuccess: async (data) => {
@@ -21,6 +23,7 @@ const RegisterPage: React.FC = () => {
         type: "success",
         content: data.message,
       });
+      router.push("/login");
     },
     async onError({ message }) {
       await messageHandler.open({
@@ -32,7 +35,8 @@ const RegisterPage: React.FC = () => {
 
   const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
     await createUser.mutateAsync({
-      name: `${values.firstName} ${values.lastName}`,
+      firstName: values.firstName,
+      lastName: values.lastName,
       email: values.email,
       password: values.password,
     });
@@ -147,7 +151,11 @@ const RegisterPage: React.FC = () => {
               <Link href="/login">Login</Link>
             </div>
             <Form.Item className="mt-5 md:mt-0">
-              <Button type="primary" htmlType="submit">
+              <Button
+                type="primary"
+                htmlType="submit"
+                loading={createUser.isLoading}
+              >
                 Register
               </Button>
             </Form.Item>

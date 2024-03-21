@@ -1,5 +1,5 @@
 "use client";
-import { PlusOutlined } from "@ant-design/icons";
+import { CloseOutlined, PlusOutlined } from "@ant-design/icons";
 import { Button, Typography } from "antd";
 import { IoIosArrowForward } from "react-icons/io";
 
@@ -8,26 +8,32 @@ import FileUpload from "./FileUpload";
 import { FileIcon } from "./FileIcon";
 import { FileListCard } from "./FileListCard";
 import { type File } from "@/db/schema";
+import { cn } from "@/lib/utils";
 
 interface FileListProps {
   files: File[] | undefined;
 }
 
 const FilesListMenu = ({ files }: FileListProps) => {
-  const { setOpenUploadModal } = useUtils();
+  const { setOpenUploadModal, isSidebarOpen, toggleSidebar } = useUtils();
 
   const csvFiles = files?.filter((file) => file.type === "CSV");
   const jsonFiles = files?.filter((file) => file.type === "JSON");
 
   return (
-    <div className="flex max-h-[calc(100vh-56px)] w-full max-w-sm flex-col overflow-y-auto border-r bg-slate-50 px-7 py-2">
+    <div
+      className={cn(
+        "fixed  top-[--navbar-h] z-50 flex h-full w-[350px] flex-col overflow-y-auto border-r bg-slate-50 px-7 py-2 shadow-lg transition delay-150 duration-300 ease-in-out lg:w-[400px]",
+        isSidebarOpen ? "left-0" : "-left-full",
+      )}
+    >
       <div className="my-3 flex items-center justify-between">
         <div>
           <Typography.Title level={3} style={{ fontWeight: "bold" }}>
             Files
           </Typography.Title>
         </div>
-        <div>
+        <div className="flex gap-x-1">
           <Button
             type="dashed"
             size="large"
@@ -40,6 +46,11 @@ const FilesListMenu = ({ files }: FileListProps) => {
             Upload
           </Button>
           <FileUpload />
+          <Button
+            icon={<CloseOutlined />}
+            size="large"
+            onClick={toggleSidebar}
+          />
         </div>
       </div>
       <div className="mt-2 max-h-full flex-1">

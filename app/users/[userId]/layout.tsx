@@ -2,8 +2,9 @@ import { db } from "@/db";
 import { getServerAuthSession } from "@/lib/authOptions";
 import { type Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
+import { type ReactNode } from "react";
 
-export const metadataGenerator = async ({
+export const generateMetadata = async ({
   params: { userId },
 }: {
   params: { userId: string };
@@ -15,14 +16,16 @@ export const metadataGenerator = async ({
   if (!user) return notFound();
 
   return {
-    title: user.fullName,
-    description: `Profile of ${user.fullName} and bio: ${user.bio}`,
+    title: `${user.firstName} ${user.lastName}`,
+    description: `Profile of ${user.firstName} ${user.lastName} and bio: ${user.bio}`,
   };
 };
 
 const ProfileLayout = async ({
+  children,
   params: { userId },
 }: {
+  children: ReactNode;
   params: { userId: string };
 }) => {
   const session = await getServerAuthSession();
@@ -31,7 +34,7 @@ const ProfileLayout = async ({
     return redirect("/chats");
   }
 
-  return <div>ProfileLayout</div>;
+  return <>{children}</>;
 };
 
 export default ProfileLayout;

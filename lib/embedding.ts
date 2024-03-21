@@ -94,6 +94,8 @@ export const embeddingAICSV = async (
 
     return { success: true, fileId: uploadedFile.id };
   } catch (error: unknown) {
+    console.log(error);
+
     await db
       .update(files)
       .set({ status: "FAILED" })
@@ -150,6 +152,8 @@ export const embeddingAIJSON = async (
 
     return { success: true, fileId: uploadedFile.id };
   } catch (error: unknown) {
+    console.log(error);
+
     await db
       .update(files)
       .set({ status: "FAILED" })

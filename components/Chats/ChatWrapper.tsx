@@ -36,7 +36,7 @@ const ChatWrapper = ({ fileId }: ChatWrapperProps) => {
 
   if (isLoading)
     return (
-      <div className="flex h-full min-h-[calc(100vh-56px)] flex-col justify-between gap-2">
+      <div className="flex h-full min-h-[calc(100vh-var(--navbar-h))] flex-col justify-between gap-2">
         <div className="flex h-full flex-1 items-center justify-center">
           <div className="flex flex-col items-center gap-2">
             <RxReload className="h-8 w-8 animate-spin text-primary" />
@@ -51,7 +51,7 @@ const ChatWrapper = ({ fileId }: ChatWrapperProps) => {
     );
 
   return (
-    <div className="flex h-full min-h-[calc(100vh-56px)] flex-col justify-between gap-2">
+    <div className="flex h-full min-h-[calc(100vh-var(--navbar-h))] flex-col justify-between gap-2">
       <div className="flex h-full flex-1 items-center justify-center">
         <Messages isThinking={isThinking} messages={messages} />
       </div>

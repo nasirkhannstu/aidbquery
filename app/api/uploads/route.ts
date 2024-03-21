@@ -51,6 +51,8 @@ export const POST = async (request: NextRequest) => {
       embeddings = await embeddingAIJSON(session.user.id, fileName, filePath);
     }
 
+    console.log(embeddings);
+
     if (embeddings.success) {
       return NextResponse.json(
         {
@@ -67,6 +69,8 @@ export const POST = async (request: NextRequest) => {
       );
     }
   } catch (error: unknown) {
+    console.log(error);
+
     return NextResponse.json(
       { success: false, msg: APIErrors.catchAll.message },
       { status: APIErrors.catchAll.code },
