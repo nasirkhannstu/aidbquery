@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { Button, Input, Tag, Typography } from "antd";
+import { Button, Divider, Input, Tag, Typography } from "antd";
 import Image from "next/image";
 import moment from "moment";
 import { MdDriveFileRenameOutline } from "react-icons/md";
@@ -69,7 +69,9 @@ const Profile = ({ user }: ProfileProps) => {
                     <Input
                       size="large"
                       defaultValue={user.firstName}
-                      prefix={<MdDriveFileRenameOutline />}
+                      prefix={
+                        <MdDriveFileRenameOutline className="text-slate-400" />
+                      }
                     />
                   ) : (
                     <p className="rounded border px-5 py-2">{user.firstName}</p>
@@ -83,7 +85,9 @@ const Profile = ({ user }: ProfileProps) => {
                     <Input
                       size="large"
                       defaultValue={user.lastName}
-                      prefix={<MdDriveFileRenameOutline />}
+                      prefix={
+                        <MdDriveFileRenameOutline className="text-slate-400" />
+                      }
                     />
                   ) : (
                     <p className="rounded border px-5 py-2">{user.lastName}</p>
@@ -104,19 +108,27 @@ const Profile = ({ user }: ProfileProps) => {
                 <div>
                   <Typography.Title level={5}>Bio</Typography.Title>
                   {editable ? (
-                    <TextArea size="large" value={user.bio ?? ""} rows={6} />
+                    <TextArea size="large" value={user.bio ?? ""} rows={5} />
                   ) : (
-                    <p className="rounded border px-5 py-2">{user.firstName}</p>
+                    <div className="h-36 rounded border px-5 py-2">
+                      {user.bio}
+                    </div>
                   )}
                 </div>
               </div>
             </div>
 
-            <div>
-              <Button onClick={() => setEditable(false)} danger>
+            <Divider />
+
+            <div className="flex flex-row items-center gap-x-5 md:justify-end">
+              <Button onClick={() => setEditable(false)} danger size="large">
                 Cancel
               </Button>
-              <Button onClick={() => setEditable(true)} type="primary">
+              <Button
+                onClick={() => setEditable(true)}
+                type="primary"
+                size="large"
+              >
                 Edit
               </Button>
             </div>
