@@ -41,7 +41,7 @@ const FileUpload: React.FC = () => {
         });
         await utils.files.invalidate();
         setCloseUploadModal();
-        router.push(`/chats/${info.file.response?.fileId}`);
+        router.push(`/chats?_id=${info.file.response?.fileId}`);
       } else if (status === "error") {
         await messageHandler.open({
           type: "error",

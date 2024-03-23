@@ -27,7 +27,7 @@ const Profile = ({ user }: ProfileProps) => {
               alt={user.firstName}
               width={200}
               height={200}
-              className="mx-auto mb-10 rounded-full"
+              className="mx-auto rounded-full"
             />
             <div className="absolute right-0 top-0">
               <Tag color="magenta" icon={<AlertOutlined />}>
@@ -35,13 +35,11 @@ const Profile = ({ user }: ProfileProps) => {
               </Tag>
             </div>
 
-            {/* <div className="my-3 text-sm">
-              <Typography.Text type="secondary">
-                Allowed *.jpeg, *.jpg, *.png, *.gif max size of 3 Mb
-              </Typography.Text>
-            </div> */}
+            <p className="mx-auto max-w-56 text-center text-sm text-slate-400">
+              Allowed *.jpeg, *.jpg, *.png, *.gif max size of 3 Mb
+            </p>
 
-            <p className="mx-auto max-w-52 text-center font-light text-slate-400">
+            <p className="max-w-62 mx-auto text-center font-light text-slate-700">
               Joined at {moment(user.createdAt).format("LLLL")}
             </p>
 
@@ -113,11 +111,17 @@ const Profile = ({ user }: ProfileProps) => {
                 </div>
               </div>
             </div>
+
+            <div>
+              <Button onClick={() => setEditable(false)} danger>
+                Cancel
+              </Button>
+              <Button onClick={() => setEditable(true)} type="primary">
+                Edit
+              </Button>
+            </div>
           </div>
         </div>
-      </div>
-      <div>
-        <Button onClick={() => setEditable(true)}>Edit</Button>
       </div>
     </>
   );

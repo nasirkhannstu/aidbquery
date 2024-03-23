@@ -102,24 +102,6 @@ export const POST = async (req: NextRequest) => {
     ],
   });
 
-  console.log(
-    "with join: ",
-    formattedPrevMessages
-      .map((message) => {
-        if (message.role === "user") return `User: ${message.content}\n`;
-        return `Assistant: ${message.content}\n`;
-      })
-      .join(""),
-  );
-
-  console.log(
-    "without join: ",
-    formattedPrevMessages.map((message) => {
-      if (message.role === "user") return `User: ${message.content}\n`;
-      return `Assistant: ${message.content}\n`;
-    }),
-  );
-
   const stream = OpenAIStream(response, {
     async onCompletion(completion) {
       await db.insert(DMessages).values({
