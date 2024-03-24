@@ -11,6 +11,8 @@ import { embeddings } from "./openai";
 import { db } from "@/db";
 import { files } from "@/db/schema";
 
+type TFileTypes = FileType | "AVATAR";
+
 export interface EmbeddingResponse {
   success: boolean;
   fileId: string | null;
@@ -23,15 +25,13 @@ export interface EmbeddingResponse {
  */
 export const fileUploader = async (
   file: File,
-  fileType: FileType,
+  fileType: TFileTypes,
   userId: string,
 ) => {
-  const uploadFolder = join(
-    process.cwd(),
-    "public",
-    "uploads",
-    fileType === "CSV" ? "csvs" : "jsons",
-  );
+  const path =
+    fileType === "CSV" ? "csvs" : fileType === "JSON" ? "jsons" : "avatars";
+
+  const uploadFolder = join(process.cwd(), "public", "uploads", path);
 
   // create folder if not exists
   await access(uploadFolder).catch(
@@ -39,7 +39,10 @@ export const fileUploader = async (
   );
 
   const fileExt = extname(file.name);
-  const fileName = `${userId}-${Date.now()}${fileExt}`;
+  const fileName =
+    path === "avatars"
+      ? `avatar-${userId}${fileExt}`
+      : `${userId}-${Date.now()}${fileExt}`;
   const filePath = join(uploadFolder, fileName);
 
   await writeFile(filePath, new Uint8Array(await file.arrayBuffer()));

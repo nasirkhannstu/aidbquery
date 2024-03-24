@@ -17,21 +17,22 @@ import {
   CheckOutlined,
   CloseOutlined,
   EditOutlined,
+  EyeOutlined,
   SaveOutlined,
+  UploadOutlined,
 } from "@ant-design/icons";
 import {
   MdDriveFileRenameOutline,
   MdOutlineAlternateEmail,
+  MdPreview,
 } from "react-icons/md";
 
 import { api } from "@/trpc/provider";
 import { openNotification } from "@/lib/utils";
-import { useRouter } from "next/navigation";
 
 const { TextArea } = Input;
 
 const Profile = () => {
-  const router = useRouter();
   const [notify, notificationHolder] = notification.useNotification();
   const [profileData, setProfileData] = useState({
     id: "",
@@ -112,13 +113,32 @@ const Profile = () => {
       <div className="flex gap-x-5">
         <div className="w-2/6 rounded border p-5 shadow">
           <div className="relative flex flex-col justify-start gap-y-3">
-            <Image
-              src={`/uploads/avatars/${profileData.avatar}`}
-              alt={profileData.firstName}
-              width={200}
-              height={200}
-              className="mx-auto rounded-full"
-            />
+            <div className="flex justify-center">
+              <div className="relative">
+                <Image
+                  src={`/uploads/avatars/${profileData.avatar}`}
+                  alt={profileData.firstName}
+                  width={200}
+                  height={200}
+                  className="rounded-full"
+                />
+                <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center rounded-full bg-black/5">
+                  <div className="flex items-center gap-x-1">
+                    <Button
+                      icon={<EyeOutlined />}
+                      size="small"
+                      type="default"
+                    />
+                    <Button
+                      icon={<UploadOutlined />}
+                      size="small"
+                      type="default"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <div className="absolute right-0 top-0">
               <Tag color="magenta" icon={<AlertOutlined />}>
                 Premium

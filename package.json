@@ -30,6 +30,7 @@
     "@trpc/server": "^10.45.1",
     "ai": "^3.0.7",
     "antd": "^5.15.0",
+    "antd-img-crop": "^4.21.0",
     "bcryptjs": "^2.4.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
