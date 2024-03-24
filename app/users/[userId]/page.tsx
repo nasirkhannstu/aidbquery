@@ -61,7 +61,7 @@ const ProfilePage = async ({ params: { userId } }: ProfilePageProps) => {
                 key: "1",
                 label: "Profile",
                 icon: <UserOutlined />,
-                children: <Profile user={user} />,
+                children: <Profile />,
               },
               {
                 key: "2",

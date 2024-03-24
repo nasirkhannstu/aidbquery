@@ -1,16 +1,17 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import moment from "moment";
 import {
   Button,
   Divider,
   Input,
+  notification,
   Switch,
   Tag,
   Typography,
   type InputRef,
 } from "antd";
-import Image from "next/image";
-import moment from "moment";
 import {
   AlertOutlined,
   CheckOutlined,
@@ -23,17 +24,55 @@ import {
   MdOutlineAlternateEmail,
 } from "react-icons/md";
 
-import { type User } from "@/db/schema";
+import { api } from "@/trpc/provider";
+import { openNotification } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 const { TextArea } = Input;
 
-interface ProfileProps {
-  user: User;
-}
-
-const Profile = ({ user }: ProfileProps) => {
+const Profile = () => {
+  const router = useRouter();
+  const [notify, notificationHolder] = notification.useNotification();
+  const [profileData, setProfileData] = useState({
+    id: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    bio: "",
+    avatar: "",
+    createdAt: null as unknown as Date,
+    isEmailVerified: false,
+  });
   const [editable, setEditable] = useState<boolean>(false);
   const firstNameRef = useRef<InputRef>(null);
+  const utils = api.useUtils();
+  const {
+    data: profile,
+    error,
+    isError,
+    isLoading,
+  } = api.users.userProfile.useQuery();
+  const { mutate: updateProfile, isLoading: mutateLoading } =
+    api.users.updateProfile.useMutation({
+      async onSuccess(data) {
+        openNotification(
+          "success",
+          notify,
+          "Profile Updated",
+          data.message ?? "Profile updated successfully.",
+        );
+        setEditable(false);
+        await utils.users.userProfile.invalidate();
+      },
+      onError(error) {
+        openNotification(
+          "error",
+          notify,
+          "Something went wrong",
+          error?.message ?? "An error occurred while updating the profile.",
+        );
+      },
+    });
 
   useEffect(() => {
     if (editable) {
@@ -41,14 +80,41 @@ const Profile = ({ user }: ProfileProps) => {
     }
   }, [editable]);
 
+  useEffect(() => {
+    if (isError) {
+      openNotification(
+        "error",
+        notify,
+        "Something went wrong",
+        error?.message ?? "An error occurred while fetching the profile data.",
+      );
+    }
+  }, [error?.message, isError, notify]);
+
+  useEffect(() => {
+    if (profile) {
+      setProfileData({
+        id: profile.id,
+        firstName: profile.firstName,
+        lastName: profile.lastName,
+        bio: profile.bio ?? "",
+        avatar: profile.avatar,
+        createdAt: profile.createdAt,
+        email: profile.email,
+        isEmailVerified: profile.isEmailVerified,
+      });
+    }
+  }, [profile]);
+
   return (
     <>
+      {notificationHolder}
       <div className="flex gap-x-5">
         <div className="w-2/6 rounded border p-5 shadow">
           <div className="relative flex flex-col justify-start gap-y-3">
             <Image
-              src={`/uploads/avatars/${user.avatar}`}
-              alt={user.firstName}
+              src={`/uploads/avatars/${profileData.avatar}`}
+              alt={profileData.firstName}
               width={200}
               height={200}
               className="mx-auto rounded-full"
@@ -64,24 +130,25 @@ const Profile = ({ user }: ProfileProps) => {
             </p>
 
             <p className="max-w-62 mx-auto text-center font-light text-slate-700">
-              Joined at {moment(user.createdAt).format("LLLL")}
+              Joined at {moment(profileData.createdAt).format("LLLL")}
             </p>
 
             <div className="my-2 flex items-center justify-between">
               <div>
                 <p className="font-semibold">Email Verification</p>
-                {/* <p className="text-sm text-slate-400">
-                Email Verification is not completed
-              </p> */}
-                <p className="text-sm text-slate-400">
+
+                <p className="text-sm text-rose-300">
                   Email Verification is required to access all features.
                 </p>
               </div>
               <Switch
+                title={
+                  profileData.isEmailVerified ? "Verified" : "Not Verified"
+                }
                 disabled
                 checkedChildren={<CheckOutlined />}
                 unCheckedChildren={<CloseOutlined />}
-                defaultChecked
+                defaultChecked={profileData.isEmailVerified}
               />
             </div>
 
@@ -103,14 +170,20 @@ const Profile = ({ user }: ProfileProps) => {
                     <Input
                       ref={firstNameRef}
                       size="large"
-                      defaultValue={user.firstName}
+                      value={profileData.firstName}
+                      onChange={(e) =>
+                        setProfileData((prev) => ({
+                          ...prev,
+                          firstName: e.target.value,
+                        }))
+                      }
                       prefix={
                         <MdDriveFileRenameOutline className="text-slate-400" />
                       }
                     />
                   ) : (
                     <p className="text-secondary-foreground rounded border px-5 py-2">
-                      {user.firstName}
+                      {profileData.firstName}
                     </p>
                   )}
                 </div>
@@ -121,13 +194,21 @@ const Profile = ({ user }: ProfileProps) => {
                   {editable ? (
                     <Input
                       size="large"
-                      defaultValue={user.lastName}
+                      value={profileData.lastName}
+                      onChange={(e) =>
+                        setProfileData((prev) => ({
+                          ...prev,
+                          lastName: e.target.value,
+                        }))
+                      }
                       prefix={
                         <MdDriveFileRenameOutline className="text-slate-400" />
                       }
                     />
                   ) : (
-                    <p className="rounded border px-5 py-2">{user.lastName}</p>
+                    <p className="rounded border px-5 py-2">
+                      {profileData.lastName}
+                    </p>
                   )}
                 </div>
               </div>
@@ -139,7 +220,9 @@ const Profile = ({ user }: ProfileProps) => {
                   {editable && (
                     <MdOutlineAlternateEmail className="text-slate-400" />
                   )}
-                  <p className="text-secondary-foreground">{user.email}</p>
+                  <p className="text-secondary-foreground">
+                    {profileData.email}
+                  </p>
                 </div>
               </div>
             </div>
@@ -150,14 +233,20 @@ const Profile = ({ user }: ProfileProps) => {
                   {editable ? (
                     <TextArea
                       size="large"
-                      value={user.bio ?? ""}
+                      value={profileData.bio}
+                      onChange={(e) =>
+                        setProfileData((prev) => ({
+                          ...prev,
+                          bio: e.target.value,
+                        }))
+                      }
                       rows={5}
                       placeholder="Write something about yourself..."
                       prefix={'<MailOutlined className="text-slate-400" />'}
                     />
                   ) : (
                     <div className="h-36 rounded border px-5 py-2">
-                      {user.bio}
+                      {profileData.bio}
                     </div>
                   )}
                 </div>
@@ -180,9 +269,16 @@ const Profile = ({ user }: ProfileProps) => {
               {editable ? (
                 <Button
                   icon={<SaveOutlined />}
-                  onClick={() => setEditable(true)}
+                  onClick={() =>
+                    updateProfile({
+                      bio: profileData.bio,
+                      firstName: profileData.firstName,
+                      lastName: profileData.lastName,
+                    })
+                  }
                   type="primary"
                   size="large"
+                  loading={mutateLoading || isLoading}
                 >
                   Update
                 </Button>

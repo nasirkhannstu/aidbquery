@@ -1,8 +1,9 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
-import type { MimeTypes } from "@/types/types";
+import type { MimeTypes, NotificationType } from "@/types/types";
 import { type FileType } from "@/db/schema";
+import type { NotificationInstance } from "antd/es/notification/interface";
 
 export const APP_NAME = process.env.APP_NAME;
 export const APP_NAME_CLIENT = process.env.NEXT_PUBLIC_APP_NAME;
@@ -39,4 +40,16 @@ export const mimeTypeToFileType = (type: MimeTypes) => {
     case "text/csv":
       return "CSV";
   }
+};
+
+export const openNotification = (
+  type: NotificationType,
+  notify: NotificationInstance,
+  title: string,
+  description: string,
+) => {
+  notify[type]({
+    message: title,
+    description,
+  });
 };

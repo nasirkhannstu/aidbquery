@@ -10,7 +10,7 @@ type ErrorCode =
   | "TIMEOUT"
   | "CONFLICT";
 
-type UserAlertTypes = "userExists";
+type UserAlertTypes = "userExists" | "userNotFound";
 type FileAlertTypes = "fileNotFound" | "deleteFailed";
 
 type UserErrorsType = Record<
@@ -33,6 +33,10 @@ export const userErrors: UserErrorsType = {
   userExists: {
     code: "BAD_REQUEST",
     message: "The user already exists.",
+  },
+  userNotFound: {
+    code: "NOT_FOUND",
+    message: "User not found",
   },
 };
 

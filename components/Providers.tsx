@@ -10,16 +10,18 @@ import { TRPCReactProvider } from "@/trpc/provider";
 
 const Providers = ({ children }: PropsWithChildren) => {
   return (
-    <SessionProvider>
-      <TRPCReactProvider>
-        <AntdRegistry>
-          <ConfigProvider theme={theme}>
-            <Navbar />
-            {children}
-          </ConfigProvider>
-        </AntdRegistry>
-      </TRPCReactProvider>
-    </SessionProvider>
+    <>
+      <SessionProvider>
+        <TRPCReactProvider>
+          <AntdRegistry>
+            <ConfigProvider theme={theme}>
+              <Navbar />
+              {children}
+            </ConfigProvider>
+          </AntdRegistry>
+        </TRPCReactProvider>
+      </SessionProvider>
+    </>
   );
 };
 
