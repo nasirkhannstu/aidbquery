@@ -6,6 +6,8 @@
   :root {
     --primary: 230 74% 44%;
     --primary-foreground: 355.7 100% 97.3%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
     --bg-fade: 229.09 100% 97.84%;
     --navbar-h: 56px;
   }

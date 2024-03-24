@@ -1,12 +1,29 @@
 "use client";
-import { useState } from "react";
-import { Button, Divider, Input, Tag, Typography } from "antd";
+import { useEffect, useRef, useState } from "react";
+import {
+  Button,
+  Divider,
+  Input,
+  Switch,
+  Tag,
+  Typography,
+  type InputRef,
+} from "antd";
 import Image from "next/image";
 import moment from "moment";
-import { MdDriveFileRenameOutline } from "react-icons/md";
+import {
+  AlertOutlined,
+  CheckOutlined,
+  CloseOutlined,
+  EditOutlined,
+  SaveOutlined,
+} from "@ant-design/icons";
+import {
+  MdDriveFileRenameOutline,
+  MdOutlineAlternateEmail,
+} from "react-icons/md";
 
 import { type User } from "@/db/schema";
-import { AlertOutlined } from "@ant-design/icons";
 
 const { TextArea } = Input;
 
@@ -16,12 +33,19 @@ interface ProfileProps {
 
 const Profile = ({ user }: ProfileProps) => {
   const [editable, setEditable] = useState<boolean>(false);
+  const firstNameRef = useRef<InputRef>(null);
+
+  useEffect(() => {
+    if (editable) {
+      firstNameRef.current?.focus();
+    }
+  }, [editable]);
 
   return (
     <>
       <div className="flex gap-x-5">
         <div className="w-2/6 rounded border p-5 shadow">
-          <div className="relative flex flex-col justify-center gap-y-3">
+          <div className="relative flex flex-col justify-start gap-y-3">
             <Image
               src={`/uploads/avatars/${user.avatar}`}
               alt={user.firstName}
@@ -36,27 +60,37 @@ const Profile = ({ user }: ProfileProps) => {
             </div>
 
             <p className="mx-auto max-w-56 text-center text-sm text-slate-400">
-              Allowed *.jpeg, *.jpg, *.png, *.gif max size of 3 Mb
+              Allowed *.jpeg, *.jpg, *.png, *.gif max size of 1Mb
             </p>
 
             <p className="max-w-62 mx-auto text-center font-light text-slate-700">
               Joined at {moment(user.createdAt).format("LLLL")}
             </p>
 
-            <p className="text-center">
-              Your email is <Tag color="green">Verified</Tag>
-            </p>
-
-            <p className="text-center">
-              Your are correctly using{" "}
-              <Typography.Text strong>Premium</Typography.Text> plan.
-            </p>
-
-            <div className="mx-auto mt-5">
-              <Button danger size="large">
-                Delete Account
-              </Button>
+            <div className="my-2 flex items-center justify-between">
+              <div>
+                <p className="font-semibold">Email Verification</p>
+                {/* <p className="text-sm text-slate-400">
+                Email Verification is not completed
+              </p> */}
+                <p className="text-sm text-slate-400">
+                  Email Verification is required to access all features.
+                </p>
+              </div>
+              <Switch
+                disabled
+                checkedChildren={<CheckOutlined />}
+                unCheckedChildren={<CloseOutlined />}
+                defaultChecked
+              />
             </div>
+
+            <p className="mb-5">
+              Your are correctly using{" "}
+              <Typography.Text strong>Premium</Typography.Text> plan. Next
+              payment will be on{" "}
+              <Typography.Text strong>12/12/2022</Typography.Text>
+            </p>
           </div>
         </div>
         <div className="flex-1">
@@ -67,6 +101,7 @@ const Profile = ({ user }: ProfileProps) => {
                   <Typography.Title level={5}>First Name</Typography.Title>
                   {editable ? (
                     <Input
+                      ref={firstNameRef}
                       size="large"
                       defaultValue={user.firstName}
                       prefix={
@@ -74,7 +109,9 @@ const Profile = ({ user }: ProfileProps) => {
                       }
                     />
                   ) : (
-                    <p className="rounded border px-5 py-2">{user.firstName}</p>
+                    <p className="text-secondary-foreground rounded border px-5 py-2">
+                      {user.firstName}
+                    </p>
                   )}
                 </div>
               </div>
@@ -98,9 +135,12 @@ const Profile = ({ user }: ProfileProps) => {
             <div className="my-5 w-full">
               <div>
                 <Typography.Title level={5}>Email Address</Typography.Title>
-                <p className="cursor-not-allowed rounded border px-5 py-2 text-slate-500">
-                  {user.email}
-                </p>
+                <div className="flex cursor-not-allowed items-center gap-x-2 rounded border px-3 py-2">
+                  {editable && (
+                    <MdOutlineAlternateEmail className="text-slate-400" />
+                  )}
+                  <p className="text-secondary-foreground">{user.email}</p>
+                </div>
               </div>
             </div>
             <div className="my-5 w-full">
@@ -108,7 +148,13 @@ const Profile = ({ user }: ProfileProps) => {
                 <div>
                   <Typography.Title level={5}>Bio</Typography.Title>
                   {editable ? (
-                    <TextArea size="large" value={user.bio ?? ""} rows={5} />
+                    <TextArea
+                      size="large"
+                      value={user.bio ?? ""}
+                      rows={5}
+                      placeholder="Write something about yourself..."
+                      prefix={'<MailOutlined className="text-slate-400" />'}
+                    />
                   ) : (
                     <div className="h-36 rounded border px-5 py-2">
                       {user.bio}
@@ -121,16 +167,35 @@ const Profile = ({ user }: ProfileProps) => {
             <Divider />
 
             <div className="flex flex-row items-center gap-x-5 md:justify-end">
-              <Button onClick={() => setEditable(false)} danger size="large">
-                Cancel
-              </Button>
-              <Button
-                onClick={() => setEditable(true)}
-                type="primary"
-                size="large"
-              >
-                Edit
-              </Button>
+              {editable && (
+                <Button
+                  onClick={() => setEditable(false)}
+                  danger
+                  size="large"
+                  icon={<CloseOutlined />}
+                >
+                  Cancel
+                </Button>
+              )}
+              {editable ? (
+                <Button
+                  icon={<SaveOutlined />}
+                  onClick={() => setEditable(true)}
+                  type="primary"
+                  size="large"
+                >
+                  Update
+                </Button>
+              ) : (
+                <Button
+                  onClick={() => setEditable(true)}
+                  type="primary"
+                  size="large"
+                  icon={<EditOutlined />}
+                >
+                  Edit
+                </Button>
+              )}
             </div>
           </div>
         </div>
