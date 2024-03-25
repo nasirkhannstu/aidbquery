@@ -2,14 +2,21 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import moment from "moment";
+import { SlEye } from "react-icons/sl";
+import { FaRegEdit } from "react-icons/fa";
+import { useHover } from "@mantine/hooks";
+import ImgCrop from "antd-img-crop";
 import {
   Button,
   Divider,
   Input,
+  Modal,
   notification,
   Switch,
   Tag,
   Typography,
+  Upload,
+  type UploadProps,
   type InputRef,
 } from "antd";
 import {
@@ -17,22 +24,27 @@ import {
   CheckOutlined,
   CloseOutlined,
   EditOutlined,
-  EyeOutlined,
   SaveOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
 import {
   MdDriveFileRenameOutline,
   MdOutlineAlternateEmail,
-  MdPreview,
 } from "react-icons/md";
 
 import { api } from "@/trpc/provider";
-import { openNotification } from "@/lib/utils";
+import { cn, openNotification } from "@/lib/utils";
+import { Button as MyButton } from "@/components/ui/button";
+import { useSession } from "next-auth/react";
 
 const { TextArea } = Input;
+const { Dragger } = Upload;
 
 const Profile = () => {
+  const { hovered, ref } = useHover<HTMLDivElement>();
+  const session = useSession();
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [editModalOpen, setEditModalOpen] = useState(false);
   const [notify, notificationHolder] = notification.useNotification();
   const [profileData, setProfileData] = useState({
     id: "",
@@ -75,6 +87,36 @@ const Profile = () => {
       },
     });
 
+  const handleCancel = () => setPreviewOpen(false);
+  const handleCancelEditModal = () => setEditModalOpen(false);
+
+  const props: UploadProps = {
+    name: "file",
+    multiple: false,
+    action: "/api/avatars",
+    async onChange(info) {
+      const { status } = info.file;
+
+      if (status === "done") {
+        await utils.users.userProfile.invalidate();
+        await session.update({ avatar: info.file.response.avatar });
+        openNotification(
+          "success",
+          notify,
+          "File Uploaded",
+          "File uploaded successfully.",
+        );
+      } else if (status === "error") {
+        openNotification(
+          "error",
+          notify,
+          "File Uploaded",
+          "File uploaded failed.",
+        );
+      }
+    },
+  };
+
   useEffect(() => {
     if (editable) {
       firstNameRef.current?.focus();
@@ -109,31 +151,93 @@ const Profile = () => {
 
   return (
     <>
+      <Modal
+        open={previewOpen}
+        title={`${profileData.firstName} ${profileData.lastName} avatar`}
+        footer={
+          <div>
+            <Button danger onClick={handleCancel}>
+              Close
+            </Button>
+          </div>
+        }
+        onCancel={handleCancel}
+      >
+        <Image
+          alt="example"
+          className="w-full"
+          src={`/uploads/avatars/${profileData.avatar}`}
+          width={300}
+          height={300}
+          quality={100}
+        />
+      </Modal>
+      <Modal
+        open={editModalOpen}
+        title="Update Profile Picture"
+        footer={
+          <div>
+            <Button danger onClick={handleCancelEditModal}>
+              Close
+            </Button>
+          </div>
+        }
+        onCancel={handleCancelEditModal}
+      >
+        <ImgCrop rotationSlider>
+          <Dragger {...props}>
+            <p className="ant-upload-drag-icon">
+              <UploadOutlined />
+            </p>
+            <p className="ant-upload-text">
+              Click or drag file to this area to upload
+            </p>
+            <p className="ant-upload-hint">
+              Support for a single or bulk upload. Strictly prohibited from
+              uploading company data or other banned files.
+            </p>
+          </Dragger>
+        </ImgCrop>
+      </Modal>
       {notificationHolder}
       <div className="flex gap-x-5">
         <div className="w-2/6 rounded border p-5 shadow">
           <div className="relative flex flex-col justify-start gap-y-3">
             <div className="flex justify-center">
-              <div className="relative">
-                <Image
-                  src={`/uploads/avatars/${profileData.avatar}`}
-                  alt={profileData.firstName}
-                  width={200}
-                  height={200}
-                  className="rounded-full"
-                />
-                <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center rounded-full bg-black/5">
-                  <div className="flex items-center gap-x-1">
-                    <Button
-                      icon={<EyeOutlined />}
-                      size="small"
-                      type="default"
-                    />
-                    <Button
-                      icon={<UploadOutlined />}
-                      size="small"
-                      type="default"
-                    />
+              <div className="relative" ref={ref}>
+                <div className="rounded-full">
+                  <Image
+                    src={`/uploads/avatars/${profileData.avatar}`}
+                    alt={profileData.firstName}
+                    width={200}
+                    height={200}
+                    className="cursor-pointer rounded-full"
+                  />
+                </div>
+                <div
+                  className={cn(
+                    "absolute left-0 top-0 h-full w-full items-center justify-center rounded-full bg-black/30",
+                    {
+                      hidden: !hovered,
+                      flex: hovered,
+                    },
+                  )}
+                >
+                  <div className="flex items-center">
+                    <MyButton
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setPreviewOpen(true)}
+                    >
+                      <SlEye className="h-5 w-5 text-white" />
+                    </MyButton>
+                    <MyButton
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setEditModalOpen(true)}
+                    >
+                      <FaRegEdit className="h-5 w-5 text-white" />
+                    </MyButton>
                   </div>
                 </div>
               </div>
@@ -202,7 +306,7 @@ const Profile = () => {
                       }
                     />
                   ) : (
-                    <p className="text-secondary-foreground rounded border px-5 py-2">
+                    <p className="rounded border px-5 py-2 text-secondary-foreground">
                       {profileData.firstName}
                     </p>
                   )}

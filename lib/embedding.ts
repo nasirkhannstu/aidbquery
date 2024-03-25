@@ -22,6 +22,7 @@ export interface EmbeddingResponse {
  * @description Uploads file to public folder
  * @param file {File}
  * @param fileType {FileTypes}
+ * @returns {Promise<{ filePath: string; fileName: string }>}
  */
 export const fileUploader = async (
   file: File,
@@ -47,7 +48,7 @@ export const fileUploader = async (
 
   await writeFile(filePath, new Uint8Array(await file.arrayBuffer()));
 
-  return { filePath, fileName: file.name };
+  return { filePath, fileName: file.name, customizeName: fileName };
 };
 
 /**
@@ -97,8 +98,6 @@ export const embeddingAICSV = async (
 
     return { success: true, fileId: uploadedFile.id };
   } catch (error: unknown) {
-    console.log(error);
-
     await db
       .update(files)
       .set({ status: "FAILED" })
@@ -155,8 +154,6 @@ export const embeddingAIJSON = async (
 
     return { success: true, fileId: uploadedFile.id };
   } catch (error: unknown) {
-    console.log(error);
-
     await db
       .update(files)
       .set({ status: "FAILED" })

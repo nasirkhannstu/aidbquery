@@ -3,6 +3,9 @@ import { NextResponse, type NextRequest } from "next/server";
 import { getServerAuthSession } from "@/lib/authOptions";
 import { APIErrors } from "@/lib/alerts/alerts.api";
 import { fileUploader } from "@/lib/embedding";
+import { db } from "@/db";
+import { users } from "@/db/schema";
+import { eq } from "drizzle-orm";
 
 export const POST = async (request: NextRequest) => {
   try {
@@ -30,12 +33,19 @@ export const POST = async (request: NextRequest) => {
       );
     }
 
-    const { fileName } = await fileUploader(file, "AVATAR", session.user.id);
+    const { customizeName } = await fileUploader(
+      file,
+      "AVATAR",
+      session.user.id,
+    );
 
-    return NextResponse.json({ success: true, avatar: fileName });
+    await db
+      .update(users)
+      .set({ avatar: customizeName })
+      .where(eq(users.id, session.user.id));
+
+    return NextResponse.json({ success: true, avatar: customizeName });
   } catch (error: unknown) {
-    console.log(error);
-
     return NextResponse.json(
       { success: false, msg: APIErrors.catchAll.message },
       { status: APIErrors.catchAll.code },
