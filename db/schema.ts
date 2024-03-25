@@ -11,6 +11,10 @@ import {
 } from "drizzle-orm/mysql-core";
 import { createId } from "@paralleldrive/cuid2";
 
+const userStatus = mysqlEnum("status", ["ACTIVE", "DEACTIVATED", "BANNED"])
+  .notNull()
+  .default("ACTIVE");
+
 // TODO: users table
 export const users = mysqlTable("users", {
   id: varchar("id", { length: 128 })
@@ -22,6 +26,7 @@ export const users = mysqlTable("users", {
   password: varchar("password", { length: 256 }).notNull(),
   isEmailVerified: boolean("is_email_verified").notNull().default(false),
   avatar: varchar("avatar", { length: 256 }).notNull().default("avatar.jpg"),
+  status: userStatus,
   bio: varchar("bio", { length: 500 }),
   createdAt: timestamp("created_at")
     .notNull()
@@ -173,6 +178,7 @@ export const messageRelations = relations(messages, ({ one }) => ({
 
 // TODO: exports all table types
 export type User = InferSelectModel<typeof users>;
+export type UserStatus = typeof users.$inferSelect.status;
 export type Subscription = InferSelectModel<typeof subscriptions>;
 export type File = InferSelectModel<typeof files>;
 export type Message = InferSelectModel<typeof messages>;

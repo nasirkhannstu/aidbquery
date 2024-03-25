@@ -1,4 +1,4 @@
-type AlertTypes = "userRegister" | "profileUpdate";
+type AlertTypes = "userRegister" | "profileUpdate" | "passwordChange";
 
 type MessagesType = Record<
   AlertTypes,
@@ -16,5 +16,9 @@ export const messages: MessagesType = {
   profileUpdate: {
     code: 200,
     message: "Profile successfully updated.",
+  },
+  passwordChange: {
+    code: 200,
+    message: "Password successfully changed.",
   },
 };

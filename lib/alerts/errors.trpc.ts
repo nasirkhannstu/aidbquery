@@ -10,7 +10,11 @@ type ErrorCode =
   | "TIMEOUT"
   | "CONFLICT";
 
-type UserAlertTypes = "userExists" | "userNotFound";
+type UserAlertTypes =
+  | "userExists"
+  | "userNotFound"
+  | "invalidPassword"
+  | "passwordNotMatch";
 type FileAlertTypes = "fileNotFound" | "deleteFailed";
 
 type UserErrorsType = Record<
@@ -37,6 +41,14 @@ export const userErrors: UserErrorsType = {
   userNotFound: {
     code: "NOT_FOUND",
     message: "User not found",
+  },
+  invalidPassword: {
+    code: "BAD_REQUEST",
+    message: "Invalid password",
+  },
+  passwordNotMatch: {
+    code: "BAD_REQUEST",
+    message: "Password does not match",
   },
 };
 

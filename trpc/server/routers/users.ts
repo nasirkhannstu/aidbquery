@@ -92,4 +92,88 @@ export const userRouters = createTRPCRouter({
 
       return { success: true, message: messages.profileUpdate.message };
     }),
+
+  changePassword: protectedProcedure
+    .input(
+      z.object({
+        currentPassword: z.string(),
+        newPassword: z.string(),
+        confirmPassword: z.string(),
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
+      const user = await ctx.db.query.users.findFirst({
+        where: (users, { eq }) => eq(users.id, ctx.session.user.id),
+      });
+
+      if (!user) {
+        throw new TRPCError({
+          code: userErrors.userNotFound.code,
+          message: userErrors.userNotFound.message,
+        });
+      }
+
+      const isPasswordValid = await bcrypt.compare(
+        input.currentPassword,
+        user.password,
+      );
+
+      if (!isPasswordValid) {
+        throw new TRPCError({
+          code: userErrors.invalidPassword.code,
+          message: userErrors.invalidPassword.message,
+        });
+      }
+
+      if (input.newPassword !== input.confirmPassword) {
+        throw new TRPCError({
+          code: userErrors.passwordNotMatch.code,
+          message: userErrors.passwordNotMatch.message,
+        });
+      }
+
+      const hashedPassword = await bcrypt.hash(input.newPassword, 12);
+
+      await ctx.db
+        .update(users)
+        .set({ password: hashedPassword })
+        .where(eq(users.id, ctx.session.user.id));
+
+      return { success: true, message: messages.passwordChange.message };
+    }),
+
+  deactivateAccount: protectedProcedure.mutation(async ({ ctx }) => {
+    const user = await ctx.db.query.users.findFirst({
+      where: (users, { eq }) => eq(users.id, ctx.session.user.id),
+    });
+
+    if (!user)
+      throw new TRPCError({
+        code: userErrors.userNotFound.code,
+        message: userErrors.userNotFound.message,
+      });
+
+    await ctx.db
+      .update(users)
+      .set({ status: "DEACTIVATED" })
+      .where(eq(users.id, ctx.session.user.id));
+
+    return { success: true, message: "Account deactivated successfully" };
+  }),
+
+  deleteUser: protectedProcedure.mutation(async ({ ctx }) => {
+    const user = await ctx.db.query.users.findFirst({
+      where: (users, { eq }) => eq(users.id, ctx.session.user.id),
+    });
+
+    if (!user)
+      throw new TRPCError({
+        code: userErrors.userNotFound.code,
+        message: userErrors.userNotFound.message,
+      });
+
+    await ctx.db.delete(users).where(eq(users.id, ctx.session.user.id));
+
+    return { success: true, message: "User deleted successfully" };
+  }),
 });
