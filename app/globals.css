@@ -10,9 +10,10 @@
     --secondary-foreground: 222.2 47.4% 11.2%;
     --bg-fade: 229.09 100% 97.84%;
     --navbar-h: 56px;
+    --bg-card: #fff;
   }
 }
 
 body {
-  @apply bg-gray-50;
+  background-color: #f5f7fa;
 }

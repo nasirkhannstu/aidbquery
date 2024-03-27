@@ -15,6 +15,8 @@ const userStatus = mysqlEnum("status", ["ACTIVE", "DEACTIVATED", "BANNED"])
   .notNull()
   .default("ACTIVE");
 
+const userRole = mysqlEnum("role", ["ADMIN", "USER"]).notNull().default("USER");
+
 // TODO: users table
 export const users = mysqlTable("users", {
   id: varchar("id", { length: 128 })
@@ -24,6 +26,7 @@ export const users = mysqlTable("users", {
   lastName: varchar("last_name", { length: 32 }).notNull(),
   email: varchar("email", { length: 32 }).unique().notNull(),
   password: varchar("password", { length: 256 }).notNull(),
+  role: userRole,
   isEmailVerified: boolean("is_email_verified").notNull().default(false),
   avatar: varchar("avatar", { length: 256 }).notNull().default("avatar.jpg"),
   status: userStatus,
@@ -180,6 +183,7 @@ export const messageRelations = relations(messages, ({ one }) => ({
 // TODO: exports all table types
 export type User = InferSelectModel<typeof users>;
 export type UserStatus = typeof users.$inferSelect.status;
+export type UserRole = typeof users.$inferSelect.role;
 export type Subscription = InferSelectModel<typeof subscriptions>;
 export type File = InferSelectModel<typeof files>;
 export type Message = InferSelectModel<typeof messages>;

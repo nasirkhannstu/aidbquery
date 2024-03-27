@@ -3,6 +3,7 @@ import { createTRPCRouter } from "@/trpc/server/api/trpc";
 import { fileRouter } from "../routers/files";
 import { messageRouter } from "../routers/messages";
 import { subscriptionRoute } from "../routers/subscriptions";
+import { adminRouter } from "../routers/admin";
 
 /**
  * This is the primary router for your server.
@@ -10,6 +11,7 @@ import { subscriptionRoute } from "../routers/subscriptions";
  * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = createTRPCRouter({
+  admin: adminRouter,
   users: userRouters,
   files: fileRouter,
   messages: messageRouter,
