@@ -27,6 +27,7 @@ export const subscriptionRoute = createTRPCRouter({
 
     const subscribe = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
+      customer: ctx.session.user.stripeCustomerId!,
       mode: "subscription",
       line_items: [
         {
@@ -37,13 +38,34 @@ export const subscriptionRoute = createTRPCRouter({
       billing_address_collection: "auto",
       metadata: {
         userId: ctx.session.user.id,
-        name: ctx.session.user.fullName,
+        firstName: ctx.session.user.firstName,
+        lastName: ctx.session.user.lastName,
         email: ctx.session.user.email,
+        stripeCustomerId: ctx.session.user.stripeCustomerId,
       },
       cancel_url: absURL("/pricing"),
-      success_url: absURL("/billing"),
+      success_url: absURL("/pricing"),
     });
 
     return { url: subscribe.url };
+  }),
+
+  /**
+   * @description Get the user's subscription
+   * @returns {Promise<Stripe.Customer>} information about the user's subscription
+   */
+  userSubscription: protectedProcedure.query(async ({ ctx }) => {
+    const billingPortal = await stripe.billingPortal.sessions.create({
+      customer: ctx.session.user.stripeCustomerId ?? "",
+      return_url: absURL("/pricing"),
+    });
+
+    // Retrieve all subscriptions for a customer
+    const subscription = await ctx.db.query.subscriptions.findFirst({
+      where: (subscriptions, { eq }) =>
+        eq(subscriptions.userId, ctx.session.user.id),
+    });
+
+    return { subscription, url: billingPortal.url };
   }),
 });

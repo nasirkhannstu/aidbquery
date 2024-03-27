@@ -199,13 +199,13 @@ const Setting = () => {
         </div>
       </Modal>
       <div className="w-full rounded bg-white p-5 shadow">
-        <div className="max-w-2xl">
+        <div className="w-full">
           <h1 className="mb-5 text-3xl font-bold">Setting</h1>
 
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between gap-x-3">
             <div>
-              <h3 className="my-1 text-lg font-semibold">Profile Update</h3>
-              <p className="max-w-96 font-light  text-slate-500">
+              <h3 className="my-1 text-lg font-semibold">Profile Updated</h3>
+              <p className="font-light  text-slate-500">
                 Your password was last updated.
               </p>
             </div>
@@ -214,10 +214,10 @@ const Setting = () => {
             </div>
           </div>
 
-          <div className="my-5 flex items-center justify-between">
+          <div className="my-5 flex items-center justify-between gap-x-3">
             <div>
               <h3 className="my-1 text-lg font-semibold">Email Verification</h3>
-              <p className="max-w-96 font-light  text-slate-500">
+              <p className="font-light  text-slate-500">
                 Email verification is required to access some features. If you
                 have not verified your email, please do so.
               </p>
@@ -238,10 +238,10 @@ const Setting = () => {
             </div>
           </div>
 
-          <div className="my-5 flex items-center justify-between">
+          <div className="my-5 flex items-center justify-between gap-x-3">
             <div>
               <h3 className="my-1 text-lg font-semibold">Change Password</h3>
-              <p className="max-w-96 font-light  text-slate-500">
+              <p className="ont-light  text-slate-500">
                 You can change your password by clicking the button below.
               </p>
             </div>
@@ -259,7 +259,7 @@ const Setting = () => {
           <div className="my-5 flex items-center justify-between gap-x-3">
             <div>
               <h3 className="my-1 text-lg font-semibold">Account Actions</h3>
-              <p className="mb-2 max-w-96  font-light text-slate-500">
+              <p className="mb-2 font-light text-slate-500">
                 You can deactivate or delete your account by clicking the button
                 below.
               </p>

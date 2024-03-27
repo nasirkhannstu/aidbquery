@@ -28,6 +28,7 @@ export const users = mysqlTable("users", {
   avatar: varchar("avatar", { length: 256 }).notNull().default("avatar.jpg"),
   status: userStatus,
   bio: varchar("bio", { length: 500 }),
+  stripeCustomerId: varchar("stripe_customer_id", { length: 256 }),
   createdAt: timestamp("created_at")
     .notNull()
     .default(sql`now()`),

@@ -11,6 +11,7 @@ import {
 import { users } from "@/db/schema";
 import { userErrors } from "@/lib/alerts/errors.trpc";
 import { messages } from "@/lib/alerts/alerts.trpc";
+import { stripe } from "@/lib/stripe";
 
 export const userRouters = createTRPCRouter({
   register: publicProcedure
@@ -36,11 +37,23 @@ export const userRouters = createTRPCRouter({
 
       const hashedPassword = await bcrypt.hash(input.password, 12);
 
+      // Create a stripe customer
+      let stripeCustomerId: string | null = null;
+      if (process.env.APP_MODE === "SaaS") {
+        const customer = await stripe.customers.create({
+          email: input.email,
+          name: `${input.firstName} ${input.lastName}`,
+        });
+
+        stripeCustomerId = customer.id;
+      }
+
       await ctx.db.insert(users).values({
         firstName: input.firstName,
         lastName: input.lastName,
         email: input.email,
         password: hashedPassword,
+        stripeCustomerId,
       });
 
       return { success: true, message: messages.userRegister.message };
