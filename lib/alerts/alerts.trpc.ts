@@ -1,4 +1,10 @@
-type AlertTypes = "userRegister" | "profileUpdate" | "passwordChange";
+type AlertTypes =
+  | "userRegister"
+  | "profileUpdate"
+  | "passwordChange"
+  | "reactiveAccount"
+  | "deactivateAccount"
+  | "deleteUser";
 
 type MessagesType = Record<
   AlertTypes,
@@ -20,5 +26,17 @@ export const messages: MessagesType = {
   passwordChange: {
     code: 200,
     message: "Password successfully changed.",
+  },
+  reactiveAccount: {
+    code: 200,
+    message: "Account reactivated successfully.",
+  },
+  deactivateAccount: {
+    code: 200,
+    message: "Account deactivated successfully.",
+  },
+  deleteUser: {
+    code: 200,
+    message: "Account deleted successfully.",
   },
 };

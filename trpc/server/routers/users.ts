@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import bcrypt from "bcryptjs";
+import { eq } from "drizzle-orm";
 
 import {
   createTRPCRouter,
@@ -10,7 +11,6 @@ import {
 import { users } from "@/db/schema";
 import { userErrors } from "@/lib/alerts/errors.trpc";
 import { messages } from "@/lib/alerts/alerts.trpc";
-import { eq } from "drizzle-orm";
 
 export const userRouters = createTRPCRouter({
   register: publicProcedure
@@ -93,6 +93,11 @@ export const userRouters = createTRPCRouter({
       return { success: true, message: messages.profileUpdate.message };
     }),
 
+  /**
+   * @description Change the user password
+   * @param input  currentPassword, newPassword:, confirmPassword
+   * @returns success message
+   */
   changePassword: protectedProcedure
     .input(
       z.object({
@@ -142,6 +147,35 @@ export const userRouters = createTRPCRouter({
       return { success: true, message: messages.passwordChange.message };
     }),
 
+  /**
+   * @description Request for account reactivation
+   * @param input none
+   * @returns success message
+   */
+  reactiveAccount: protectedProcedure.mutation(async ({ ctx }) => {
+    const user = await ctx.db.query.users.findFirst({
+      where: (users, { eq }) => eq(users.id, ctx.session.user.id),
+    });
+
+    if (!user)
+      throw new TRPCError({
+        code: userErrors.userNotFound.code,
+        message: userErrors.userNotFound.message,
+      });
+
+    await ctx.db
+      .update(users)
+      .set({ status: "ACTIVE" })
+      .where(eq(users.id, ctx.session.user.id));
+
+    return { success: true, message: messages.reactiveAccount.message };
+  }),
+
+  /**
+   * @description Deactivate the user account
+   * @param input none
+   * @returns success message
+   */
   deactivateAccount: protectedProcedure.mutation(async ({ ctx }) => {
     const user = await ctx.db.query.users.findFirst({
       where: (users, { eq }) => eq(users.id, ctx.session.user.id),
@@ -158,9 +192,14 @@ export const userRouters = createTRPCRouter({
       .set({ status: "DEACTIVATED" })
       .where(eq(users.id, ctx.session.user.id));
 
-    return { success: true, message: "Account deactivated successfully" };
+    return { success: true, message: messages.deactivateAccount.message };
   }),
 
+  /**
+   * @description Delete the user account
+   * @param input none
+   * @returns success message
+   */
   deleteUser: protectedProcedure.mutation(async ({ ctx }) => {
     const user = await ctx.db.query.users.findFirst({
       where: (users, { eq }) => eq(users.id, ctx.session.user.id),

@@ -1,13 +1,16 @@
 "use client";
-import { type MouseEvent, useState } from "react";
+import { useState } from "react";
+import { signOut } from "next-auth/react";
+import moment from "moment";
 import {
   CheckCircleOutlined,
   CheckOutlined,
   CloseOutlined,
   CloseSquareOutlined,
+  DeleteOutlined,
   IssuesCloseOutlined,
+  WarningOutlined,
 } from "@ant-design/icons";
-import moment from "moment";
 import {
   Button,
   Form,
@@ -30,11 +33,38 @@ type FieldType = {
 
 const Setting = () => {
   const [notify, notificationHolder] = notification.useNotification();
+  const utils = api.useUtils();
   const [openEmailVerify, setOpenEmailVerify] = useState(false);
   const { data: profile } = api.users.userProfile.useQuery();
-  const { mutate: deactivateAccount } =
-    api.users.deactivateAccount.useMutation();
-  const { mutate: deleteAccount } = api.users.deleteUser.useMutation();
+  const { mutate: deactivateAccount } = api.users.deactivateAccount.useMutation(
+    {
+      onSuccess(data) {
+        openNotification("warning", notify, "Account Deactivate", data.message);
+        void utils.users.userProfile.invalidate();
+      },
+      onError(error) {
+        openNotification("error", notify, "Account Deactivate", error.message);
+      },
+    },
+  );
+  const { mutate: deleteAccount } = api.users.deleteUser.useMutation({
+    onSuccess(data) {
+      openNotification("error", notify, "Account Deleted", data.message);
+      void signOut();
+    },
+    onError(error) {
+      openNotification("error", notify, "Account Deleted", error.message);
+    },
+  });
+  const { mutate: reactivateAccount } = api.users.reactiveAccount.useMutation({
+    onSuccess(data) {
+      openNotification("success", notify, "Account Reactive", data.message);
+      void utils.users.userProfile.invalidate();
+    },
+    onError(error) {
+      openNotification("error", notify, "Account Reactive", error.message);
+    },
+  });
   const [form] = Form.useForm();
   const { mutate: updatePassword, isLoading: isLoadingMutate } =
     api.users.changePassword.useMutation({
@@ -61,15 +91,13 @@ const Setting = () => {
     setOpenEmailVerify(false);
   };
 
-  const confirmDeactivate = (
-    event: MouseEvent<HTMLElement, globalThis.MouseEvent> | undefined,
-  ) => {
+  const confirmReactive = () => {
+    reactivateAccount();
+  };
+  const confirmDeactivate = () => {
     deactivateAccount();
   };
-
-  const confirmDelete = (
-    event: MouseEvent<HTMLElement, globalThis.MouseEvent> | undefined,
-  ) => {
+  const confirmDelete = () => {
     deleteAccount();
   };
 
@@ -228,7 +256,7 @@ const Setting = () => {
             </div>
           </div>
 
-          <div className="my-5 flex items-center justify-between">
+          <div className="my-5 flex items-center justify-between gap-x-3">
             <div>
               <h3 className="my-1 text-lg font-semibold">Account Actions</h3>
               <p className="mb-2 max-w-96  font-light text-slate-500">
@@ -262,25 +290,51 @@ const Setting = () => {
               )}
             </div>
             <div className="flex items-center gap-x-2">
-              <Popconfirm
-                title="Deactivate your account."
-                description={
-                  <div className="max-w-lg">
-                    You won&apos;t have access to all of your account&apos;s
-                    features if it is disabled. Do you really want to cancel
-                    your account?
-                  </div>
-                }
-                onConfirm={confirmDeactivate}
-                okText="Yes"
-                cancelText="No"
-              >
-                <Button danger disabled={profile?.status === "DEACTIVATED"}>
-                  Deactive Account
-                </Button>
-              </Popconfirm>
+              {profile?.status === "ACTIVE" ? (
+                <Popconfirm
+                  okType="danger"
+                  icon={<WarningOutlined />}
+                  title="Deactivate your account."
+                  description={
+                    <div className="max-w-lg">
+                      You won&apos;t have access to all of your account&apos;s
+                      features if it is disabled. Do you really want to cancel
+                      your account?
+                    </div>
+                  }
+                  onConfirm={confirmDeactivate}
+                  okText="Yes"
+                  cancelText="No"
+                >
+                  <Button icon={<WarningOutlined />} danger>
+                    Deactivate Account
+                  </Button>
+                </Popconfirm>
+              ) : profile?.status === "DEACTIVATED" ? (
+                <Popconfirm
+                  okType="primary"
+                  icon={<CheckCircleOutlined />}
+                  title="Reactive your account."
+                  description={
+                    <div className="max-w-lg">
+                      You will be able to access all the features of your
+                      account if you reactivate it. Do you really want to
+                      reactivate your account?
+                    </div>
+                  }
+                  onConfirm={confirmReactive}
+                  okText="Yes"
+                  cancelText="No"
+                >
+                  <Button icon={<CheckCircleOutlined />} type="default">
+                    Reactive Account
+                  </Button>
+                </Popconfirm>
+              ) : null}
 
               <Popconfirm
+                icon={<DeleteOutlined />}
+                okType="danger"
                 title="Delete your account."
                 description={
                   <div className="max-w-lg">
@@ -292,7 +346,7 @@ const Setting = () => {
                 okText="Yes"
                 cancelText="No"
               >
-                <Button danger type="primary">
+                <Button danger type="primary" icon={<DeleteOutlined />}>
                   Delete Account
                 </Button>
               </Popconfirm>
