@@ -1,7 +1,11 @@
-import React from "react";
+import { UsersList } from "@/components/Admin/UsersList";
 
 const DashboardUsersPage = () => {
-  return <div>DashboardUsersPage</div>;
+  return (
+    <div>
+      <UsersList />
+    </div>
+  );
 };
 
 export default DashboardUsersPage;

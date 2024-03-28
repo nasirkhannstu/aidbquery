@@ -6,6 +6,8 @@ type Store = {
   setCloseUploadModal: () => void;
   isSidebarOpen: boolean;
   toggleSidebar: () => void;
+  isOpenAdminSidebar: boolean;
+  setOpenAdminSidebar: () => void;
 };
 
 export const useUtils = create<Store>()((set) => ({
@@ -15,4 +17,7 @@ export const useUtils = create<Store>()((set) => ({
   isSidebarOpen: true,
   toggleSidebar: () =>
     set((state) => ({ isSidebarOpen: !state.isSidebarOpen })),
+  isOpenAdminSidebar: false,
+  setOpenAdminSidebar: () =>
+    set((state) => ({ isOpenAdminSidebar: !state.isOpenAdminSidebar })),
 }));

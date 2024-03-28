@@ -17,3 +17,11 @@
 body {
   background-color: #f5f7fa;
 }
+
+.table-header th {
+  @apply bg-slate-200 px-5 pb-3 pt-6;
+}
+
+.table-body td {
+  @apply border-b border-slate-200 p-5 text-center text-slate-500;
+}
